@@ -1,5 +1,3 @@
-package Tests;
-
 import java.util.Map;
 import Exceptions.DeckCountException;
 import Exceptions.PlayerCountException;

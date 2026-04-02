@@ -1,5 +1,3 @@
-package Tests;
-
 import Model.Cards.Deck;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
