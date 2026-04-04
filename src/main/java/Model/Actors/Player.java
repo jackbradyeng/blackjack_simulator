@@ -9,8 +9,8 @@ public class Player extends Actor {
 
     /** both the dealer and the players store a reference to their allocated position as well as a strategy object.
      * This strategy class determines how the actor will behave in certain conditions. */
-    PlayerPosition defaultPosition;
-    PlayerStrategy strategy;
+    private PlayerPosition defaultPosition;
+    private PlayerStrategy strategy;
 
     public Player(double startingChips) {
         super(startingChips);
