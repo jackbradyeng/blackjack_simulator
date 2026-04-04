@@ -1,12 +1,15 @@
 package Model.Actors;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@AllArgsConstructor
+@Builder
+@Data
 public class Actor {
 
     private double chips;
-
-    public Actor(double startingChips) {
-        this.chips = startingChips;
-    }
 
     /** receipts a given number of chips to the actor's total. */
     public void receiveChips(double chips) {
@@ -16,13 +19,5 @@ public class Actor {
     /** dispenses a given number of chips from the actor's total. */
     public void dispenseChips(double chips) {
         this.chips -= chips;
-    }
-
-    public double getChips() {
-        return chips;
-    }
-
-    public void setChips(double chips) {
-        this.chips = chips;
     }
 }
