@@ -2,7 +2,13 @@ package Model.Actors;
 
 import Model.Actors.Strategies.DealerStrategy;
 import Model.Table.Positions.DealerPosition;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@Data
 public class Dealer extends Actor {
 
     /** both the dealer and the players store a reference to their allocated position as well as a strategy object.
@@ -30,13 +36,5 @@ public class Dealer extends Actor {
     /** executes the dealer's assigned strategy from within the dealer class. */
     public String executeStrategy() {
         return getStrategy().executeStrategy(position.getHand());
-    }
-
-    public DealerStrategy getStrategy() {
-        return strategy;
-    }
-
-    public void setStrategy(DealerStrategy strategy) {
-        this.strategy = strategy;
     }
 }
