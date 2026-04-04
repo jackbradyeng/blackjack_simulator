@@ -1,6 +1,6 @@
 package Model.Actors;
 
-import Model.Actors.Strategies.DealerStrategy;
+import Model.Actors.Strategies.dealer_strategies.DealerStrategy;
 import Model.Table.Positions.DealerPosition;
 import lombok.Builder;
 import lombok.Data;
@@ -16,21 +16,9 @@ public class Dealer extends Actor {
     private DealerPosition position;
     private DealerStrategy strategy;
 
-    public Dealer(double startingChips) {
+    public Dealer(DealerStrategy strategy, double startingChips) {
         super(startingChips);
-        this.strategy = new DealerStrategy();
-    }
-
-    public int getHandValue() {
-        return position.getHand().getHandValue();
-    }
-
-    public DealerPosition getPosition() {
-        return position;
-    }
-
-    public void setPosition(DealerPosition position) {
-        this.position = position;
+        this.strategy = strategy;
     }
 
     /** executes the dealer's assigned strategy from within the dealer class. */
