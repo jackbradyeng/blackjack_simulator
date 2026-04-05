@@ -7,7 +7,8 @@ import java.util.Objects;
 import Exceptions.PlayerCountException;
 import Model.Actors.Dealer;
 import Model.Actors.Player;
-import Model.Cards.Deck;
+import Model.Deck.Deck;
+import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.InsuranceBet;
 import Model.Table.Hands.DealerHand;
@@ -45,7 +46,7 @@ public class Table {
     /// default constructor
     public Table(int playerCount, int deckCount, boolean isSimulation) {
         this.isSimulation = isSimulation;
-        this.deck = new Deck(deckCount);
+        this.deck = new Deck(deckCount, new FisherYatesStrategy());
         this.dealer = new Dealer(DEFAULT_DEALER_STARTING_CHIPS);
         this.players = new ArrayList<>();
         this.dealerPosition = new DealerPosition();

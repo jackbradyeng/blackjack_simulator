@@ -1,4 +1,5 @@
-import Model.Cards.Deck;
+import Model.Deck.Deck;
+import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -10,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DeckTesting {
 
     // testing instance variables
-    private Deck deck;
+    private final Deck deck;
 
     public DeckTesting() {
-        deck = new Deck(DEFAULT_NUMBER_OF_DECKS);
+        deck = new Deck(DEFAULT_NUMBER_OF_DECKS, new FisherYatesStrategy());
     }
 
     /** tests that the deck has the correct number of cards given some n copies. */
