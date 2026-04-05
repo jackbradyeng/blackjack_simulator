@@ -169,8 +169,8 @@ public class Table {
 
     /** checks to see how many cards remain in the deck and creates a new deck instance if the number is too low. */
     private void checkDeck() {
-        if(getDeck().size() < NEW_DECK_THRESHOLD) {
-            deck.createNewDeck();
+        if(deck.getDeck().size() < NEW_DECK_THRESHOLD) {
+            deck.createNewDeck(DEFAULT_NUMBER_OF_DECKS);
         }
     }
 
@@ -259,7 +259,7 @@ public class Table {
 
     /** deals a single card to the dealer's hand. */
     private void dealToDealer() {
-        getDealerHand().receiveCard(deck.deal());
+        deck.deal().ifPresent(deal -> getDealerHand().receiveCard(deal));
     }
 
     /** deals a single card to each position that has a bet. */
@@ -267,7 +267,7 @@ public class Table {
         for(PlayerPosition position : playerPositionsIterable) {
             for(PlayerHand hand : position.getHands()) {
                 if(hand.hasBet()) {
-                    hand.receiveCard(deck.deal());
+                    deck.deal().ifPresent(hand::receiveCard);
                 }
             }
         }
@@ -293,9 +293,11 @@ public class Table {
     /** deals a card to a hand before setting its value. */
     public void hit(Hand hand) {
         if(!hand.isBust()) {
-            hand.receiveCard(deck.deal());
-            hand.setHandValue();
-            hand.setHasHit(true);
+            deck.deal().ifPresent(deal -> {
+                hand.receiveCard(deal);
+                hand.setHandValue();
+                hand.setHasHit(true);
+            });
         } else {
             System.out.println("BUST!");
         }
