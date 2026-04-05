@@ -1,12 +1,10 @@
 package Model.Actors;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
-@AllArgsConstructor
-@Builder
 @Data
+@AllArgsConstructor
 public class Actor {
 
     private double chips;

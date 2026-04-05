@@ -2,12 +2,10 @@ package Model.Actors;
 
 import Model.Strategies.dealer_strategies.DealerStrategy;
 import Model.Table.Positions.DealerPosition;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@Builder
 @Data
 public class Dealer extends Actor {
 

@@ -4,12 +4,10 @@ import Model.Strategies.player_strategies.PlayerStrategy;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@Builder
 @Data
 public class Player extends Actor {
 
