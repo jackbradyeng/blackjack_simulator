@@ -7,9 +7,10 @@ import java.util.Objects;
 import Exceptions.PlayerCountException;
 import Model.Actors.Dealer;
 import Model.Actors.Player;
+import Model.Deck.Deck;
+import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
-import Model.Cards.Deck;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.InsuranceBet;
 import Model.Table.Hands.DealerHand;
@@ -47,7 +48,7 @@ public class Table {
     /// default constructor
     public Table(int playerCount, int deckCount, boolean isSimulation) {
         this.isSimulation = isSimulation;
-        this.deck = new Deck(deckCount);
+        this.deck = new Deck(deckCount, new FisherYatesStrategy());
         this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
         this.players = new ArrayList<>();
         this.dealerPosition = new DealerPosition();
@@ -170,8 +171,8 @@ public class Table {
 
     /** checks to see how many cards remain in the deck and creates a new deck instance if the number is too low. */
     private void checkDeck() {
-        if(getDeck().size() < NEW_DECK_THRESHOLD) {
-            deck.createNewDeck();
+        if(deck.getDeck().size() < NEW_DECK_THRESHOLD) {
+            deck.createNewDeck(DEFAULT_NUMBER_OF_DECKS);
         }
     }
 
@@ -260,7 +261,7 @@ public class Table {
 
     /** deals a single card to the dealer's hand. */
     private void dealToDealer() {
-        getDealerHand().receiveCard(deck.deal());
+        deck.deal().ifPresent(deal -> getDealerHand().receiveCard(deal));
     }
 
     /** deals a single card to each position that has a bet. */
@@ -268,7 +269,7 @@ public class Table {
         for(PlayerPosition position : playerPositionsIterable) {
             for(PlayerHand hand : position.getHands()) {
                 if(hand.hasBet()) {
-                    hand.receiveCard(deck.deal());
+                    deck.deal().ifPresent(hand::receiveCard);
                 }
             }
         }
@@ -294,9 +295,11 @@ public class Table {
     /** deals a card to a hand before setting its value. */
     public void hit(Hand hand) {
         if(!hand.isBust()) {
-            hand.receiveCard(deck.deal());
-            hand.setHandValue();
-            hand.setHasHit(true);
+            deck.deal().ifPresent(deal -> {
+                hand.receiveCard(deal);
+                hand.setHandValue();
+                hand.setHasHit(true);
+            });
         } else {
             System.out.println("BUST!");
         }
