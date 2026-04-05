@@ -9,6 +9,8 @@ import Model.Actors.Dealer;
 import Model.Actors.Player;
 import Model.Deck.Deck;
 import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
+import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
+import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.InsuranceBet;
 import Model.Table.Hands.DealerHand;
@@ -47,7 +49,7 @@ public class Table {
     public Table(int playerCount, int deckCount, boolean isSimulation) {
         this.isSimulation = isSimulation;
         this.deck = new Deck(deckCount, new FisherYatesStrategy());
-        this.dealer = new Dealer(DEFAULT_DEALER_STARTING_CHIPS);
+        this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
         this.players = new ArrayList<>();
         this.dealerPosition = new DealerPosition();
         this.playerPositionsIterable = new ArrayList<>();
@@ -100,7 +102,7 @@ public class Table {
                     "of table positions is " + DEFAULT_TABLE_POSITIONS + ".");
         } else {
             for (int i = 0; i < playerCount; i++) {
-                Player player = new Player(DEFAULT_PLAYER_STARTING_CHIPS);
+                Player player = new Player(DEFAULT_PLAYER_STARTING_CHIPS, new OptimalNoCountingStrategy());
                 players.add(player);
             }
         }
