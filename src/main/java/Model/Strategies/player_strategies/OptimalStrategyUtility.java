@@ -1,4 +1,4 @@
-package Model.Actors.Strategies.player_strategies;
+package Model.Strategies.player_strategies;
 
 import Model.Cards.Card;
 import Model.Table.Hands.DealerHand;

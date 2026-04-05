@@ -1,6 +1,6 @@
 package Model.Actors;
 
-import Model.Actors.Strategies.player_strategies.PlayerStrategy;
+import Model.Strategies.player_strategies.PlayerStrategy;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;

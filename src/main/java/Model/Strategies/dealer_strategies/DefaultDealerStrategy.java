@@ -1,4 +1,4 @@
-package Model.Actors.Strategies.dealer_strategies;
+package Model.Strategies.dealer_strategies;
 
 import Model.Table.Hands.DealerHand;
 import static Model.Constants.*;

@@ -1,6 +1,6 @@
 package Model.Actors;
 
-import Model.Actors.Strategies.dealer_strategies.DealerStrategy;
+import Model.Strategies.dealer_strategies.DealerStrategy;
 import Model.Table.Positions.DealerPosition;
 import lombok.Builder;
 import lombok.Data;
