@@ -8,6 +8,7 @@ import Exceptions.PlayerCountException;
 import Model.Actors.Dealer;
 import Model.Actors.Player;
 import Model.Actors.Strategies.dealer_strategies.DefaultDealerStrategy;
+import Model.Actors.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Cards.Deck;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.InsuranceBet;
@@ -100,7 +101,7 @@ public class Table {
                     "of table positions is " + DEFAULT_TABLE_POSITIONS + ".");
         } else {
             for (int i = 0; i < playerCount; i++) {
-                Player player = new Player(DEFAULT_PLAYER_STARTING_CHIPS);
+                Player player = new Player(DEFAULT_PLAYER_STARTING_CHIPS, new OptimalNoCountingStrategy());
                 players.add(player);
             }
         }

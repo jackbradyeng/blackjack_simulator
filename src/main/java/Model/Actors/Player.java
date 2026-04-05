@@ -1,6 +1,6 @@
 package Model.Actors;
 
-import Model.Actors.Strategies.PlayerStrategy;
+import Model.Actors.Strategies.player_strategies.PlayerStrategy;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
@@ -18,9 +18,9 @@ public class Player extends Actor {
     private PlayerPosition defaultPosition;
     private PlayerStrategy strategy;
 
-    public Player(double startingChips) {
+    public Player(double startingChips, PlayerStrategy playerStrategy) {
         super(startingChips);
-        this.strategy = new PlayerStrategy();
+        this.strategy = playerStrategy;
     }
 
     /** given the player's hand and the dealer's hand, executes the player's assigned strategy from within the player
