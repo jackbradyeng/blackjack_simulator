@@ -9,7 +9,6 @@ public final class Constants {
     public static final int DEFAULT_PLAYER_STARTING_CHIPS = 500;
     public static final int DEFAULT_DEALER_STARTING_CHIPS = 15000;
     public static final int DEFAULT_DEALER_DRAW_VALUE = 17;
-    public static final int DEFAULT_PLAYER_DRAW_VALUE = 17;
 
     // strategy constants
     public static final double DEFAULT_PLAYER_BET_AMOUNT = 25;
