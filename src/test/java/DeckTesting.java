@@ -30,7 +30,7 @@ public class DeckTesting {
     @Test
     public void testDeal() {
         deck.deal();
-        assertEquals(DEFAULT_NUMBER_OF_DECKS * NUMBER_OF_SUITS * NUMBER_OF_CARDS_PER_SUIT,
-                deck.getDeck().size() - 1);
+        assertEquals(DEFAULT_NUMBER_OF_DECKS * NUMBER_OF_SUITS * NUMBER_OF_CARDS_PER_SUIT - 1,
+                deck.getDeck().size());
     }
 }
