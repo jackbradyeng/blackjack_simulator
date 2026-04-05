@@ -1,5 +1,3 @@
-package org.example.blackjack_emulator;
-
 import Controller.Controller;
 import static Model.Constants.*;
 

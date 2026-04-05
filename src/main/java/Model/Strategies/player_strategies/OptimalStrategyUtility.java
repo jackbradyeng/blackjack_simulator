@@ -1,75 +1,29 @@
-package Model.Actors.Strategies;
+package Model.Strategies.player_strategies;
 
-import java.util.Map;
-import java.util.HashMap;
 import Model.Cards.Card;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import static Model.Constants.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class PlayerStrategy {
+public class OptimalStrategyUtility {
 
     // player hard value -> dealer hard value map
-    private HashMap<Map.Entry<Integer, Integer>, String> hardValuesActionTable;
-    private HashMap<Map.Entry<Integer, Integer>, String> softValuesActionTable;
-    private HashMap<Map.Entry<Map.Entry<Integer, Integer>, Integer>, String> splitActionTable;
+    private static final HashMap<Map.Entry<Integer, Integer>, String> hardValuesActionTable = new HashMap<>();
+    private static final HashMap<Map.Entry<Integer, Integer>, String> softValuesActionTable = new HashMap<>();
+    private static final HashMap<Map.Entry<Map.Entry<Integer, Integer>, Integer>, String> splitActionTable = new HashMap<>();
 
-    public PlayerStrategy() {
-        this.hardValuesActionTable = new HashMap<>();
-        this.softValuesActionTable = new HashMap<>();
-        this.splitActionTable = new HashMap<>();
-        populateActionTables();
-    }
-
-    /** */
-    private void populateActionTables() {
+    static {
         populateHardValueTable();
         populateSoftValueTable();
         populateSplittingTable();
     }
 
-    /** executes the player's strategy for a given hand and dealer face-up card. */
-    public String executeStrategy(PlayerHand playerHand, DealerHand dealerHand) {
-        return optimalStrategy(playerHand, dealerHand);
-    }
-
-    /** mathematically optimal blackjack strategy without counting cards. */
-    private String optimalStrategy(PlayerHand playerHand, DealerHand dealerHand) {
-        // if the two player cards are equal in value, first test to see if the action is a split
-        if(playerHand.hasSplitOption()) {
-            String action = executeSplittingStrategy(playerHand, dealerHand);
-            if (action.equals(NO_SPLIT)) {
-                return executeHardValuesStrategy(playerHand, dealerHand);
-            } else {
-                return action;
-            }
-        } else if(playerHand.hasAce() && playerHand.getCards().size() == 2) {
-                return executeSoftValuesStrategy(playerHand, dealerHand);
-        } else {
-            return executeHardValuesStrategy(playerHand, dealerHand);
-        }
-    }
-
-    /** incorporates insurance into the hard values and splitting strategy. */
-    private String optimalStrategyWithInsurance(PlayerHand playerHand, DealerHand dealerHand) {
-        if(playerHand.hasInsuranceOption(dealerHand)) {
-            return INSURANCE;
-        } else {
-            return optimalStrategy(playerHand, dealerHand);
-        }
-    }
-
-    /** a primitive player strategy designed to mirror the behaviour of the dealer. */
-    private String playerStandOnX(PlayerHand hand) {
-        if(hand.getHandValue() < DEFAULT_PLAYER_DRAW_VALUE) {
-            return HIT;
-        } else {
-            return STAND;
-        }
-    }
+    private OptimalStrategyUtility() {}
 
     /** returns the player action based on the hard-values strategy table. */
-    private String executeHardValuesStrategy(PlayerHand playerHand, DealerHand dealerHand) {
+    public static String executeHardValuesStrategy(PlayerHand playerHand, DealerHand dealerHand) {
         int playerHV = playerHand.getHandValue();
         int dealerHV = dealerHand.getCards().getFirst().getValue();
         Map.Entry<Integer, Integer> entry = Map.entry(playerHV, dealerHV);
@@ -77,7 +31,7 @@ public class PlayerStrategy {
     }
 
     /** returns the player action based on the soft-values strategy table. */
-    private String executeSoftValuesStrategy(PlayerHand playerHand, DealerHand dealerHand) {
+    public static String executeSoftValuesStrategy(PlayerHand playerHand, DealerHand dealerHand) {
         int playerSV = playerHand.getHandValue();
         int dealerSV = dealerHand.getCards().getFirst().getValue();
         Map.Entry<Integer, Integer> entry = Map.entry(playerSV, dealerSV);
@@ -85,15 +39,15 @@ public class PlayerStrategy {
     }
 
     /** returns the player action based on the splitting strategy table. */
-    private String executeSplittingStrategy(PlayerHand playerHand, DealerHand dealerHand) {
+    public static String executeSplittingStrategy(PlayerHand playerHand, DealerHand dealerHand) {
         Card first = playerHand.getCards().get(0);
         Card second = playerHand.getCards().get(1);
         Card dealerFirst = dealerHand.getCards().getFirst();
         return splitActionTable.get(Map.entry(Map.entry(first.getValue(), second.getValue()), dealerFirst.getValue()));
     }
 
-    /** determines player behaviour based on hard-value comparisons (i.e. neglecting the flexibility of the Ace). */
-    private void populateHardValueTable() {
+    /** determines player behavior based on hard-value comparisons (i.e. neglecting the flexibility of the Ace). */
+    private static void populateHardValueTable() {
         for (int playerHV = 2; playerHV <= BLACKJACK_CONSTANT; playerHV++) {
             for (int dealerHV = 2; dealerHV <= ACE_UPPER_VALUE; dealerHV++) {
                 Map.Entry<Integer, Integer> entry = Map.entry(playerHV, dealerHV);
@@ -133,8 +87,8 @@ public class PlayerStrategy {
         }
     }
 
-    /** determines player behaviour based on soft-value comparisons (taking account of the ace card's flexibility). */
-    private void populateSoftValueTable() {
+    /** determines player behavior based on soft-value comparisons (taking account of the ace card's flexibility). */
+    private static void populateSoftValueTable() {
         for (int playerSV = ACE_UPPER_VALUE + 2; playerSV <= ACE_UPPER_VALUE + 10; playerSV++) {
             for (int dealerSV = 2; dealerSV <= ACE_UPPER_VALUE; dealerSV++) {
                 Map.Entry<Integer, Integer> entry = Map.entry(playerSV, dealerSV);
@@ -174,13 +128,12 @@ public class PlayerStrategy {
     /** for pairs where the first card's value equals the second, determines whether the player should split or not
      * based on the value of the dealer's face-up card. Note: This method does specific the action to be taken if the
      * decision is not to split. This must be handled by another method. */
-    private void populateSplittingTable() {
+    private static void populateSplittingTable() {
         for (int first = 2; first <= ACE_UPPER_VALUE; first++) {
             for (int dealerValue = 2; dealerValue <= ACE_UPPER_VALUE; dealerValue++) {
-                int second = first;
-                Map.Entry<Map.Entry<Integer, Integer>, Integer> entry = Map.entry(Map.entry(first, second), dealerValue);
+                Map.Entry<Map.Entry<Integer, Integer>, Integer> entry = Map.entry(Map.entry(first, first), dealerValue);
 
-                if (first == 2 & second == 2 || first == 3 & second == 3) {
+                if (first == 2 || first == 3) {
                     if (dealerValue <= 7) {
                         splitActionTable.put(entry, SPLIT);
                     } else {
@@ -188,15 +141,15 @@ public class PlayerStrategy {
                     }
                 }
                 // never split these hands
-                else if (first == 4 & second == 4 || first == 5 & second == 5 || first == 10 & second == 10) {
+                else if (first == 4 || first == 5 || first == 10) {
                     splitActionTable.put(entry, NO_SPLIT);
-                } else if (first == 6 & second == 6) {
+                } else if (first == 6) {
                     if (dealerValue <= 6) {
                         splitActionTable.put(entry, SPLIT);
                     } else {
                         splitActionTable.put(entry, NO_SPLIT);
                     }
-                } else if (first == 7 & second == 7) {
+                } else if (first == 7) {
                     if (dealerValue <= 7) {
                         splitActionTable.put(entry, SPLIT);
                     } else {
@@ -204,7 +157,7 @@ public class PlayerStrategy {
                     }
                 }
                 // always split these hands
-                else if (first == 8 & second == 8 || first == ACE_UPPER_VALUE & second == ACE_UPPER_VALUE) {
+                else if (first == 8 || first == ACE_UPPER_VALUE) {
                     splitActionTable.put(entry, SPLIT);
                 } else {
                     if (dealerValue <= 9) {
