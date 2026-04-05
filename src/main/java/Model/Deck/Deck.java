@@ -6,6 +6,7 @@ import Model.Cards.Ace;
 import Model.Cards.Card;
 import Model.Cards.CardMapUtility;
 import Model.Deck.ShuffleStrategies.ShuffleStrategy;
+import static Model.Constants.ACE;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -46,8 +47,7 @@ public class Deck {
         for (int i = 0; i < this.copies; i++) {
             for (Map.Entry<String, Integer> pair : CardMapUtility.getCardValueMap().entrySet()) {
                 Card newCard;
-                // ACE should not be hard coded, this needs to be moved to constants
-                if (pair.getKey().contains("Ace")) {
+                if (pair.getKey().contains(ACE)) {
                     newCard = new Ace(pair.getKey(), pair.getValue());
                 } else {
                     newCard = new Card(pair.getKey(), pair.getValue());

@@ -28,6 +28,7 @@ public final class Constants {
     public static final int NUMBER_OF_CARDS_PER_SUIT = 13;
     public static final int NUMBER_OF_CARDS_PER_DECK = 52;
     public static final int NEW_DECK_THRESHOLD = 52;
+    public static final String ACE = "Ace";
 
     // card value constants
     public static final int ACE_LOWER_VALUE = 1;
