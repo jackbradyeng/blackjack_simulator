@@ -4,16 +4,22 @@ import java.util.ArrayList;
 import static Model.Constants.*;
 import Model.Cards.Ace;
 import Model.Cards.Card;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Hand {
 
     // stores the cards allocated to the hand
+    @Getter
     protected ArrayList<Card> cards;
 
     // stores the numerical value of the hand
+    @Getter
     protected int handValue;
 
     // stores whether the hand has been hit or not
+    @Getter
+    @Setter
     protected boolean hasHit = false;
 
     public Hand() {
@@ -45,14 +51,6 @@ public class Hand {
         return handValue == BLACKJACK_CONSTANT;
     }
 
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
-
-    public int getHandValue() {
-        return handValue;
-    }
-
     public void setHandValue() {
         this.handValue = calculateHandValue();
     }
@@ -64,14 +62,6 @@ public class Hand {
                 return true;
             }
         } return false;
-    }
-
-    public boolean hasHit() {
-        return hasHit;
-    }
-
-    public void setHasHit(boolean hasHit) {
-        this.hasHit = hasHit;
     }
 
     /** calculates the final hand value. Sums the non-ace cards before considering aces. */

@@ -217,13 +217,13 @@ public class Controller {
                     DealerHand dealerHand = table.getDealerHand();
                     if (hand.isBlackjack()) {
                         handleBlackjackCase(hand);
-                    } else if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && !hand.hasHit()) {
+                    } else if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
                         System.out.println("HIT | STAND | DOUBLE | SPLIT | INSURANCE");
-                    } else if(!hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && !hand.hasHit()) {
+                    } else if(!hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
                         System.out.println("HIT | STAND | INSURANCE");
-                    } else if (hand.hasSplitOption() && !hand.hasInsuranceOption(dealerHand) && !hand.hasHit()) {
+                    } else if (hand.hasSplitOption() && !hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
                         System.out.println("HIT | STAND | DOUBLE | SPLIT");
-                    } else if (!hand.hasSplitOption() && !hand.hasInsuranceOption(dealerHand) && !hand.hasHit()) {
+                    } else if (!hand.hasSplitOption() && !hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
                         System.out.println("HIT | STAND | DOUBLE");
                     } else if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand)) {
                         System.out.println("HIT | STAND | SPLIT | INSURANCE");
