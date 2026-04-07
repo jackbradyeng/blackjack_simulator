@@ -1,18 +1,13 @@
 package Model.Table.Bets;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
 public class Bet {
 
+    @Getter
+    @Setter
     private double amount;
-
-    public Bet(double amount) {
-        this.amount = amount;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 }

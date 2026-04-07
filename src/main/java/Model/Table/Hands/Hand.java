@@ -4,16 +4,22 @@ import java.util.ArrayList;
 import static Model.Constants.*;
 import Model.Cards.Ace;
 import Model.Cards.Card;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Hand {
 
     // stores the cards allocated to the hand
+    @Getter
     protected ArrayList<Card> cards;
 
     // stores the numerical value of the hand
+    @Getter
     protected int handValue;
 
     // stores whether the hand has been hit or not
+    @Getter
+    @Setter
     protected boolean hasHit = false;
 
     public Hand() {
@@ -45,33 +51,17 @@ public class Hand {
         return handValue == BLACKJACK_CONSTANT;
     }
 
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
-
-    public int getHandValue() {
-        return handValue;
-    }
-
-    public void setHandValue() {
-        this.handValue = calculateHandValue();
-    }
-
     /** returns whether the hand has an ace in it or not. */
     public boolean hasAce() {
-        for(Card card : cards) {
-            if(card instanceof Ace) {
+        for (Card card : cards) {
+            if (card instanceof Ace) {
                 return true;
             }
         } return false;
     }
 
-    public boolean hasHit() {
-        return hasHit;
-    }
-
-    public void setHasHit(boolean hasHit) {
-        this.hasHit = hasHit;
+    public void setHandValue() {
+        this.handValue = calculateHandValue();
     }
 
     /** calculates the final hand value. Sums the non-ace cards before considering aces. */
@@ -79,31 +69,19 @@ public class Hand {
         int handValue = 0;
         int aceCount = 0;
 
-        // first sweep, sums the total of non-Ace cards
-        for(Card card : cards) {
-            if(!(card instanceof Ace)) {
+        // iterate over the cards in the hand and sum their values
+        for (Card card : cards) {
+            if (card instanceof Ace) {
+                aceCount++;
+                handValue += ACE_LOWER_VALUE; // count the ace using its lower value by default
+            } else {
                 handValue += card.getValue();
             }
         }
 
-        // second sweep, sums the total of Ace cards
-        for(Card card : cards) {
-            if(card instanceof Ace) {
-                if(aceCount > 0) {
-                    if(handValue + ACE_UPPER_VALUE < BLACKJACK_CONSTANT) {
-                        handValue += ACE_UPPER_VALUE;
-                    } else {
-                        handValue += ACE_LOWER_VALUE;
-                    }
-                } else if(handValue < ACE_UPPER_VALUE) {
-                    handValue += ACE_UPPER_VALUE;
-                } else {
-                    handValue += ACE_LOWER_VALUE;
-                }
-                /* if an ace has already been counted then any subsequent aces need to be assigned their lower value
-                rather than their higher value. */
-                aceCount++;
-            }
+        // see if the ace can be "upgraded" to its upper value
+        if (aceCount > 0 && handValue + (ACE_UPPER_VALUE - ACE_LOWER_VALUE) <= BLACKJACK_CONSTANT) {
+            handValue += ACE_UPPER_VALUE - ACE_LOWER_VALUE;
         }
         return handValue;
     }
