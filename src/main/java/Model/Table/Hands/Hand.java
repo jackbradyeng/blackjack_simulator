@@ -51,10 +51,6 @@ public class Hand {
         return handValue == BLACKJACK_CONSTANT;
     }
 
-    public void setHandValue() {
-        this.handValue = calculateHandValue();
-    }
-
     /** returns whether the hand has an ace in it or not. */
     public boolean hasAce() {
         for (Card card : cards) {
@@ -62,6 +58,10 @@ public class Hand {
                 return true;
             }
         } return false;
+    }
+
+    public void setHandValue() {
+        this.handValue = calculateHandValue();
     }
 
     /** calculates the final hand value. Sums the non-ace cards before considering aces. */
