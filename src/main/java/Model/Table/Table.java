@@ -22,27 +22,47 @@ import Model.Table.Processors.DoubleBetProcessor;
 import Model.Table.Processors.InsuranceBetProcessor;
 import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessor;
+import lombok.Getter;
+import lombok.Setter;
 import static Model.Constants.*;
 
 public class Table {
 
     /// instance variables
+
+    @Getter
     private boolean isSimulation;
+    @Getter
     private Deck deck;
+    @Getter
     private Dealer dealer;
-    private ArrayList<Player> players;
+    @Getter
     private final DealerPosition dealerPosition;
+    @Getter
+    @Setter
+    private ArrayList<Player> players;
+    @Getter
     private final ArrayList<PlayerPosition> playerPositionsIterable;
+    @Getter
     private ArrayList<PlayerHand> activeHands;
+    @Getter
     private HashMap<Player, Double> playerBalances;
+    @Getter
     private Double houseBalance;
 
     /// table stats
+
+    @Getter
     public int handCount = 0;
+    @Getter
     public int splitCount = 0;
+    @Getter
     public int blackjackCount = 0;
+    @Getter
     public int playerWinCount = 0;
+    @Getter
     public int playerLossCount = 0;
+    @Getter
     public int pushCount = 0;
 
     /// default constructor
@@ -223,10 +243,6 @@ public class Table {
             }
         }
         this.activeHands =  activeHands;
-    }
-
-    public ArrayList<PlayerHand> getActiveHands() {
-        return activeHands;
     }
 
     public void clearActiveHands() {
@@ -473,55 +489,12 @@ public class Table {
         }
     }
 
-    public Deck getDeck() {
-        return deck;
-    }
-
     public int getNumberOfPositions() {
         return playerPositionsIterable.size();
     }
 
-    public ArrayList<PlayerPosition> getPlayerPositionsIterable() {
-        return playerPositionsIterable;
-    }
-
-    public Dealer getDealer() {
-        return dealer;
-    }
-
     public DealerHand getDealerHand() {
         return dealerPosition.getHand();
-    }
-
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    public int getHandCount() {return handCount; }
-
-    public int getBlackjackCount() {
-        return blackjackCount;
-    }
-
-    public int getPlayerWinCount() {
-        return playerWinCount;
-    }
-
-    public int getPlayerLossCount() {
-        return playerLossCount;
-    }
-
-    public int getPushCount() {
-        return pushCount;
-    }
-
-    public int getSplitCount() {
-        return splitCount;
-    }
-
-    /** may be required if a player decides to leave the game. */
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
     }
 
     // prints welcome message
