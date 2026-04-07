@@ -34,7 +34,8 @@ public class PlayerHand extends Hand {
 
     /** returns whether the hand can be split. */
     public boolean hasSplitOption() {
-        if(cards.size() > 1)
+        // robust check - player should not be able to split when they have three or more cards
+        if(cards.size() == 2)
             return cards.get(0).getValue() == cards.get(1).getValue();
         else
             return false;
