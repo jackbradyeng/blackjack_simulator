@@ -9,6 +9,7 @@ import Model.Actors.Dealer;
 import Model.Actors.Player;
 import Model.Deck.Deck;
 import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
+import Model.Observers.TablePrinter;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Table.Bets.Bet;
@@ -495,15 +496,6 @@ public class Table {
 
     public DealerHand getDealerHand() {
         return dealerPosition.getHand();
-    }
-
-    // prints welcome message
-    public void printWelcomeMessage() {
-        System.out.println("********************************");
-
-        System.out.println("***** WELCOME TO BLACKJACK *****");
-
-        System.out.println("********************************");
     }
 
     // prints new round message

@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Scanner;
 import Model.Actors.*;
+import Model.Observers.TablePrinter;
 import Model.Table.*;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
@@ -17,6 +18,7 @@ public class Controller {
     private boolean isRunning;
     private final Scanner scanner;
     private final Table table;
+    private final TablePrinter tablePrinter;
 
     // default constructor
     public Controller(int playerCount, int deckCount, boolean isSimulation) {
@@ -24,6 +26,7 @@ public class Controller {
         this.isRunning = true;
         this.scanner = new Scanner(System.in);
         this.table = new Table(playerCount, deckCount, isSimulation);
+        this.tablePrinter = new TablePrinter(this.table);
     }
 
     /** initializes the emulator. */
@@ -33,7 +36,7 @@ public class Controller {
     /// Monte Carlo Simulation
     public void runSimulation() {
         Instant start = Instant.now();
-        table.printWelcomeMessage();
+        tablePrinter.printWelcomeMessage();
         Player mainPlayer = table.getPlayers().getFirst();
 
         for(int i = 0; i < DEFAULT_NUMBER_OF_ITERATIONS; i++) {
@@ -57,7 +60,7 @@ public class Controller {
 
     /// Interactive Game Loop
     public void runGameLoop() {
-        table.printWelcomeMessage();
+        tablePrinter.printWelcomeMessage();
 
         while(isRunning) {
             table.startupRoutine();
