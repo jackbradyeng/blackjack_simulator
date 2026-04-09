@@ -50,6 +50,8 @@ public class Table {
     private HashMap<Player, Double> playerBalances;
     @Getter
     private Double houseBalance;
+    @Getter
+    private TablePrinter tablePrinter;
 
     /// table stats
 
@@ -87,7 +89,7 @@ public class Table {
      * creates empty player hands at each position.
      * creates an empty dealer hand at the dealer position.</p> */
     public void startupRoutine() {
-        printNewRoundMessage();
+        tablePrinter.printNewRoundMessage();
         logPlayerBalances();
         logHouseBalance();
         checkDeck();
@@ -496,12 +498,6 @@ public class Table {
 
     public DealerHand getDealerHand() {
         return dealerPosition.getHand();
-    }
-
-    // prints new round message
-    public void printNewRoundMessage() {
-        System.out.print("\n");
-        System.out.println("---- NEW ROUND ----");
     }
 
     // prints all active player hands at the table
