@@ -246,7 +246,7 @@ public class Controller {
                         } else {
                             table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
                             tablePrinter.printActivePlayerHands();
-                            table.printDealerFirstCard();
+                            tablePrinter.printDealerFirstCard();
                         }
                         if (playerAction.equalsIgnoreCase(STAND)) {
                             playerCanAct = false;

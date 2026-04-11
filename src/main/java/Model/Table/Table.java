@@ -104,7 +104,7 @@ public class Table {
         setActiveHands();
         calculateHandValues();
         tablePrinter.printActivePlayerHands();
-        printDealerFirstCard();
+        tablePrinter.printDealerFirstCard();
     }
 
     /** Actions: handles regular payouts, handles insurance payouts, and resets the game state in preparation for a new
@@ -498,13 +498,6 @@ public class Table {
 
     public DealerHand getDealerHand() {
         return dealerPosition.getHand();
-    }
-
-    // prints the dealer's first card and its corresponding value
-    public void printDealerFirstCard() {
-        System.out.println("Position: 0 (Dealer)");
-        System.out.println("----" + " Hand: " + getDealerHand().getCards().getFirst() + " Hand Value: " +
-                getDealerHand().getCards().getFirst().getValue() + "." + "\n");
     }
 
     // print the dealer's hand
