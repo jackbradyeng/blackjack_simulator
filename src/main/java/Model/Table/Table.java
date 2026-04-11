@@ -243,7 +243,7 @@ public class Table {
             for(PlayerHand hand : position.getHands()) {
                 if(hand.hasBet()) {
                     activeHands.add(hand);
-                    handCount++;
+                    tableStats.incrementHandCount();
                 }
             }
         }
@@ -386,8 +386,8 @@ public class Table {
             case SPLIT:
                 // partition hands and book additional bet
                 splitHand(player, hand.getPosition(), hand);
-                handCount++;
-                splitCount++;
+                tableStats.incrementHandCount();
+                tableStats.incrementSplitCount();
                 break;
             case DOUBLE:
                 // book double down bet
@@ -411,15 +411,15 @@ public class Table {
                 if(handlePlayerWin(hand, pair)) {
                     // avoid double counting bets in single player games
                     if(isStandardBet(pair.getValue()))
-                        playerWinCount++;
+                        tableStats.incrementPlayerWinCount();
                 }
                 else if(handlePlayerPush(hand, pair)) {
                     if(isStandardBet(pair.getValue()))
-                        pushCount++;
+                        tableStats.incrementPushCount();
                 }
                 else if(handlePlayerLoss(hand, pair)) {
                     if(isStandardBet(pair.getValue())) {
-                        playerLossCount++;
+                        tableStats.incrementPlayerLossCount();
                     }
                 }
             }
@@ -441,7 +441,7 @@ public class Table {
                 if(hand.getHandValue() == BLACKJACK_CONSTANT && hand.getCards().size() == 2) {
                     payout = pair.getValue().getAmount() * (1 +
                             ((double) DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR / DEFAULT_BLACKJACK_PAYOUT_NUMERATOR));
-                    blackjackCount++;
+                    tableStats.incrementBlackjackCount();
                 } else {
                     payout = pair.getValue().getAmount() * (1 + DEFAULT_PAYOUT_RATIO);
                 }
