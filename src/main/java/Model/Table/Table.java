@@ -30,7 +30,6 @@ import static Model.Constants.*;
 public class Table {
 
     /// instance variables
-
     @Getter
     private boolean isSimulation;
     @Getter
@@ -54,7 +53,6 @@ public class Table {
     private TablePrinter tablePrinter;
 
     /// table stats
-
     @Getter
     public int handCount = 0;
     @Getter
@@ -337,7 +335,7 @@ public class Table {
         while(!Objects.equals(dealer.executeStrategy(), STAND)) {
             handleDealerAction(dealer.executeStrategy());
         }
-        printDealerHand();
+        tablePrinter.printDealerHand();
     }
 
     /** executes the player's strategy. */
@@ -500,38 +498,11 @@ public class Table {
         return dealerPosition.getHand();
     }
 
-    // print the dealer's hand
-    public void printDealerHand() {
-        System.out.println("Position: 0 (Dealer)");
-        System.out.println("----" + " Hand: " + getDealerHand().toString() + " Hand Value: " +
-                getDealerHand().getHandValue()
-                + "." + "\n");
-        if(getDealerHand().isBust()) {
-            System.out.println("BUST!");
-        }
-    }
-
     // prints results
     public void printHandResults() {
         System.out.println("---- RESULTS ----");
         printPlayerResults();
         printHouseResults();
         System.out.println("---- END OF ROUND ----");
-    }
-
-    public void printPlayerResults() {
-        for(Player player : players) {
-            System.out.println("Player: " + player);
-            System.out.println("Starting Balance: " + playerBalances.get(player).intValue() + " Closing Balance: "
-                    + (int) player.getChips());
-            System.out.println("Profit (Loss): " + (int) (player.getChips() - playerBalances.get(player)) + "\n");
-        }
-    }
-
-    public void printHouseResults() {
-        System.out.println("Player: House");
-        System.out.println("Starting Balance: " + houseBalance.intValue() + " Closing Balance: "
-                + (int) dealer.getChips());
-        System.out.println("Profit (Loss): " + (int) (dealer.getChips() - houseBalance) + "\n");
     }
 }

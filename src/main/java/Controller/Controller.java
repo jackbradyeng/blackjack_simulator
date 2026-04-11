@@ -44,7 +44,7 @@ public class Controller {
             table.bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
             table.drawRoutine();
             table.executePlayerStrategyForAll();
-            table.printDealerHand();
+            tablePrinter.printDealerHand();
             table.executeDealerStrategy();
             table.windDownRoutine();
             double runningProfit = mainPlayer.getChips() - DEFAULT_PLAYER_STARTING_CHIPS;
@@ -68,7 +68,7 @@ public class Controller {
             table.drawRoutine();
             playerActions();
             gamePause("Dealer drawing in...");
-            table.printDealerHand();
+            tablePrinter.printDealerHand();
             table.executeDealerStrategy();
             gamePause("Printing results in...");
             table.windDownRoutine();
