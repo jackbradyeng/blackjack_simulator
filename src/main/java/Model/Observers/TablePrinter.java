@@ -67,4 +67,21 @@ public class TablePrinter implements GameEventListener {
             System.out.println("BUST!");
         }
     }
+
+    public void printPlayerResults() {
+        for(Player player : table.getPlayers()) {
+            System.out.println("Player: " + player);
+            System.out.println("Starting Balance: " + table.getPlayerBalances().get(player).intValue()
+                    + " Closing Balance: " + (int) player.getChips());
+            System.out.println("Profit (Loss): " + (int) (player.getChips() - table.getPlayerBalances().get(player))
+                    + "\n");
+        }
+    }
+
+    public void printHouseResults() {
+        System.out.println("Player: House");
+        System.out.println("Starting Balance: " + table.getHouseBalance().intValue() + " Closing Balance: "
+                + (int) table.getDealer().getChips());
+        System.out.println("Profit (Loss): " + (int) (table.getDealer().getChips() - table.getHouseBalance()) + "\n");
+    }
 }

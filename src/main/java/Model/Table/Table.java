@@ -501,8 +501,8 @@ public class Table {
     // prints results
     public void printHandResults() {
         System.out.println("---- RESULTS ----");
-        printPlayerResults();
-        printHouseResults();
+        tablePrinter.printPlayerResults();
+        tablePrinter.printHouseResults();
         System.out.println("---- END OF ROUND ----");
     }
 }
