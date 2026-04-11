@@ -110,7 +110,7 @@ public class Table {
     public void windDownRoutine() {
         handleRegularPayouts();
         handleInsurancePayouts();
-        printHandResults();
+        tablePrinter.printHandResults();
         clearActiveHands();
         clearAllHands();
     }
@@ -496,13 +496,5 @@ public class Table {
 
     public DealerHand getDealerHand() {
         return dealerPosition.getHand();
-    }
-
-    // prints results
-    public void printHandResults() {
-        System.out.println("---- RESULTS ----");
-        tablePrinter.printPlayerResults();
-        tablePrinter.printHouseResults();
-        System.out.println("---- END OF ROUND ----");
     }
 }
