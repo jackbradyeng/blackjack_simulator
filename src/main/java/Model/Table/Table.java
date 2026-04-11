@@ -103,7 +103,7 @@ public class Table {
         dealOpeningCards();
         setActiveHands();
         calculateHandValues();
-        printActivePlayerHands();
+        tablePrinter.printActivePlayerHands();
         printDealerFirstCard();
     }
 
@@ -358,7 +358,7 @@ public class Table {
                 handlePlayerAction(actingPlayer, playerHand, actingPlayer.executeStrategy(playerHand, dealerHand));
             }
         }
-        printActivePlayerHands();
+        tablePrinter.printActivePlayerHands();
     }
 
     /** executes the player strategy for all active hands at the table. */
@@ -498,17 +498,6 @@ public class Table {
 
     public DealerHand getDealerHand() {
         return dealerPosition.getHand();
-    }
-
-    // prints all active player hands at the table
-    public void printActivePlayerHands() {
-        for(PlayerHand hand : getActiveHands()) {
-            System.out.println("Position: " + hand.getPosition().getPositionNumber());
-            System.out.println("----" + " Hand: " + hand + " Hand value: " + hand.getHandValue() + ".");
-            if (hand.isBust()) {
-                System.out.println("BUST!");
-            }
-        }
     }
 
     // prints the dealer's first card and its corresponding value

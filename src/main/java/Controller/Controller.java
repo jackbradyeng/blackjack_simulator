@@ -245,7 +245,7 @@ public class Controller {
                             handleInsuranceCase(hand);
                         } else {
                             table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
-                            table.printActivePlayerHands();
+                            tablePrinter.printActivePlayerHands();
                             table.printDealerFirstCard();
                         }
                         if (playerAction.equalsIgnoreCase(STAND)) {
