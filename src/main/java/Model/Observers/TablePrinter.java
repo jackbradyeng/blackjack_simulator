@@ -25,16 +25,17 @@ public class TablePrinter implements GameEventListener {
     }
 
     public void printWelcomeMessage() {
-        System.out.println("********************************");
-
-        System.out.println("***** WELCOME TO BLACKJACK *****");
-
-        System.out.println("********************************");
+        String message =
+                """
+                ********************************
+                ***** WELCOME TO BLACKJACK *****
+                ********************************
+                """;
+        System.out.println(message);
     }
 
     public void printNewRoundMessage() {
-        System.out.print("\n");
-        System.out.println("---- NEW ROUND ----");
+        System.out.println("\n---- NEW ROUND ----");
     }
 
     // prints all active player hands at the table
