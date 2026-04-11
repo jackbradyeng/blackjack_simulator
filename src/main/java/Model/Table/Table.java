@@ -10,6 +10,7 @@ import Model.Actors.Player;
 import Model.Deck.Deck;
 import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
 import Model.Observers.TablePrinter;
+import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Table.Bets.Bet;
@@ -51,6 +52,8 @@ public class Table {
     private Double houseBalance;
     @Getter
     private TablePrinter tablePrinter;
+    @Getter
+    private TableStats tableStats;
 
     /// table stats
     @Getter
@@ -76,6 +79,7 @@ public class Table {
         this.playerPositionsIterable = new ArrayList<>();
         this.activeHands = new ArrayList<>();
         this.playerBalances = new HashMap<>();
+        this.tableStats = new TableStats();
         initPlayers(playerCount);
         initPlayerPositions();
         assignDefaultPlayerPositions(players);
