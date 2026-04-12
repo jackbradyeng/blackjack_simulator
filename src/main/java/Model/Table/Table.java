@@ -25,7 +25,6 @@ import Model.Table.Processors.InsuranceBetProcessor;
 import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessor;
 import lombok.Getter;
-import lombok.Setter;
 import static Model.Constants.*;
 
 public class Table {
@@ -53,20 +52,6 @@ public class Table {
     private TablePrinter tablePrinter;
     @Getter
     private TableStats tableStats;
-
-    /// table stats
-    @Getter
-    public int handCount = 0;
-    @Getter
-    public int splitCount = 0;
-    @Getter
-    public int blackjackCount = 0;
-    @Getter
-    public int playerWinCount = 0;
-    @Getter
-    public int playerLossCount = 0;
-    @Getter
-    public int pushCount = 0;
 
     /// default constructor
     public Table(int playerCount, int deckCount, boolean isSimulation) {
