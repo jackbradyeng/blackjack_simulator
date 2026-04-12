@@ -40,7 +40,6 @@ public class Table {
     @Getter
     private final DealerPosition dealerPosition;
     @Getter
-    @Setter
     private ArrayList<Player> players;
     @Getter
     private final ArrayList<PlayerPosition> playerPositionsIterable;
