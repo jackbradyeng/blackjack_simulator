@@ -72,12 +72,13 @@ public class TablePrinter implements GameEventListener {
 
     public void printPlayerResults() {
         for (Player player : table.getPlayers()) {
-            double openingBalance = table.getPlayerBalances().get(player);
+            Double openingBalance = table.getPlayerBalances().get(player);
             String result = """
                     Player: %s
-                    Starting Balance: %s Closing Balance: %s
+                    Starting Balance: %s
+                    Closing Balance: %s
                     Profit (Loss): %s
-                    """.formatted(player, (int) openingBalance, (int) player.getChips(),
+                    """.formatted(player, openingBalance.intValue(), (int) player.getChips(),
                     (int) (player.getChips() - openingBalance));
             System.out.println(result);
         }
@@ -89,7 +90,6 @@ public class TablePrinter implements GameEventListener {
                 Starting Balance: %s
                 Closing Balance: %s
                 Profit (Loss): %s
-
                 """.formatted(table.getHouseBalance().intValue(),
                 (int) table.getDealer().getChips(),
                 (int) table.getDealer().getChips() - table.getHouseBalance());
