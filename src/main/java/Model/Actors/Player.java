@@ -5,9 +5,7 @@ import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 public class Player extends Actor {
 
