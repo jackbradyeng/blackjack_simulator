@@ -78,6 +78,7 @@ public class Table {
         this.playerPositionsIterable = new ArrayList<>();
         this.activeHands = new ArrayList<>();
         this.playerBalances = new HashMap<>();
+        this.tablePrinter = new TablePrinter(this);
         this.tableStats = new TableStats();
         initPlayers(playerCount);
         initPlayerPositions();
