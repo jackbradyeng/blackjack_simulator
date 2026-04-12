@@ -18,6 +18,7 @@ import Model.Table.Bets.InsuranceBet;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.Hand;
 import Model.Table.Hands.PlayerHand;
+import Model.Table.PayoutServices.StandardPayoutService;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Processors.DoubleBetProcessor;
@@ -49,6 +50,8 @@ public class Table {
     @Getter
     private Double houseBalance;
     @Getter
+    StandardPayoutService standardPayoutService;
+    @Getter
     private TablePrinter tablePrinter;
     @Getter
     private TableStats tableStats;
@@ -65,6 +68,7 @@ public class Table {
         this.playerBalances = new HashMap<>();
         this.tablePrinter = new TablePrinter(this);
         this.tableStats = new TableStats();
+        this.standardPayoutService = new StandardPayoutService(tableStats);
         initPlayers(playerCount);
         initPlayerPositions();
         assignDefaultPlayerPositions(players);
@@ -97,7 +101,7 @@ public class Table {
     /** Actions: handles regular payouts, handles insurance payouts, and resets the game state in preparation for a new
      * round. */
     public void windDownRoutine() {
-        handleRegularPayouts();
+        standardPayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         handleInsurancePayouts();
         tablePrinter.printHandResults();
         clearActiveHands();
@@ -386,79 +390,6 @@ public class Table {
                 break;
             case STAND: {}
                 // do nothing
-        }
-    }
-
-    /** processes the non-insurance payouts for each active hand at the table. */
-    private void handleRegularPayouts() {
-        for(PlayerHand hand : getActiveHands()) {
-            for(Map.Entry<Player, Bet> pair : hand.getPairs()) {
-                if(handlePlayerWin(hand, pair)) {
-                    // avoid double counting bets in single player games
-                    if(isStandardBet(pair.getValue()))
-                        tableStats.incrementPlayerWinCount();
-                }
-                else if(handlePlayerPush(hand, pair)) {
-                    if(isStandardBet(pair.getValue()))
-                        tableStats.incrementPushCount();
-                }
-                else if(handlePlayerLoss(hand, pair)) {
-                    if(isStandardBet(pair.getValue())) {
-                        tableStats.incrementPlayerLossCount();
-                    }
-                }
-            }
-        }
-    }
-
-    /** private helper method. Determines whether a given bet is standard or not. */
-    private boolean isStandardBet(Bet bet) {
-        return bet.getClass().equals(Bet.class);
-    }
-
-    /** process a player's bet on a hand if it wins against the dealer. */
-    public boolean handlePlayerWin(PlayerHand hand, Map.Entry<Player, Bet> pair) {
-        if(!hand.isBust() && (getDealerHand().isBust() || hand.getHandValue() >
-                getDealerHand().getHandValue())) {
-            if(!(pair.getValue() instanceof InsuranceBet)) {
-                double payout;
-                // blackjack pays out for natural blackjacks only
-                if(hand.getHandValue() == BLACKJACK_CONSTANT && hand.getCards().size() == 2) {
-                    payout = pair.getValue().getAmount() * (1 +
-                            ((double) DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR / DEFAULT_BLACKJACK_PAYOUT_NUMERATOR));
-                    tableStats.incrementBlackjackCount();
-                } else {
-                    payout = pair.getValue().getAmount() * (1 + DEFAULT_PAYOUT_RATIO);
-                }
-                dealer.dispenseChips(payout - pair.getValue().getAmount());
-                pair.getKey().receiveChips(payout);
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /** processes a player's bet on a hand if it pushes with the dealer. (i.e. the two are equal in value) */
-    public boolean handlePlayerPush(PlayerHand hand, Map.Entry<Player, Bet> pair) {
-        if(!hand.isBust() && hand.getHandValue() == getDealerHand().getHandValue()) {
-            if(!(pair.getValue() instanceof InsuranceBet)) {
-                // refund chips;
-                pair.getKey().receiveChips(pair.getValue().getAmount());
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /** processes a player's bet on a hand if it loses against the dealer. */
-    public boolean handlePlayerLoss(PlayerHand hand, Map.Entry<Player, Bet> pair) {
-        if(hand.isBust() || (!getDealerHand().isBust() && getDealerHand().getHandValue() > hand.getHandValue())) {
-            dealer.receiveChips(pair.getValue().getAmount());
-            return true;
-        } else {
-            return false;
         }
     }
 
