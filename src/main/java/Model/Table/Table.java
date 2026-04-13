@@ -382,8 +382,4 @@ public class Table {
                 // do nothing
         }
     }
-
-    public int getNumberOfPositions() {
-        return playerPositionsIterable.size();
-    }
 }

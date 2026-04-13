@@ -179,7 +179,7 @@ public class Controller {
                     " The minimum bet size is " + DEFAULT_MIN_BET_SIZE + " chips.");
             double playerBet = scanner.nextDouble();
             System.out.println("Which position would you like to bet on? There are " +
-                    table.getNumberOfPositions() + " total positions.");
+                    table.getPlayerPositionsIterable().size() + " total positions.");
             int position = scanner.nextInt();
             table.bookStandardBet(player, table.getPlayerPositionsIterable().get(position - 1), playerBet);
             return true;
