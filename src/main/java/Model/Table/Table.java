@@ -321,7 +321,7 @@ public class Table {
         for(PlayerHand hand : getActiveHands()) {
             hand.setHandValue();
         }
-        getDealerHand().setHandValue();
+        dealerPosition.getHand().setHandValue();
     }
 
     /// STRATEGY LOGIC - TO BE REFACTORED
@@ -398,9 +398,5 @@ public class Table {
 
     public int getNumberOfPositions() {
         return playerPositionsIterable.size();
-    }
-
-    public DealerHand getDealerHand() {
-        return dealerPosition.getHand();
     }
 }

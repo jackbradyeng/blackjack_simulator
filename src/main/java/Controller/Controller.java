@@ -188,7 +188,7 @@ public class Controller {
 
     /** handles cases where the player has a natural blackjack in non-simulation games. */
     private boolean handleBlackjackCase(PlayerHand hand) {
-        if(!hand.hasInsuranceOption(table.getDealerHand())) {
+        if(!hand.hasInsuranceOption(table.getDealerPosition().getHand())) {
             return false;
         } else {
             System.out.println("Would you like to buy insurance? (Y/N)");
@@ -234,7 +234,7 @@ public class Controller {
                     playerCanAct = handleBlackjackCase(hand);
                 } else {
                     System.out.println("Player " + hand.getActingPlayer() + " to act. Select an action:");
-                    DealerHand dealerHand = table.getDealerHand();
+                    DealerHand dealerHand = table.getDealerPosition().getHand();
                     if (hand.isBlackjack()) {
                         handleBlackjackCase(hand);
                     } else if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
