@@ -29,32 +29,19 @@ import lombok.Getter;
 public class Table {
 
     /// instance variables
-    @Getter
-    private boolean isSimulation;
-    @Getter
-    private Deck deck;
-    @Getter
-    private Dealer dealer;
-    @Getter
-    private final DealerPosition dealerPosition;
-    @Getter
-    private ArrayList<Player> players;
-    @Getter
-    private final ArrayList<PlayerPosition> playerPositionsIterable;
-    @Getter
-    private ArrayList<PlayerHand> activeHands;
-    @Getter
-    private HashMap<Player, Double> playerBalances;
-    @Getter
-    private Double houseBalance;
-    @Getter
-    private StandardPayoutService standardPayoutService;
-    @Getter
-    private InsurancePayoutService insurancePayoutService;
-    @Getter
-    private TablePrinter tablePrinter;
-    @Getter
-    private TableStats tableStats;
+    @Getter private boolean isSimulation;
+    @Getter private Deck deck;
+    @Getter private Dealer dealer;
+    @Getter private final DealerPosition dealerPosition;
+    @Getter private ArrayList<Player> players;
+    @Getter private final ArrayList<PlayerPosition> playerPositionsIterable;
+    @Getter private ArrayList<PlayerHand> activeHands;
+    @Getter private HashMap<Player, Double> playerBalances;
+    @Getter private Double houseBalance;
+    @Getter private StandardPayoutService standardPayoutService;
+    @Getter private InsurancePayoutService insurancePayoutService;
+    @Getter private TablePrinter tablePrinter;
+    @Getter private TableStats tableStats;
 
     /// default constructor
     public Table(int playerCount, int deckCount, boolean isSimulation) {
