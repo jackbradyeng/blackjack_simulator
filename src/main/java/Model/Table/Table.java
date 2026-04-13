@@ -1,7 +1,6 @@
 package Model.Table;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Objects;
 import Exceptions.PlayerCountException;
@@ -13,11 +12,10 @@ import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
-import Model.Table.Bets.Bet;
-import Model.Table.Bets.InsuranceBet;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.Hand;
 import Model.Table.Hands.PlayerHand;
+import Model.Table.PayoutServices.InsurancePayoutService;
 import Model.Table.PayoutServices.StandardPayoutService;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
@@ -25,8 +23,8 @@ import Model.Table.Processors.DoubleBetProcessor;
 import Model.Table.Processors.InsuranceBetProcessor;
 import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessor;
-import lombok.Getter;
 import static Model.Constants.*;
+import lombok.Getter;
 
 public class Table {
 
@@ -50,7 +48,9 @@ public class Table {
     @Getter
     private Double houseBalance;
     @Getter
-    StandardPayoutService standardPayoutService;
+    private StandardPayoutService standardPayoutService;
+    @Getter
+    private InsurancePayoutService insurancePayoutService;
     @Getter
     private TablePrinter tablePrinter;
     @Getter
@@ -69,6 +69,7 @@ public class Table {
         this.tablePrinter = new TablePrinter(this);
         this.tableStats = new TableStats();
         this.standardPayoutService = new StandardPayoutService(tableStats);
+        this.insurancePayoutService = new InsurancePayoutService();
         initPlayers(playerCount);
         initPlayerPositions();
         assignDefaultPlayerPositions(players);
@@ -102,7 +103,7 @@ public class Table {
      * round. */
     public void windDownRoutine() {
         standardPayoutService.process(activeHands, dealerPosition.getHand(), dealer);
-        handleInsurancePayouts();
+        insurancePayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         tablePrinter.printHandResults();
         clearActiveHands();
         clearAllHands();
@@ -271,7 +272,7 @@ public class Table {
 
     /** deals a single card to the dealer's hand. */
     private void dealToDealer() {
-        deck.deal().ifPresent(deal -> getDealerHand().receiveCard(deal));
+        deck.deal().ifPresent(deal -> dealerPosition.getHand().receiveCard(deal));
     }
 
     /** deals a single card to each position that has a bet. */
@@ -322,6 +323,8 @@ public class Table {
         }
         getDealerHand().setHandValue();
     }
+
+    /// STRATEGY LOGIC - TO BE REFACTORED
 
     /** executes the dealer's strategy. */
     public void executeDealerStrategy() {
@@ -390,23 +393,6 @@ public class Table {
                 break;
             case STAND: {}
                 // do nothing
-        }
-    }
-
-    /** processes the insurance payouts for each active hand at the table. */
-    private void handleInsurancePayouts() {
-        for(PlayerHand hand : getActiveHands()) {
-            for(Map.Entry<Player, Bet> pair : hand.getPairs()) {
-                if(pair.getValue() instanceof InsuranceBet) {
-                    if(getDealerHand().getHandValue() == BLACKJACK_CONSTANT && hand.hasInsuranceOption(getDealerHand())) {
-                        double payout = pair.getValue().getAmount() * (1 + DEFAULT_INSURANCE_RATIO);
-                        dealer.dispenseChips(payout - pair.getValue().getAmount());
-                        pair.getKey().receiveChips(payout);
-                    } else {
-                        dealer.receiveChips((pair.getValue().getAmount()));
-                    }
-                }
-            }
         }
     }
 
