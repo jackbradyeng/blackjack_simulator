@@ -93,7 +93,8 @@ public class Table {
         insurancePayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         tablePrinter.printHandResults();
         clearActiveHands();
-        clearAllHands();
+        clearPlayerHands();
+        clearDealerHand();
     }
 
     /** initializes each of the players at the table. Throws an exception if more players are allocated than the
@@ -178,6 +179,8 @@ public class Table {
         }
     }
 
+    /// BETTING LOGIC - TO BE SPUN OFF INTO SEPARATE SERVICES
+
     /** books a standard bet for a player on a given position for a given amount. To be called before the cards are
      * dealt. */
     public void bookStandardBet(Player player, PlayerPosition position, double amount) {
@@ -213,6 +216,8 @@ public class Table {
         this.activeHands = processor.refreshActiveHands();
     }
 
+    /// DEAL LOGIC - TO BE REFACTORED
+
     /** returns a list of the active hands at the table. */
     public void setActiveHands() {
         ArrayList<PlayerHand> activeHands = new ArrayList<>();
@@ -229,12 +234,6 @@ public class Table {
 
     public void clearActiveHands() {
         activeHands.clear();
-    }
-
-    /** clears all hands at the table (along with their associated cards and player-bet pairs). */
-    private void clearAllHands() {
-        clearPlayerHands();
-        clearDealerHand();
     }
 
     /** private helper method. Clears all player hands at the table. */
@@ -350,6 +349,8 @@ public class Table {
             executePlayerStrategy(hand, dealer.getPosition().getHand());
         }
     }
+
+    /// ACTION LOGIC - TO BE REFACTORED
 
     public void handleDealerAction(String action) {
         if(action.equals(HIT)) {
