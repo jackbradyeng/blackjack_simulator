@@ -50,7 +50,7 @@ public class TablePrinter implements GameEventListener {
     }
 
     public void printDealerFirstCard() {
-        var firstCard = table.getDealerHand().getCards().getFirst();
+        var firstCard = table.getDealerPosition().getHand().getCards().getFirst();
         String output = """
                 Position: 0 (Dealer)
                 ---- Hand: %s Hand Value: %s.
@@ -59,7 +59,7 @@ public class TablePrinter implements GameEventListener {
     }
 
     public void printDealerHand() {
-        var dealerHand = table.getDealerHand();
+        var dealerHand = table.getDealerPosition().getHand();
         String output = """
                 Position: 0 (Dealer)
                 ---- Hand: %s Hand Value: %s.
