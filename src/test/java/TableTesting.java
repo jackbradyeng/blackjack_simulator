@@ -109,7 +109,7 @@ public class TableTesting {
         Player singlePlayer = table.getPlayers().getFirst();
         table.startupRoutine();
         table.bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
-        table.setActiveHands();
+        table.getHandService().setActiveHands(table.getPlayerPositionsIterable());
 
         assertTrue(table.getActiveHands().size() == 1 &&
                 table.getActiveHands().getFirst().equals(singlePlayer.getDefaultPosition().getHands().getFirst()));
@@ -136,7 +136,7 @@ public class TableTesting {
     public void testActivePlayerDefault() {
         Player player = betOnDefaultPosition().getKey();
         PlayerHand hand = betOnDefaultPosition().getValue();
-        table.determineActingPlayers();
+        table.getHandService().setActingPlayers(table.getPlayerPositionsIterable());
         assertEquals(player, hand.getActingPlayer());
     }
 
@@ -149,7 +149,7 @@ public class TableTesting {
         Player singlePlayer = table.getPlayers().getFirst();
         table.bookStandardBet(singlePlayer, table.getPlayerPositionsIterable().get(1), 100);
         PlayerHand hand = table.getPlayerPositionsIterable().get(1).getHands().getFirst();
-        table.determineActingPlayers();
+        table.getHandService().setActingPlayers(table.getPlayerPositionsIterable());
         assertEquals(singlePlayer, hand.getActingPlayer());
     }
 

@@ -13,6 +13,7 @@ import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Table.DealServices.DealServiceImpl;
+import Model.Table.HandServices.HandServiceImpl;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.Hand;
 import Model.Table.Hands.PlayerHand;
@@ -40,6 +41,7 @@ public class Table {
     @Getter private HashMap<Player, Double> playerBalances;
     @Getter private Double houseBalance;
     @Getter private DealServiceImpl dealService;
+    @Getter private HandServiceImpl handService;
     @Getter private StandardPayoutService standardPayoutService;
     @Getter private InsurancePayoutService insurancePayoutService;
     @Getter private TablePrinter tablePrinter;
@@ -58,6 +60,7 @@ public class Table {
         this.tablePrinter = new TablePrinter(this);
         this.tableStats = new TableStats();
         this.dealService = new DealServiceImpl();
+        this.handService = new HandServiceImpl(tableStats);
         this.standardPayoutService = new StandardPayoutService(tableStats);
         this.insurancePayoutService = new InsurancePayoutService();
         initPlayers(playerCount);
@@ -75,15 +78,15 @@ public class Table {
         logPlayerBalances();
         logHouseBalance();
         checkDeck();
-        createPlayerHands();
-        createDealerHand();
+        handService.createPlayerHands(playerPositionsIterable);
+        handService.createDealerHand(dealerPosition);
     }
 
     /** Actions: deals each player two initial cards, computes the hand values for all active hands, outputs the results. */
     public void drawRoutine() {
-        determineActingPlayers();
+        handService.setActingPlayers(playerPositionsIterable);
         dealService.dealOpeningCards(deck, dealerPosition, playerPositionsIterable);
-        setActiveHands();
+        this.activeHands = handService.setActiveHands(playerPositionsIterable);
         dealService.calculateHandValues(activeHands, dealerPosition);
         tablePrinter.printActivePlayerHands();
         tablePrinter.printDealerFirstCard();
@@ -95,9 +98,9 @@ public class Table {
         standardPayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         insurancePayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         tablePrinter.printHandResults();
-        clearActiveHands();
-        clearPlayerHands();
-        clearDealerHand();
+        handService.clearActiveHands(activeHands);
+        handService.clearPlayerHands(playerPositionsIterable);
+        handService.clearDealerHand(dealerPosition);
     }
 
     /** initializes each of the players at the table. Throws an exception if more players are allocated than the
@@ -161,20 +164,6 @@ public class Table {
         this.houseBalance = dealer.getChips();
     }
 
-    /** initializes an empty hand for each position at the table. Required before dealing cards. */
-    private void createPlayerHands() {
-        for(PlayerPosition position : playerPositionsIterable) {
-            PlayerHand emptyHand = new PlayerHand(position);
-            position.getHands().add(emptyHand);
-        }
-    }
-
-    /** initializes an empty hand for the dealer. */
-    private void createDealerHand() {
-        DealerHand dealerHand = new DealerHand();
-        dealerPosition.setHand(dealerHand);
-    }
-
     /** checks to see how many cards remain in the deck and creates a new deck instance if the number is too low. */
     private void checkDeck() {
         if(deck.getDeck().size() < NEW_DECK_THRESHOLD) {
@@ -219,68 +208,6 @@ public class Table {
         this.activeHands = processor.refreshActiveHands();
     }
 
-    /// DEAL LOGIC - TO BE REFACTORED
-
-    /** returns a list of the active hands at the table. */
-    public void setActiveHands() {
-        ArrayList<PlayerHand> activeHands = new ArrayList<>();
-        for(PlayerPosition position : playerPositionsIterable) {
-            for(PlayerHand hand : position.getHands()) {
-                if(hand.hasBet()) {
-                    activeHands.add(hand);
-                    tableStats.incrementHandCount();
-                }
-            }
-        }
-        this.activeHands =  activeHands;
-    }
-
-    public void clearActiveHands() {
-        activeHands.clear();
-    }
-
-    /** private helper method. Clears all player hands at the table. */
-    private void clearPlayerHands() {
-        for(PlayerPosition position : playerPositionsIterable) {
-            position.clearHands();
-        }
-    }
-
-    /** private helper method. Clears the dealer's hand. */
-    private void clearDealerHand() {
-        dealerPosition.clearHand();
-    }
-
-    /** sets the acting player for each hand at the table. This should usually be the default player. But if the
-     * default player has not bet on their own position, then the acting player is simply the first to have bet on that
-     * position. */
-    public void determineActingPlayers() {
-        for(PlayerPosition position : playerPositionsIterable) {
-            for(PlayerHand hand : position.getHands()) {
-                if(hand.hasBet()) {
-                    if(position.isDefaultPlayerInHand()) {
-                        hand.setActingPlayer(position.getDefaultPlayer());
-                    } else {
-                        hand.setActingPlayer(hand.getPairs().getFirst().getKey());
-                    }
-                }
-            }
-        }
-    }
-
-    /** deals a card to a hand before setting its value. */
-    public void hit(Hand hand) {
-        if(!hand.isBust()) {
-            deck.deal().ifPresent(deal -> {
-                hand.receiveCard(deal);
-                hand.setHandValue();
-                hand.setHasHit(true);
-            });
-        } else {
-            System.out.println("BUST!");
-        }
-    }
-
     /// STRATEGY LOGIC - TO BE REFACTORED
 
     /** executes the dealer's strategy. */
@@ -322,6 +249,19 @@ public class Table {
     }
 
     /// ACTION LOGIC - TO BE REFACTORED
+
+    /** deals a card to a hand before setting its value. */
+    public void hit(Hand hand) {
+        if(!hand.isBust()) {
+            deck.deal().ifPresent(deal -> {
+                hand.receiveCard(deal);
+                hand.setHandValue();
+                hand.setHasHit(true);
+            });
+        } else {
+            System.out.println("BUST!");
+        }
+    }
 
     public void handleDealerAction(String action) {
         if(action.equals(HIT)) {
