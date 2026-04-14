@@ -127,7 +127,7 @@ public class TableTesting {
     @Test
     public void testDealerHasHand() {
         table.startupRoutine();
-        assertNotNull(table.getDealerHand());
+        assertNotNull(table.getDealerPosition().getHand());
     }
 
     /** tests that a given player remains the acting player after betting on their default position. */
