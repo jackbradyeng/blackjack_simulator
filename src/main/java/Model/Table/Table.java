@@ -12,6 +12,7 @@ import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
+import Model.Table.DealServices.DealServiceImpl;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.Hand;
 import Model.Table.Hands.PlayerHand;
@@ -38,6 +39,7 @@ public class Table {
     @Getter private ArrayList<PlayerHand> activeHands;
     @Getter private HashMap<Player, Double> playerBalances;
     @Getter private Double houseBalance;
+    @Getter private DealServiceImpl dealService;
     @Getter private StandardPayoutService standardPayoutService;
     @Getter private InsurancePayoutService insurancePayoutService;
     @Getter private TablePrinter tablePrinter;
@@ -55,6 +57,7 @@ public class Table {
         this.playerBalances = new HashMap<>();
         this.tablePrinter = new TablePrinter(this);
         this.tableStats = new TableStats();
+        this.dealService = new DealServiceImpl();
         this.standardPayoutService = new StandardPayoutService(tableStats);
         this.insurancePayoutService = new InsurancePayoutService();
         initPlayers(playerCount);
@@ -79,9 +82,9 @@ public class Table {
     /** Actions: deals each player two initial cards, computes the hand values for all active hands, outputs the results. */
     public void drawRoutine() {
         determineActingPlayers();
-        dealOpeningCards();
+        dealService.dealOpeningCards(deck, dealerPosition, playerPositionsIterable);
         setActiveHands();
-        calculateHandValues();
+        dealService.calculateHandValues(activeHands, dealerPosition);
         tablePrinter.printActivePlayerHands();
         tablePrinter.printDealerFirstCard();
     }
@@ -248,30 +251,6 @@ public class Table {
         dealerPosition.clearHand();
     }
 
-    /** deals first two cards to all active positions including the dealer. */
-    private void dealOpeningCards() {
-        dealToActivePositions();
-        dealToDealer();
-        dealToActivePositions();
-        dealToDealer();
-    }
-
-    /** deals a single card to the dealer's hand. */
-    private void dealToDealer() {
-        deck.deal().ifPresent(deal -> dealerPosition.getHand().receiveCard(deal));
-    }
-
-    /** deals a single card to each position that has a bet. */
-    private void dealToActivePositions() {
-        for(PlayerPosition position : playerPositionsIterable) {
-            for(PlayerHand hand : position.getHands()) {
-                if(hand.hasBet()) {
-                    deck.deal().ifPresent(hand::receiveCard);
-                }
-            }
-        }
-    }
-
     /** sets the acting player for each hand at the table. This should usually be the default player. But if the
      * default player has not bet on their own position, then the acting player is simply the first to have bet on that
      * position. */
@@ -300,14 +279,6 @@ public class Table {
         } else {
             System.out.println("BUST!");
         }
-    }
-
-    /** calculates the hand value for all active hands at the table. */
-    private void calculateHandValues() {
-        for(PlayerHand hand : getActiveHands()) {
-            hand.setHandValue();
-        }
-        dealerPosition.getHand().setHandValue();
     }
 
     /// STRATEGY LOGIC - TO BE REFACTORED
