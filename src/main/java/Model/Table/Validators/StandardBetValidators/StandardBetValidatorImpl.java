@@ -16,7 +16,7 @@ public class StandardBetValidatorImpl implements StandardBetValidator {
 
     private Player player;
     private ArrayList<Player> players;
-    private PlayerPosition position;
+    private PlayerPosition playerPosition;
     private ArrayList<PlayerPosition> playerPositions;
     private Double amount;
     private boolean isSimulation;
@@ -33,14 +33,14 @@ public class StandardBetValidatorImpl implements StandardBetValidator {
     /** books a standard bet for a player on a given position for a given amount. To be called before the cards are
      * dealt. */
     private boolean isValidStandardBet() {
-        return isValidPlayer(player, players) && isValidPosition(position, playerPositions) && isValidBetSize(amount)
+        return isValidPlayer(player, players) && isValidPosition(playerPosition, playerPositions) && isValidBetSize(amount)
                 && hasSufficientChips(player, amount);
     }
 
     /** same as above but allows the player to overdraw on their stack. Required for collecting statistics such as
      * average profit per hand and expected value as these can be negative. */
     private boolean isValidSimulationBet() {
-        return isValidPlayer(player, players) && isValidPosition(position, playerPositions) && isValidBetSize(amount);
+        return isValidPlayer(player, players) && isValidPosition(playerPosition, playerPositions) && isValidBetSize(amount);
     }
 
     /** validates a given bet size by verifying that it is greater than the minimum allowed for a standard bet. */

@@ -14,7 +14,7 @@ public class StandardBetProcessor implements BetProcessor {
 
     public void process() {
         bookStandardBet(standardBetValidator.getPlayer(),
-                standardBetValidator.getPosition(),
+                standardBetValidator.getPlayerPosition(),
                 standardBetValidator.getAmount());
     }
 

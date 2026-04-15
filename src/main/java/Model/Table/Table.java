@@ -183,7 +183,7 @@ public class Table {
                 StandardBetValidatorImpl.builder()
                         .player(player)
                         .players(players)
-                        .position(position)
+                        .playerPosition(position)
                         .playerPositions(playerPositionsIterable)
                         .amount(amount)
                         .isSimulation(isSimulation)
