@@ -5,15 +5,15 @@ import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.DoubleBet;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.DoubleBetValidatorInterfaceImpl;
+import Model.Table.Validators.DoubleBetValidatorImpl;
 
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
 
 public class DoubleBetProcessor implements BetProcessor {
 
-    private final DoubleBetValidatorInterfaceImpl doubleBetValidatorImpl;
+    private final DoubleBetValidatorImpl doubleBetValidatorImpl;
 
-    public DoubleBetProcessor(DoubleBetValidatorInterfaceImpl doubleBetValidatorImpl) {
+    public DoubleBetProcessor(DoubleBetValidatorImpl doubleBetValidatorImpl) {
         this.doubleBetValidatorImpl = doubleBetValidatorImpl;
     }
 

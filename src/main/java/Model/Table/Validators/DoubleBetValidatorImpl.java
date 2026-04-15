@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class DoubleBetValidatorInterfaceImpl implements DoubleBetValidatorInterface {
+public class DoubleBetValidatorImpl implements DoubleBetValidator {
 
     private Player player;
     private ArrayList<Player> players;

@@ -26,7 +26,7 @@ import Model.Table.Processors.InsuranceBetProcessor;
 import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessor;
 import static Model.Constants.*;
-import Model.Table.Validators.DoubleBetValidatorInterfaceImpl;
+import Model.Table.Validators.DoubleBetValidatorImpl;
 import lombok.Getter;
 
 public class Table {
@@ -195,8 +195,8 @@ public class Table {
      * player has already made a natural blackjack, they cannot double down. */
     public void bookDoubleDownBet(Player player, PlayerPosition position, PlayerHand hand) {
 
-        DoubleBetValidatorInterfaceImpl doubleBetValidatorImpl =
-                new DoubleBetValidatorInterfaceImpl(player, players, position, playerPositionsIterable, hand, isSimulation);
+        DoubleBetValidatorImpl doubleBetValidatorImpl =
+                new DoubleBetValidatorImpl(player, players, position, playerPositionsIterable, hand, isSimulation);
 
         DoubleBetProcessor processor =
                 new DoubleBetProcessor(doubleBetValidatorImpl);
