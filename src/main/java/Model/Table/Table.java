@@ -178,8 +178,16 @@ public class Table {
     /** books a standard bet for a player on a given position for a given amount. To be called before the cards are
      * dealt. */
     public void bookStandardBet(Player player, PlayerPosition position, double amount) {
+
         StandardBetValidatorImpl standardBetValidatorImpl =
-                new StandardBetValidatorImpl(player, players, position, playerPositionsIterable, amount, isSimulation);
+                StandardBetValidatorImpl.builder()
+                        .player(player)
+                        .players(players)
+                        .position(position)
+                        .playerPositions(playerPositionsIterable)
+                        .amount(amount)
+                        .isSimulation(isSimulation)
+                        .build();
 
         StandardBetProcessor processor = new StandardBetProcessor(standardBetValidatorImpl);
 
