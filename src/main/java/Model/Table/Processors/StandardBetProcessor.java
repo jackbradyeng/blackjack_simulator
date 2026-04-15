@@ -4,7 +4,7 @@ import java.util.Map;
 import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.StandardBetValidatorImpl;
+import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
