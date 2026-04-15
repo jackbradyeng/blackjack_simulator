@@ -4,20 +4,22 @@ import java.util.ArrayList;
 import Model.Actors.Player;
 import Model.Table.Positions.PlayerPosition;
 import static Model.Constants.DEFAULT_MIN_BET_SIZE;
+import static Model.Table.Validators.BetValidatorUtils.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-public class StandardBetValidator extends BetValidator {
+@Data
+@Builder
+@AllArgsConstructor
+public class StandardBetValidatorImpl implements StandardBetValidatorInterface {
 
-    private final Player player;
-    private final PlayerPosition position;
-    private final Double amount;
-
-    public StandardBetValidator(boolean isSimulation, ArrayList<Player> players, ArrayList<PlayerPosition> playerPositions,
-                                Player player, PlayerPosition position, Double amount) {
-        super(isSimulation, players, playerPositions, position.getHands().getFirst());
-        this.player = player;
-        this.position = position;
-        this.amount = amount;
-    }
+    private Player player;
+    private ArrayList<Player> players;
+    private PlayerPosition position;
+    private ArrayList<PlayerPosition> playerPositions;
+    private Double amount;
+    private boolean isSimulation;
 
     /** determines if the given player, position, and bet amount are valid. */
     public boolean isValid() {
@@ -31,14 +33,14 @@ public class StandardBetValidator extends BetValidator {
     /** books a standard bet for a player on a given position for a given amount. To be called before the cards are
      * dealt. */
     private boolean isValidStandardBet() {
-        return isValidPlayer(player) && isValidPosition(position) && isValidBetSize(amount)
+        return isValidPlayer(player, players) && isValidPosition(position, playerPositions) && isValidBetSize(amount)
                 && hasSufficientChips(player, amount);
     }
 
     /** same as above but allows the player to overdraw on their stack. Required for collecting statistics such as
      * average profit per hand and expected value as these can be negative. */
     private boolean isValidSimulationBet() {
-        return isValidPlayer(player) && isValidPosition(position) && isValidBetSize(amount);
+        return isValidPlayer(player, players) && isValidPosition(position, playerPositions) && isValidBetSize(amount);
     }
 
     /** validates a given bet size by verifying that it is greater than the minimum allowed for a standard bet. */

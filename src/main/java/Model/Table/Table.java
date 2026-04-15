@@ -27,6 +27,7 @@ import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessor;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
+import Model.Table.Validators.StandardBetValidatorImpl;
 import lombok.Getter;
 
 public class Table {
@@ -177,8 +178,11 @@ public class Table {
     /** books a standard bet for a player on a given position for a given amount. To be called before the cards are
      * dealt. */
     public void bookStandardBet(Player player, PlayerPosition position, double amount) {
-        StandardBetProcessor processor = new StandardBetProcessor(isSimulation, players, playerPositionsIterable,
-                player, position, amount);
+        StandardBetValidatorImpl standardBetValidatorImpl =
+                new StandardBetValidatorImpl(player, players, position, playerPositionsIterable, amount, isSimulation);
+
+        StandardBetProcessor processor = new StandardBetProcessor(standardBetValidatorImpl);
+
         processor.process();
     }
 
@@ -198,8 +202,7 @@ public class Table {
         DoubleBetValidatorImpl doubleBetValidatorImpl =
                 new DoubleBetValidatorImpl(player, players, position, playerPositionsIterable, hand, isSimulation);
 
-        DoubleBetProcessor processor =
-                new DoubleBetProcessor(doubleBetValidatorImpl);
+        DoubleBetProcessor processor = new DoubleBetProcessor(doubleBetValidatorImpl);
 
         processor.process();
     }
