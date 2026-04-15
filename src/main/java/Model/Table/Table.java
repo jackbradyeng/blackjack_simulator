@@ -26,6 +26,7 @@ import Model.Table.Processors.InsuranceBetProcessor;
 import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessor;
 import static Model.Constants.*;
+import Model.Table.Validators.DoubleBetValidatorInterfaceImpl;
 import lombok.Getter;
 
 public class Table {
@@ -193,8 +194,13 @@ public class Table {
      * they do, they can only hit one more time. If the player has already hit, they cannot double down. Also, if the
      * player has already made a natural blackjack, they cannot double down. */
     public void bookDoubleDownBet(Player player, PlayerPosition position, PlayerHand hand) {
-        DoubleBetProcessor processor = new DoubleBetProcessor(isSimulation, players, playerPositionsIterable,
-                player, position, hand);
+
+        DoubleBetValidatorInterfaceImpl doubleBetValidatorImpl =
+                new DoubleBetValidatorInterfaceImpl(player, players, position, playerPositionsIterable, hand, isSimulation);
+
+        DoubleBetProcessor processor =
+                new DoubleBetProcessor(doubleBetValidatorImpl);
+
         processor.process();
     }
 

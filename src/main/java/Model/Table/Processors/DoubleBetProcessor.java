@@ -1,31 +1,26 @@
 package Model.Table.Processors;
 
-import java.util.ArrayList;
 import java.util.Map;
 import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.DoubleBet;
-import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.DoubleBetValidator;
+import Model.Table.Validators.DoubleBetValidatorInterfaceImpl;
+
+import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
 
 public class DoubleBetProcessor implements BetProcessor {
 
-    private final Player player;
-    private final PlayerPosition position;
-    private final DoubleBetValidator validator;
+    private final DoubleBetValidatorInterfaceImpl doubleBetValidatorImpl;
 
-    public DoubleBetProcessor(boolean isSimulation, ArrayList<Player> players, ArrayList<PlayerPosition> playerPositions,
-                                Player player, PlayerPosition position, PlayerHand hand) {
-        this.player = player;
-        this.position = position;
-        this.validator = new DoubleBetValidator(isSimulation, players, playerPositions, player, position, hand);
+    public DoubleBetProcessor(DoubleBetValidatorInterfaceImpl doubleBetValidatorImpl) {
+        this.doubleBetValidatorImpl = doubleBetValidatorImpl;
     }
 
     public void process() {
-        if(validator.isValid()) {
-            double amount = validator.getOriginalBet(player);
-            bookBet(player, position, amount);
+        if(doubleBetValidatorImpl.isValid()) {
+            double amount = getOriginalBet(doubleBetValidatorImpl.getPlayer(), doubleBetValidatorImpl.getPlayerHand());
+            bookBet(doubleBetValidatorImpl.getPlayer(), doubleBetValidatorImpl.getPlayerPosition(), amount);
         }
     }
 
