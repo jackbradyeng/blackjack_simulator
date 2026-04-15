@@ -1,6 +1,6 @@
 package Model.Table.Validators;
 
-public interface StandardBetValidatorInterface {
+public interface StandardBetValidator {
 
     boolean isValid();
 }

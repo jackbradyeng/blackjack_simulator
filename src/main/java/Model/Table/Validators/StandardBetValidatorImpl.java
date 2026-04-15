@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class StandardBetValidatorImpl implements StandardBetValidatorInterface {
+public class StandardBetValidatorImpl implements StandardBetValidator {
 
     private Player player;
     private ArrayList<Player> players;
