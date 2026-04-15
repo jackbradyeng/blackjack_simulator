@@ -1,4 +1,4 @@
-package Model.Table.Validators;
+package Model.Table.Validators.DoubleBetValidators;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -5,7 +5,7 @@ import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.DoubleBet;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.DoubleBetValidatorImpl;
+import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
 
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
 
