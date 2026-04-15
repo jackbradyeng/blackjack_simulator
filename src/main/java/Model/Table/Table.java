@@ -200,7 +200,14 @@ public class Table {
     public void bookDoubleDownBet(Player player, PlayerPosition position, PlayerHand hand) {
 
         DoubleBetValidatorImpl doubleBetValidatorImpl =
-                new DoubleBetValidatorImpl(player, players, position, playerPositionsIterable, hand, isSimulation);
+                DoubleBetValidatorImpl.builder()
+                        .player(player)
+                        .players(players)
+                        .playerPosition(position)
+                        .playerPositions(playerPositionsIterable)
+                        .playerHand(hand)
+                        .isSimulation(isSimulation)
+                        .build();
 
         DoubleBetProcessor processor = new DoubleBetProcessor(doubleBetValidatorImpl);
 
