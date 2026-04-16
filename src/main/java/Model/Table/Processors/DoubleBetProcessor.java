@@ -4,23 +4,24 @@ import java.util.Map;
 import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.DoubleBet;
+import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
+import Model.Table.Validators.DoubleBetValidators.DoubleBetValidator;
 
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
 
-public class DoubleBetProcessor implements BetProcessor {
+public class DoubleBetProcessor implements DoubleBetProcessorInterface {
 
-    private final DoubleBetValidatorImpl doubleBetValidatorImpl;
+    private final DoubleBetValidator doubleBetValidator;
 
-    public DoubleBetProcessor(DoubleBetValidatorImpl doubleBetValidatorImpl) {
-        this.doubleBetValidatorImpl = doubleBetValidatorImpl;
+    public DoubleBetProcessor(DoubleBetValidator doubleBetValidator) {
+        this.doubleBetValidator = doubleBetValidator;
     }
 
-    public void process() {
-        if(doubleBetValidatorImpl.isValid()) {
-            double amount = getOriginalBet(doubleBetValidatorImpl.getPlayer(), doubleBetValidatorImpl.getPlayerHand());
-            bookBet(doubleBetValidatorImpl.getPlayer(), doubleBetValidatorImpl.getPlayerPosition(), amount);
+    public void process(Player player, PlayerPosition playerPosition, PlayerHand playerHand) {
+        if(doubleBetValidator.isValid()) {
+            double amount = getOriginalBet(player, playerHand);
+            bookBet(player, playerPosition, amount);
         }
     }
 

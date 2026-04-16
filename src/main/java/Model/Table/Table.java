@@ -219,7 +219,7 @@ public class Table {
 
         DoubleBetProcessor processor = new DoubleBetProcessor(doubleBetValidatorImpl);
 
-        processor.process();
+        processor.process(player, position, hand);
     }
 
     /** if the player's first and second cards are equal in value and if the player has chips remaining equal to the
