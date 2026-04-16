@@ -8,14 +8,12 @@ import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class StandardBetProcessor implements BetProcessor {
+public class StandardBetProcessor implements StandardBetProcessorInterface {
 
     private final StandardBetValidatorImpl standardBetValidator;
 
-    public void process() {
-        bookStandardBet(standardBetValidator.getPlayer(),
-                standardBetValidator.getPlayerPosition(),
-                standardBetValidator.getAmount());
+    public void process(Player player, PlayerPosition playerPosition, double amount) {
+        bookStandardBet(player, playerPosition, amount);
     }
 
     /** books a standard bet for a player on a given position for a given amount. To be called BEFORE the cards are

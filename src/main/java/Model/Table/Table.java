@@ -191,7 +191,7 @@ public class Table {
 
         StandardBetProcessor processor = new StandardBetProcessor(standardBetValidatorImpl);
 
-        processor.process();
+        processor.process(player, position, amount);
     }
 
     /** books an insurance bet for a player on a given position for a given amount. To be called AFTER the cards are
