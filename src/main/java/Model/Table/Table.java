@@ -27,7 +27,7 @@ import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
-import Model.Table.Validators.InsuranceBetValidator;
+import Model.Table.Validators.InsuranceBetValidatorImpl;
 import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.Getter;
 
@@ -199,14 +199,14 @@ public class Table {
      * dealt. */
     public void bookInsuranceBet(Player player, PlayerPosition position, PlayerHand hand, double amount) {
 
-        InsuranceBetValidator insuranceBetValidator =
-                InsuranceBetValidator.builder()
+        InsuranceBetValidatorImpl insuranceBetValidatorImpl =
+                InsuranceBetValidatorImpl.builder()
                         .player(player)
                         .playerHand(hand)
                         .amount(amount)
                         .build();
 
-        InsuranceBetProcessorImpl processor = new InsuranceBetProcessorImpl(insuranceBetValidator);
+        InsuranceBetProcessorImpl processor = new InsuranceBetProcessorImpl(insuranceBetValidatorImpl);
 
         processor.process(player, position, amount);
     }
