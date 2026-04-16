@@ -8,7 +8,7 @@ import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class StandardBetProcessorImpl implements StandardBetProcessorInterface {
+public class StandardBetProcessorImpl implements StandardBetProcessor {
 
     private final StandardBetValidatorImpl standardBetValidator;
 
