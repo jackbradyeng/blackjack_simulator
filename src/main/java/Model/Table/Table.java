@@ -22,7 +22,7 @@ import Model.Table.PayoutServices.StandardPayoutService;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Processors.DoubleBetProcessors.DoubleBetProcessorImpl;
-import Model.Table.Processors.InsuranceBetProcessor;
+import Model.Table.Processors.InsuranceBetProcessorImpl;
 import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
@@ -206,7 +206,7 @@ public class Table {
                         .amount(amount)
                         .build();
 
-        InsuranceBetProcessor processor = new InsuranceBetProcessor(insuranceBetValidator);
+        InsuranceBetProcessorImpl processor = new InsuranceBetProcessorImpl(insuranceBetValidator);
 
         processor.process(player, position, amount);
     }
