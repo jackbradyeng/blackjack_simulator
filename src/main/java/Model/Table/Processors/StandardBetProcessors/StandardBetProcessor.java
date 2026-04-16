@@ -1,4 +1,4 @@
-package Model.Table.Processors;
+package Model.Table.Processors.StandardBetProcessors;
 
 import Model.Actors.Player;
 import Model.Table.Positions.PlayerPosition;
