@@ -24,7 +24,7 @@ import Model.Table.Positions.PlayerPosition;
 import Model.Table.Processors.DoubleBetProcessors.DoubleBetProcessorImpl;
 import Model.Table.Processors.InsuranceBetProcessor;
 import Model.Table.Processors.SplitBetProcessor;
-import Model.Table.Processors.StandardBetProcessor;
+import Model.Table.Processors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
 import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
@@ -189,7 +189,7 @@ public class Table {
                         .isSimulation(isSimulation)
                         .build();
 
-        StandardBetProcessor processor = new StandardBetProcessor(standardBetValidatorImpl);
+        StandardBetProcessorImpl processor = new StandardBetProcessorImpl(standardBetValidatorImpl);
 
         processor.process(player, position, amount);
     }
