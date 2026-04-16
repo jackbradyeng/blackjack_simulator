@@ -7,16 +7,13 @@ import Model.Table.Bets.DoubleBet;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidator;
-
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class DoubleBetProcessorImpl implements DoubleBetProcessor {
 
     private final DoubleBetValidator doubleBetValidator;
-
-    public DoubleBetProcessorImpl(DoubleBetValidator doubleBetValidator) {
-        this.doubleBetValidator = doubleBetValidator;
-    }
 
     public void process(Player player, PlayerPosition playerPosition, PlayerHand playerHand) {
         if(doubleBetValidator.isValid()) {
