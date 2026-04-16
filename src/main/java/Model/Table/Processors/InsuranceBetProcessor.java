@@ -1,38 +1,26 @@
 package Model.Table.Processors;
 
-import java.util.ArrayList;
 import java.util.Map;
 import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.InsuranceBet;
-import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.InsuranceBetValidator;
+import Model.Table.Validators.InsuranceBetValidatorInterface;
+import lombok.AllArgsConstructor;
 
-public class InsuranceBetProcessor implements BetProcessor {
+@AllArgsConstructor
+public class InsuranceBetProcessor implements InsuranceBetProcessorInterface {
 
-    private final Player player;
-    private final PlayerPosition position;
-    private final Double amount;
-    private final InsuranceBetValidator validator;
+    private final InsuranceBetValidatorInterface insuranceBetValidatorInterface;
 
-    public InsuranceBetProcessor(boolean isSimulation, ArrayList<Player> players,
-                                 ArrayList<PlayerPosition> playerPositions, Player player, PlayerPosition position,
-                                 PlayerHand hand, Double amount) {
-        this.player = player;
-        this.position = position;
-        this.amount = amount;
-        this.validator = new InsuranceBetValidator(isSimulation, players, playerPositions, player, position, hand, amount);
-    }
-
-    public void process() {
-        bookInsuranceBet(player, position, amount);
+    public void process(Player player, PlayerPosition playerPosition, double amount) {
+        bookInsuranceBet(player, playerPosition, amount);
     }
 
     /** books an insurance bet for a player on a given position for a given amount. To be called AFTER the cards are
      * dealt. */
     private void bookInsuranceBet(Player player, PlayerPosition position, double amount) {
-        if (validator.isValid()) {
+        if (insuranceBetValidatorInterface.isValid()) {
             bookBet(player, position, amount);
         } else {
             System.out.println("INVALID BET");

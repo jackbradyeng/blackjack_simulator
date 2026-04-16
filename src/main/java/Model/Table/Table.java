@@ -27,6 +27,7 @@ import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
+import Model.Table.Validators.InsuranceBetValidator;
 import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.Getter;
 
@@ -197,9 +198,17 @@ public class Table {
     /** books an insurance bet for a player on a given position for a given amount. To be called AFTER the cards are
      * dealt. */
     public void bookInsuranceBet(Player player, PlayerPosition position, PlayerHand hand, double amount) {
-        InsuranceBetProcessor processor = new InsuranceBetProcessor(isSimulation, players, playerPositionsIterable,
-                player, position, hand, amount);
-        processor.process();
+
+        InsuranceBetValidator insuranceBetValidator =
+                InsuranceBetValidator.builder()
+                        .player(player)
+                        .playerHand(hand)
+                        .amount(amount)
+                        .build();
+
+        InsuranceBetProcessor processor = new InsuranceBetProcessor(insuranceBetValidator);
+
+        processor.process(player, position, amount);
     }
 
     /** doubles the player's existing bet at a given position for that amount. Players can only double down once and if
