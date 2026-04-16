@@ -10,7 +10,7 @@ import Model.Table.Validators.DoubleBetValidators.DoubleBetValidator;
 
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
 
-public class DoubleBetProcessorImpl implements DoubleBetProcessorInterface {
+public class DoubleBetProcessorImpl implements DoubleBetProcessor {
 
     private final DoubleBetValidator doubleBetValidator;
 
