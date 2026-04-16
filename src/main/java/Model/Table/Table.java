@@ -21,7 +21,7 @@ import Model.Table.PayoutServices.InsurancePayoutService;
 import Model.Table.PayoutServices.StandardPayoutService;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Processors.DoubleBetProcessor;
+import Model.Table.Processors.DoubleBetProcessorImpl;
 import Model.Table.Processors.InsuranceBetProcessor;
 import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessor;
@@ -217,7 +217,7 @@ public class Table {
                         .isSimulation(isSimulation)
                         .build();
 
-        DoubleBetProcessor processor = new DoubleBetProcessor(doubleBetValidatorImpl);
+        DoubleBetProcessorImpl processor = new DoubleBetProcessorImpl(doubleBetValidatorImpl);
 
         processor.process(player, position, hand);
     }
