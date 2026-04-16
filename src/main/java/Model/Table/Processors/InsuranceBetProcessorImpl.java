@@ -9,7 +9,7 @@ import Model.Table.Validators.InsuranceBetValidatorInterface;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class InsuranceBetProcessorImpl implements InsuranceBetProcessorInterface {
+public class InsuranceBetProcessorImpl implements InsuranceBetProcessor {
 
     private final InsuranceBetValidatorInterface insuranceBetValidatorInterface;
 
