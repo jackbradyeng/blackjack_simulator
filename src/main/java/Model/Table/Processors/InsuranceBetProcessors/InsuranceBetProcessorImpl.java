@@ -1,4 +1,4 @@
-package Model.Table.Processors;
+package Model.Table.Processors.InsuranceBetProcessors;
 
 import java.util.Map;
 import Model.Actors.Player;
