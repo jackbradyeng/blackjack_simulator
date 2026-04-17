@@ -28,6 +28,7 @@ import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
 import Model.Table.Validators.InsuranceBetValidators.InsuranceBetValidatorImpl;
+import Model.Table.Validators.SplitBetValidator;
 import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.Getter;
 
@@ -235,10 +236,13 @@ public class Table {
      * size of their original bet, the hand is "split". Meaning that the second card is allocated to a new hand and
      * the player's new bet is associated with this hand. */
     public void splitHand(Player player, PlayerPosition position, PlayerHand hand) {
-        SplitBetProcessor processor = new SplitBetProcessor(isSimulation, players, playerPositionsIterable, activeHands,
-                player, position, hand);
-        processor.process();
-        this.activeHands = processor.refreshActiveHands();
+
+        SplitBetProcessor splitBetProcessor = new SplitBetProcessor();
+        SplitBetValidator splitBetValidator = new SplitBetValidator();
+
+        if (splitBetValidator.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
+            splitBetProcessor.process(player, position, hand, activeHands);
+        }
     }
 
     /// STRATEGY LOGIC - TO BE REFACTORED
