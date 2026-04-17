@@ -181,19 +181,12 @@ public class Table {
      * dealt. */
     public void bookStandardBet(Player player, PlayerPosition position, double amount) {
 
-        StandardBetValidatorImpl standardBetValidatorImpl =
-                StandardBetValidatorImpl.builder()
-                        .player(player)
-                        .players(players)
-                        .playerPosition(position)
-                        .playerPositions(playerPositionsIterable)
-                        .amount(amount)
-                        .isSimulation(isSimulation)
-                        .build();
+        StandardBetValidatorImpl standardBetValidatorImpl = new StandardBetValidatorImpl();
+        StandardBetProcessorImpl standardBetProcessorImpl = new StandardBetProcessorImpl();
 
-        StandardBetProcessorImpl processor = new StandardBetProcessorImpl(standardBetValidatorImpl);
-
-        processor.process(player, position, amount);
+        if (standardBetValidatorImpl.isValid(player, players, position, playerPositionsIterable, amount, isSimulation)) {
+            standardBetProcessorImpl.process(player, position, amount);
+        }
     }
 
     /** books an insurance bet for a player on a given position for a given amount. To be called AFTER the cards are

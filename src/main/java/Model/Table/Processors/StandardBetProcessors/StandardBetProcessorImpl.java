@@ -4,13 +4,10 @@ import java.util.Map;
 import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public class StandardBetProcessorImpl implements StandardBetProcessor {
-
-    private final StandardBetValidatorImpl standardBetValidator;
 
     public void process(Player player, PlayerPosition playerPosition, double amount) {
         bookStandardBet(player, playerPosition, amount);
@@ -19,9 +16,7 @@ public class StandardBetProcessorImpl implements StandardBetProcessor {
     /** books a standard bet for a player on a given position for a given amount. To be called BEFORE the cards are
      * dealt. */
     private void bookStandardBet(Player player, PlayerPosition position, double amount) {
-        if(standardBetValidator.isValid()) {
-            bookBet(player, position, amount);
-        }
+        bookBet(player, position, amount);
     }
 
     /** books a bet for a player on a given position for a given amount. */
