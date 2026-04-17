@@ -27,7 +27,7 @@ public class TableTesting {
     private Map.Entry<Player, PlayerHand> betOnDefaultPosition() {
         table.startupRoutine();
         Player singlePlayer = table.getPlayers().getFirst();
-        table.bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
+        table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
         PlayerHand hand = table.getPlayers().getFirst().getDefaultPosition().getHands().getFirst();
         return Map.entry(singlePlayer, hand);
     }
@@ -92,7 +92,7 @@ public class TableTesting {
     public void testPlayerStandardBet() {
         Player player = table.getPlayers().getFirst();
         table.startupRoutine();
-        table.bookStandardBet(player, player.getDefaultPosition(), 100);
+        table.getBettingService().bookStandardBet(player, player.getDefaultPosition(), 100);
 
         // a standard bet should be allocated to the first hand at a given position
         PlayerHand hand = player.getDefaultPosition().getHands().getFirst();
@@ -108,7 +108,7 @@ public class TableTesting {
     public void testActiveHandCount() {
         Player singlePlayer = table.getPlayers().getFirst();
         table.startupRoutine();
-        table.bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
+        table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
         table.getHandService().setActiveHands(table.getPlayerPositionsIterable());
 
         assertTrue(table.getActiveHands().size() == 1 &&
@@ -147,7 +147,7 @@ public class TableTesting {
     public void testActivePlayerNonDefault() {
         table.startupRoutine();
         Player singlePlayer = table.getPlayers().getFirst();
-        table.bookStandardBet(singlePlayer, table.getPlayerPositionsIterable().get(1), 100);
+        table.getBettingService().bookStandardBet(singlePlayer, table.getPlayerPositionsIterable().get(1), 100);
         PlayerHand hand = table.getPlayerPositionsIterable().get(1).getHands().getFirst();
         table.getHandService().setActingPlayers(table.getPlayerPositionsIterable());
         assertEquals(singlePlayer, hand.getActingPlayer());

@@ -191,58 +191,6 @@ public class Table {
         }
     }
 
-    /// BETTING LOGIC - TO BE SPUN OFF INTO SEPARATE SERVICES
-
-    /** books a standard bet for a player on a given position for a given amount. To be called before the cards are
-     * dealt. */
-    public void bookStandardBet(Player player, PlayerPosition position, double amount) {
-
-        StandardBetValidatorImpl standardBetValidatorImpl = new StandardBetValidatorImpl();
-        StandardBetProcessorImpl standardBetProcessorImpl = new StandardBetProcessorImpl();
-
-        if (standardBetValidatorImpl.isValid(player, players, position, playerPositionsIterable, amount, isSimulation)) {
-            standardBetProcessorImpl.process(player, position, amount);
-        }
-    }
-
-    /** books an insurance bet for a player on a given position for a given amount. To be called AFTER the cards are
-     * dealt. */
-    public void bookInsuranceBet(Player player, PlayerPosition position, PlayerHand hand, double amount) {
-
-        InsuranceBetValidatorImpl insuranceBetValidatorImpl = new InsuranceBetValidatorImpl();
-        InsuranceBetProcessorImpl insuranceBetProcessorImpl = new InsuranceBetProcessorImpl();
-
-        if (insuranceBetValidatorImpl.isValid(player, hand, amount)) {
-            insuranceBetProcessorImpl.process(player, position, amount);
-        }
-    }
-
-    /** doubles the player's existing bet at a given position for that amount. Players can only double down once and if
-     * they do, they can only hit one more time. If the player has already hit, they cannot double down. Also, if the
-     * player has already made a natural blackjack, they cannot double down. */
-    public void bookDoubleDownBet(Player player, PlayerPosition position, PlayerHand hand) {
-
-        DoubleBetValidatorImpl doubleBetValidatorImpl = new DoubleBetValidatorImpl();
-        DoubleBetProcessorImpl doubleBetProcessorImpl = new DoubleBetProcessorImpl();
-
-        if (doubleBetValidatorImpl.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
-            doubleBetProcessorImpl.process(player, position, hand);
-        }
-    }
-
-    /** if the player's first and second cards are equal in value and if the player has chips remaining equal to the
-     * size of their original bet, the hand is "split". Meaning that the second card is allocated to a new hand and
-     * the player's new bet is associated with this hand. */
-    public void splitHand(Player player, PlayerPosition position, PlayerHand hand) {
-
-        SplitBetProcessorImpl splitBetProcessorImpl = new SplitBetProcessorImpl();
-        SplitBetValidatorImpl splitBetValidatorImpl = new SplitBetValidatorImpl();
-
-        if (splitBetValidatorImpl.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
-            splitBetProcessorImpl.process(player, position, hand, activeHands);
-        }
-    }
-
     /// STRATEGY LOGIC - TO BE REFACTORED
 
     /** executes the dealer's strategy. */

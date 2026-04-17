@@ -43,7 +43,8 @@ public class Controller {
 
         for(int i = 0; i < DEFAULT_NUMBER_OF_ITERATIONS; i++) {
             table.startupRoutine();
-            table.bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
+            table.getBettingService()
+                    .bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
             table.drawRoutine();
             table.executePlayerStrategyForAll();
             tablePrinter.printDealerHand();
@@ -181,7 +182,8 @@ public class Controller {
             System.out.println("Which position would you like to bet on? There are " +
                     table.getPlayerPositionsIterable().size() + " total positions.");
             int position = scanner.nextInt();
-            table.bookStandardBet(player, table.getPlayerPositionsIterable().get(position - 1), playerBet);
+            table.getBettingService()
+                    .bookStandardBet(player, table.getPlayerPositionsIterable().get(position - 1), playerBet);
             return true;
         } else return action.equalsIgnoreCase("N");
     }
@@ -212,7 +214,8 @@ public class Controller {
                     "initial bet.");
             try {
                 double insuranceBet = scanner.nextDouble();
-                table.bookInsuranceBet(hand.getActingPlayer(), hand.getPosition(), hand, insuranceBet);
+                table.getBettingService()
+                        .bookInsuranceBet(hand.getActingPlayer(), hand.getPosition(), hand, insuranceBet);
                 break;
             } catch (RuntimeException e) {
                 System.out.println("Invalid input.");
