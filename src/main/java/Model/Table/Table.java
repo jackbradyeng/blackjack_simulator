@@ -23,7 +23,7 @@ import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Processors.DoubleBetProcessors.DoubleBetProcessorImpl;
 import Model.Table.Processors.InsuranceBetProcessors.InsuranceBetProcessorImpl;
-import Model.Table.Processors.SplitBetProcessor;
+import Model.Table.Processors.SplitBetProcessorImpl;
 import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
@@ -237,11 +237,11 @@ public class Table {
      * the player's new bet is associated with this hand. */
     public void splitHand(Player player, PlayerPosition position, PlayerHand hand) {
 
-        SplitBetProcessor splitBetProcessor = new SplitBetProcessor();
+        SplitBetProcessorImpl splitBetProcessorIMpl = new SplitBetProcessorImpl();
         SplitBetValidator splitBetValidator = new SplitBetValidator();
 
         if (splitBetValidator.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
-            splitBetProcessor.process(player, position, hand, activeHands);
+            splitBetProcessorIMpl.process(player, position, hand, activeHands);
         }
     }
 
