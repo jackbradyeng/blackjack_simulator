@@ -1,4 +1,4 @@
-package Model.Table.Validators;
+package Model.Table.Validators.InsuranceBetValidators;
 
 import java.util.Map;
 import Model.Actors.Player;

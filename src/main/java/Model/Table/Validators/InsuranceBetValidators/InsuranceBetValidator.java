@@ -1,4 +1,4 @@
-package Model.Table.Validators;
+package Model.Table.Validators.InsuranceBetValidators;
 
 public interface InsuranceBetValidator {
 

@@ -27,7 +27,7 @@ import Model.Table.Processors.SplitBetProcessor;
 import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
-import Model.Table.Validators.InsuranceBetValidatorImpl;
+import Model.Table.Validators.InsuranceBetValidators.InsuranceBetValidatorImpl;
 import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.Getter;
 

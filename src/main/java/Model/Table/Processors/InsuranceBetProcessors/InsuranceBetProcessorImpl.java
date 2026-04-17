@@ -5,7 +5,7 @@ import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.InsuranceBet;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.InsuranceBetValidator;
+import Model.Table.Validators.InsuranceBetValidators.InsuranceBetValidator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
