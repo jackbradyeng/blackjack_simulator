@@ -5,7 +5,7 @@ import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 import java.util.ArrayList;
 
-public interface SplitBetProcessorInterface {
+public interface SplitBetProcessor {
 
     void process(Player player,
                         PlayerPosition playerPosition,

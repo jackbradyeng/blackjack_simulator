@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
 
 @NoArgsConstructor
-public class SplitBetProcessorImpl implements SplitBetProcessorInterface {
+public class SplitBetProcessorImpl implements SplitBetProcessor {
 
     public void process(Player player,
                         PlayerPosition playerPosition,
