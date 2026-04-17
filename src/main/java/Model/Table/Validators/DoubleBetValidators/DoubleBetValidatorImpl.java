@@ -8,23 +8,17 @@ import Model.Table.Bets.DoubleBet;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 import static Model.Table.Validators.BetValidatorUtils.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class DoubleBetValidatorImpl implements DoubleBetValidator {
 
-    private Player player;
-    private ArrayList<Player> players;
-    private PlayerPosition playerPosition;
-    private ArrayList<PlayerPosition> playerPositions;
-    private PlayerHand playerHand;
-    private boolean isSimulation;
-
-    public boolean isValid() {
+    public boolean isValid(Player player,
+                           ArrayList<Player> players,
+                           PlayerPosition playerPosition,
+                           ArrayList<PlayerPosition> playerPositions,
+                           PlayerHand playerHand,
+                           boolean isSimulation) {
 
         if(isSimulation) {
             return isValidSimulationDoubleBet(player, players, playerPosition, playerPositions, playerHand);

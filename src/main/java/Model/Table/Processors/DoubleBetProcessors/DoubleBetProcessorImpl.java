@@ -6,20 +6,15 @@ import Model.Table.Bets.Bet;
 import Model.Table.Bets.DoubleBet;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.DoubleBetValidators.DoubleBetValidator;
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public class DoubleBetProcessorImpl implements DoubleBetProcessor {
 
-    private final DoubleBetValidator doubleBetValidator;
-
     public void process(Player player, PlayerPosition playerPosition, PlayerHand playerHand) {
-        if(doubleBetValidator.isValid()) {
-            double amount = getOriginalBet(player, playerHand);
-            bookBet(player, playerPosition, amount);
-        }
+        double amount = getOriginalBet(player, playerHand);
+        bookBet(player, playerPosition, amount);
     }
 
     /** books a bet for a player on a given position for a given amount. */

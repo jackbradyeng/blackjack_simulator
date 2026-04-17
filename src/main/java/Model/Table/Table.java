@@ -217,19 +217,12 @@ public class Table {
      * player has already made a natural blackjack, they cannot double down. */
     public void bookDoubleDownBet(Player player, PlayerPosition position, PlayerHand hand) {
 
-        DoubleBetValidatorImpl doubleBetValidatorImpl =
-                DoubleBetValidatorImpl.builder()
-                        .player(player)
-                        .players(players)
-                        .playerPosition(position)
-                        .playerPositions(playerPositionsIterable)
-                        .playerHand(hand)
-                        .isSimulation(isSimulation)
-                        .build();
+        DoubleBetValidatorImpl doubleBetValidatorImpl = new DoubleBetValidatorImpl();
+        DoubleBetProcessorImpl doubleBetProcessorImpl = new DoubleBetProcessorImpl();
 
-        DoubleBetProcessorImpl processor = new DoubleBetProcessorImpl(doubleBetValidatorImpl);
-
-        processor.process(player, position, hand);
+        if (doubleBetValidatorImpl.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
+            doubleBetProcessorImpl.process(player, position, hand);
+        }
     }
 
     /** if the player's first and second cards are equal in value and if the player has chips remaining equal to the
@@ -237,11 +230,11 @@ public class Table {
      * the player's new bet is associated with this hand. */
     public void splitHand(Player player, PlayerPosition position, PlayerHand hand) {
 
-        SplitBetProcessorImpl splitBetProcessorIMpl = new SplitBetProcessorImpl();
+        SplitBetProcessorImpl splitBetProcessorImpl = new SplitBetProcessorImpl();
         SplitBetValidatorImpl splitBetValidatorImpl = new SplitBetValidatorImpl();
 
         if (splitBetValidatorImpl.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
-            splitBetProcessorIMpl.process(player, position, hand, activeHands);
+            splitBetProcessorImpl.process(player, position, hand, activeHands);
         }
     }
 
