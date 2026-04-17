@@ -1,4 +1,4 @@
-package Model.Table.Validators;
+package Model.Table.Validators.SplitBetValidators;
 
 import java.util.ArrayList;
 import Model.Actors.Player;

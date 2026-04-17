@@ -1,4 +1,4 @@
-package Model.Table.Validators;
+package Model.Table.Validators.SplitBetValidators;
 
 import Model.Actors.Player;
 import Model.Table.Hands.PlayerHand;
