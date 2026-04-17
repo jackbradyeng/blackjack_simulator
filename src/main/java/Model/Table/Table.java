@@ -23,7 +23,7 @@ import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Processors.DoubleBetProcessors.DoubleBetProcessorImpl;
 import Model.Table.Processors.InsuranceBetProcessors.InsuranceBetProcessorImpl;
-import Model.Table.Processors.SplitBetProcessorImpl;
+import Model.Table.Processors.SplitBetProcessors.SplitBetProcessorImpl;
 import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;

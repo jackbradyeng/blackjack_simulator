@@ -1,4 +1,4 @@
-package Model.Table.Processors;
+package Model.Table.Processors.SplitBetProcessors;
 
 import java.util.ArrayList;
 import java.util.Map;
