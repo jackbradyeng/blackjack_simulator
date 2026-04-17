@@ -5,13 +5,13 @@ import Model.Actors.Player;
 import Model.Table.Bets.Bet;
 import Model.Table.Bets.InsuranceBet;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.InsuranceBetValidatorInterface;
+import Model.Table.Validators.InsuranceBetValidator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class InsuranceBetProcessorImpl implements InsuranceBetProcessor {
 
-    private final InsuranceBetValidatorInterface insuranceBetValidatorInterface;
+    private final InsuranceBetValidator insuranceBetValidator;
 
     public void process(Player player, PlayerPosition playerPosition, double amount) {
         bookInsuranceBet(player, playerPosition, amount);
@@ -20,7 +20,7 @@ public class InsuranceBetProcessorImpl implements InsuranceBetProcessor {
     /** books an insurance bet for a player on a given position for a given amount. To be called AFTER the cards are
      * dealt. */
     private void bookInsuranceBet(Player player, PlayerPosition position, double amount) {
-        if (insuranceBetValidatorInterface.isValid()) {
+        if (insuranceBetValidator.isValid()) {
             bookBet(player, position, amount);
         } else {
             System.out.println("INVALID BET");

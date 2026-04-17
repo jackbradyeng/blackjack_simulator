@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class InsuranceBetValidatorImpl implements InsuranceBetValidatorInterface {
+public class InsuranceBetValidatorImpl implements InsuranceBetValidator {
 
     private Player player;
     private PlayerHand playerHand;
