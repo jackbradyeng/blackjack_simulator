@@ -8,7 +8,7 @@ import static Model.Table.Validators.BetValidatorUtils.*;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class SplitBetValidator implements SplitBetValidatorInterface {
+public class SplitBetValidatorImpl implements SplitBetValidatorInterface {
 
     public boolean isValid(Player player,
                            ArrayList<Player> players,

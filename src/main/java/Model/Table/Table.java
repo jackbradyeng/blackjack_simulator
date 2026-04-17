@@ -28,7 +28,7 @@ import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
 import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
 import Model.Table.Validators.InsuranceBetValidators.InsuranceBetValidatorImpl;
-import Model.Table.Validators.SplitBetValidator;
+import Model.Table.Validators.SplitBetValidatorImpl;
 import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.Getter;
 
@@ -238,9 +238,9 @@ public class Table {
     public void splitHand(Player player, PlayerPosition position, PlayerHand hand) {
 
         SplitBetProcessorImpl splitBetProcessorIMpl = new SplitBetProcessorImpl();
-        SplitBetValidator splitBetValidator = new SplitBetValidator();
+        SplitBetValidatorImpl splitBetValidatorImpl = new SplitBetValidatorImpl();
 
-        if (splitBetValidator.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
+        if (splitBetValidatorImpl.isValid(player, players, position, playerPositionsIterable, hand, isSimulation)) {
             splitBetProcessorIMpl.process(player, position, hand, activeHands);
         }
     }
