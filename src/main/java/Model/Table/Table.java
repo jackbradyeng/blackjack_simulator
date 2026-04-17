@@ -193,16 +193,12 @@ public class Table {
      * dealt. */
     public void bookInsuranceBet(Player player, PlayerPosition position, PlayerHand hand, double amount) {
 
-        InsuranceBetValidatorImpl insuranceBetValidatorImpl =
-                InsuranceBetValidatorImpl.builder()
-                        .player(player)
-                        .playerHand(hand)
-                        .amount(amount)
-                        .build();
+        InsuranceBetValidatorImpl insuranceBetValidatorImpl = new InsuranceBetValidatorImpl();
+        InsuranceBetProcessorImpl insuranceBetProcessorImpl = new InsuranceBetProcessorImpl();
 
-        InsuranceBetProcessorImpl processor = new InsuranceBetProcessorImpl(insuranceBetValidatorImpl);
-
-        processor.process(player, position, amount);
+        if (insuranceBetValidatorImpl.isValid(player, hand, amount)) {
+            insuranceBetProcessorImpl.process(player, position, amount);
+        }
     }
 
     /** doubles the player's existing bet at a given position for that amount. Players can only double down once and if

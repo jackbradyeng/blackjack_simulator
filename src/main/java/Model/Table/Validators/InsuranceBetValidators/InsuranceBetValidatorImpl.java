@@ -7,20 +7,12 @@ import Model.Table.Bets.InsuranceBet;
 import Model.Table.Hands.PlayerHand;
 import static Model.Table.Validators.BetValidatorUtils.getOriginalBet;
 import static Model.Table.Validators.BetValidatorUtils.hasExistingBet;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class InsuranceBetValidatorImpl implements InsuranceBetValidator {
 
-    private Player player;
-    private PlayerHand playerHand;
-    private double amount;
-
-    public boolean isValid() {
+    public boolean isValid(Player player, PlayerHand playerHand, double amount) {
         return isValidInsuranceBet(player, playerHand, amount);
     }
 
