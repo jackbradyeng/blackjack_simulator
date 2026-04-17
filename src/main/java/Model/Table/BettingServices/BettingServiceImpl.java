@@ -22,8 +22,8 @@ public class BettingServiceImpl implements BettingService {
     private ArrayList<PlayerPosition> playerPositionsIterable;
     private DoubleBetProcessor doubleBetProcessor;
     private DoubleBetValidator doubleBetValidator;
-    private InsuranceBetValidator insuranceBetValidator;
     private InsuranceBetProcessor insuranceBetProcessor;
+    private InsuranceBetValidator insuranceBetValidator;
     private StandardBetProcessor standardBetProcessor;
     private StandardBetValidator standardBetValidator;
     private SplitBetProcessor splitBetProcessor;

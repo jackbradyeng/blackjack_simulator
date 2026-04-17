@@ -12,6 +12,8 @@ import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
+import Model.Table.BettingServices.BettingService;
+import Model.Table.BettingServices.BettingServiceImpl;
 import Model.Table.DealServices.DealServiceImpl;
 import Model.Table.HandServices.HandServiceImpl;
 import Model.Table.Hands.DealerHand;
@@ -48,6 +50,7 @@ public class Table {
     @Getter private HandServiceImpl handService;
     @Getter private StandardPayoutService standardPayoutService;
     @Getter private InsurancePayoutService insurancePayoutService;
+    @Getter private BettingService bettingService;
     @Getter private TablePrinter tablePrinter;
     @Getter private TableStats tableStats;
 
@@ -71,6 +74,7 @@ public class Table {
         initPlayerPositions();
         assignDefaultPlayerPositions(players);
         assignDealerPosition(dealer);
+        initBettingService();
     }
 
     /** initializes the game state for a new round of Blackjack.
@@ -161,6 +165,18 @@ public class Table {
         for(Player player : players) {
             playerBalances.put(player, player.getChips());
         }
+    }
+
+    private void initBettingService() {
+        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositionsIterable,
+                new DoubleBetProcessorImpl(),
+                new DoubleBetValidatorImpl(),
+                new InsuranceBetProcessorImpl(),
+                new InsuranceBetValidatorImpl(),
+                new StandardBetProcessorImpl(),
+                new StandardBetValidatorImpl(),
+                new SplitBetProcessorImpl(),
+                new SplitBetValidatorImpl());
     }
 
     /** logs the house's opening balance. */
@@ -295,19 +311,18 @@ public class Table {
                 break;
             case SPLIT:
                 // partition hands and book additional bet
-                splitHand(player, hand.getPosition(), hand);
+                bettingService.splitHand(player, hand.getPosition(), hand, activeHands);
                 tableStats.incrementHandCount();
                 tableStats.incrementSplitCount();
                 break;
             case DOUBLE:
                 // book double down bet
-                bookDoubleDownBet(player, hand.getPosition(), hand);
+                bettingService.bookDoubleDownBet(player, hand.getPosition(), hand);
                 hit(hand);
                 break;
             case INSURANCE:
                 // book insurance bet
-                System.out.println("----INSURANCE BET BOOKED!----");
-                bookInsuranceBet(player, hand.getPosition(), hand, DEFAULT_PLAYER_INSURANCE_BET);
+                bettingService.bookInsuranceBet(player, hand.getPosition(), hand, DEFAULT_PLAYER_INSURANCE_BET);
                 break;
             case STAND: {}
                 // do nothing
