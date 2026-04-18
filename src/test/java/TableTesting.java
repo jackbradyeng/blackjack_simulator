@@ -112,10 +112,9 @@ public class TableTesting {
         Player singlePlayer = table.getPlayers().getFirst();
         table.startupRoutine();
         table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
-        table.getHandService().setActiveHands(table.getPlayerPositions());
-
-        assertTrue(table.getActiveHands().size() == 1 &&
-                table.getActiveHands().getFirst().equals(singlePlayer.getDefaultPosition().getHands().getFirst()));
+        table.drawRoutine();
+        assertTrue(table.getActiveHands().size() == 1);
+        assertTrue(table.getActiveHands().getFirst().equals(singlePlayer.getDefaultPosition().getHands().getFirst()));
     }
 
     /** tests that the dealer's position is created. */
