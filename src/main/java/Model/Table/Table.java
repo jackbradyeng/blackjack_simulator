@@ -134,43 +134,6 @@ public class Table {
         }
     }
 
-    /// POSITION SERVICE
-
-    /** initializes each of the player position instances and places them in the iterable arraylist. */
-    private void initPlayerPositions() {
-        for(int i = 1; i < DEFAULT_TABLE_POSITIONS + 1; i++) {
-            PlayerPosition p = new PlayerPosition(i);
-            playerPositionsIterable.add(p);
-        }
-    }
-
-    /** assigns players to their default positions around the table. <strong> Note: </strong> This method assumes
-     * that the player count is less than or equal to the total number of positions available. */
-    private void assignDefaultPlayerPositions(ArrayList<Player> players) {
-        // if singleplayer, place the player directly across from the dealer
-        if(players.size() == 1) {
-            Player singlePlayer = players.getFirst();
-            int middlePosition = DEFAULT_TABLE_POSITIONS / 2 + 1;
-            PlayerPosition defaultPosition = playerPositionsIterable.get(middlePosition);
-            // stores a default position reference in both the position and the player classes
-            singlePlayer.setDefaultPosition(defaultPosition);
-            defaultPosition.setDefaultPlayer(singlePlayer);
-        } else {
-            // if multiplayer, allocate the players to seats at the table from right to left
-            for(int i = 0; i < players.size(); i++) {
-                Player player = players.get(i);
-                PlayerPosition position = playerPositionsIterable.get(i);
-                player.setDefaultPosition(position);
-                position.setDefaultPlayer(player);
-            }
-        }
-    }
-
-    /** assigns the dealer to his/her default position. */
-    private void assignDealerPosition(Dealer dealer) {
-        dealer.setPosition(dealerPosition);
-    }
-
     private void initBettingService() {
         this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositionsIterable,
                 new DoubleBetProcessorImpl(),
