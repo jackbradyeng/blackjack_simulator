@@ -6,24 +6,9 @@ import Model.Table.Table;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class TablePrinter implements GameEventListener {
+public class TablePrinter {
 
     private Table table;
-
-    @Override
-    public void onRoundStart() {
-
-    }
-
-    @Override
-    public void onHandResult() {
-
-    }
-
-    @Override
-    public void onPlayerWin() {
-
-    }
 
     public void printWelcomeMessage() {
         String message =
