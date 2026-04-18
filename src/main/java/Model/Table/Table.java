@@ -92,7 +92,7 @@ public class Table {
         tablePrinter.printNewRoundMessage();
         logPlayerBalances();
         logHouseBalance();
-        checkDeck();
+        dealService.checkDeck(deck);
         handService.createPlayerHands(playerPositionsIterable);
         handService.createDealerHand(dealerPosition);
     }
@@ -117,8 +117,6 @@ public class Table {
         handService.clearPlayerHands(playerPositionsIterable);
         handService.clearDealerHand(dealerPosition);
     }
-
-    /// PLACE THIS IN THE CONTROLLER
 
     /** initializes each of the players at the table. Throws an exception if more players are allocated than the
      * table allows. */
@@ -164,8 +162,6 @@ public class Table {
             deck.createNewDeck(DEFAULT_NUMBER_OF_DECKS);
         }
     }
-
-    /// STRATEGY LOGIC - TO BE REFACTORED
 
     /** executes the dealer's strategy. */
     public void executeDealerStrategy() {
