@@ -22,6 +22,8 @@ import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.PayoutServices.InsurancePayoutService;
 import Model.Table.PayoutServices.StandardPayoutService;
+import Model.Table.PositionService.PositionService;
+import Model.Table.PositionService.PositionServiceImpl;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Processors.DoubleBetProcessors.DoubleBetProcessorImpl;
@@ -52,6 +54,7 @@ public class Table {
     @Getter private StandardPayoutService standardPayoutService;
     @Getter private InsurancePayoutService insurancePayoutService;
     @Getter private ActionService actionService;
+    @Getter private PositionService positionService;
     @Getter private BettingService bettingService;
     @Getter private TablePrinter tablePrinter;
     @Getter private TableStats tableStats;
@@ -73,10 +76,11 @@ public class Table {
         this.standardPayoutService = new StandardPayoutService(tableStats);
         this.insurancePayoutService = new InsurancePayoutService();
         this.actionService = new ActionServicePlayerImpl();
+        this.positionService = new PositionServiceImpl();
         initPlayers(playerCount);
-        initPlayerPositions();
-        assignDefaultPlayerPositions(players);
-        assignDealerPosition(dealer);
+        positionService.createPlayerPositions(this.playerPositionsIterable);
+        positionService.assignDefaultPlayerPositions(this.players, this.playerPositionsIterable);
+        positionService.assignDealerPosition(this.dealer, this.dealerPosition);
         initBettingService();
     }
 
