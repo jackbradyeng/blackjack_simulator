@@ -156,13 +156,6 @@ public class Table {
         this.houseBalance = dealer.getChips();
     }
 
-    /** checks to see how many cards remain in the deck and creates a new deck instance if the number is too low. */
-    private void checkDeck() {
-        if(deck.getDeck().size() < NEW_DECK_THRESHOLD) {
-            deck.createNewDeck(DEFAULT_NUMBER_OF_DECKS);
-        }
-    }
-
     /** executes the dealer's strategy. */
     public void executeDealerStrategy() {
         while(!Objects.equals(dealer.executeStrategy(), STAND)) {
