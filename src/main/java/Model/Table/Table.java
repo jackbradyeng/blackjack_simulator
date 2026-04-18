@@ -12,12 +12,13 @@ import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
 import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
+import Model.Table.ActionServices.ActionService;
+import Model.Table.ActionServices.ActionServicePlayerImpl;
 import Model.Table.BettingServices.BettingService;
 import Model.Table.BettingServices.BettingServiceImpl;
 import Model.Table.DealServices.DealServiceImpl;
 import Model.Table.HandServices.HandServiceImpl;
 import Model.Table.Hands.DealerHand;
-import Model.Table.Hands.Hand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.PayoutServices.InsurancePayoutService;
 import Model.Table.PayoutServices.StandardPayoutService;
@@ -50,12 +51,16 @@ public class Table {
     @Getter private HandServiceImpl handService;
     @Getter private StandardPayoutService standardPayoutService;
     @Getter private InsurancePayoutService insurancePayoutService;
+    @Getter private ActionService actionService;
     @Getter private BettingService bettingService;
     @Getter private TablePrinter tablePrinter;
     @Getter private TableStats tableStats;
 
     /// default constructor
     public Table(int playerCount, int deckCount, boolean isSimulation) {
+
+        // REMEMBER TO INJECT TABLE STATS INTO THIS CLASS
+
         this.isSimulation = isSimulation;
         this.deck = new Deck(deckCount, new FisherYatesStrategy());
         this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
@@ -70,6 +75,7 @@ public class Table {
         this.handService = new HandServiceImpl(tableStats);
         this.standardPayoutService = new StandardPayoutService(tableStats);
         this.insurancePayoutService = new InsurancePayoutService();
+        this.actionService = new ActionServicePlayerImpl();
         initPlayers(playerCount);
         initPlayerPositions();
         assignDefaultPlayerPositions(players);
@@ -133,6 +139,18 @@ public class Table {
         }
     }
 
+    private void initBettingService() {
+        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositionsIterable,
+                new DoubleBetProcessorImpl(),
+                new DoubleBetValidatorImpl(),
+                new InsuranceBetProcessorImpl(),
+                new InsuranceBetValidatorImpl(),
+                new StandardBetProcessorImpl(),
+                new StandardBetValidatorImpl(),
+                new SplitBetProcessorImpl(),
+                new SplitBetValidatorImpl());
+    }
+
     /** assigns players to their default positions around the table. <strong> Note: </strong> This method assumes
      * that the player count is less than or equal to the total number of positions available. */
     private void assignDefaultPlayerPositions(ArrayList<Player> players) {
@@ -165,18 +183,6 @@ public class Table {
         for(Player player : players) {
             playerBalances.put(player, player.getChips());
         }
-    }
-
-    private void initBettingService() {
-        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositionsIterable,
-                new DoubleBetProcessorImpl(),
-                new DoubleBetValidatorImpl(),
-                new InsuranceBetProcessorImpl(),
-                new InsuranceBetValidatorImpl(),
-                new StandardBetProcessorImpl(),
-                new StandardBetValidatorImpl(),
-                new SplitBetProcessorImpl(),
-                new SplitBetValidatorImpl());
     }
 
     /** logs the house's opening balance. */
@@ -231,31 +237,16 @@ public class Table {
         }
     }
 
-    /// ACTION LOGIC - TO BE REFACTORED
-
-    /** deals a card to a hand before setting its value. */
-    public void hit(Hand hand) {
-        if(!hand.isBust()) {
-            deck.deal().ifPresent(deal -> {
-                hand.receiveCard(deal);
-                hand.setHandValue();
-                hand.setHasHit(true);
-            });
-        } else {
-            System.out.println("BUST!");
-        }
-    }
-
     public void handleDealerAction(String action) {
         if(action.equals(HIT)) {
-            hit(dealer.getPosition().getHand());
+            actionService.hit(deck, dealer.getPosition().getHand());
         }
     }
 
     public void handlePlayerAction(Player player, PlayerHand hand, String action) {
         switch (action) {
             case HIT:
-                hit(hand);
+                actionService.hit(deck, hand);
                 break;
             case SPLIT:
                 // partition hands and book additional bet
@@ -266,7 +257,7 @@ public class Table {
             case DOUBLE:
                 // book double down bet
                 bettingService.bookDoubleDownBet(player, hand.getPosition(), hand);
-                hit(hand);
+                actionService.hit(deck, hand);
                 break;
             case INSURANCE:
                 // book insurance bet

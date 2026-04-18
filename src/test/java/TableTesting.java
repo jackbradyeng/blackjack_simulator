@@ -180,7 +180,7 @@ public class TableTesting {
     public void testHandCountAfterHit() {
         PlayerHand hand = betOnDefaultPosition().getValue();
         table.drawRoutine();
-        table.hit(hand);
+        table.getActionService().hit(table.getDeck(), hand);
         assertEquals(3, hand.getCards().size());
     }
 
@@ -191,10 +191,10 @@ public class TableTesting {
         PlayerHand hand = betOnDefaultPosition().getValue();
         table.drawRoutine();
         while(!hand.isBust()) {
-            table.hit(hand);
+            table.getActionService().hit(table.getDeck(), hand);
         }
         int size = hand.getCards().size();
-        table.hit(hand);
+        table.getActionService().hit(table.getDeck(), hand);
         assertEquals(size, hand.getCards().size());
     }
 }
