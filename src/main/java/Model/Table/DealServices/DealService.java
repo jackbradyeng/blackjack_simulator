@@ -15,4 +15,6 @@ public interface DealService {
     void dealToActivePositions(Deck deck, List<PlayerPosition> activePositions);
 
     void calculateHandValues(List<PlayerHand> activeHands, DealerPosition dealerPosition);
+
+    void checkDeck(Deck deck);
 }

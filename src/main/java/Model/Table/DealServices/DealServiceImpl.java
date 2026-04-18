@@ -5,6 +5,8 @@ import Model.Deck.Deck;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
+import static Model.Constants.DEFAULT_NUMBER_OF_DECKS;
+import static Model.Constants.NEW_DECK_THRESHOLD;
 
 public class DealServiceImpl implements DealService {
 
@@ -40,5 +42,13 @@ public class DealServiceImpl implements DealService {
             hand.setHandValue();
         }
         dealerPosition.getHand().setHandValue();
+    }
+
+    /** checks to see how many cards remain in the deck and creates a new deck instance if the number is too low. */
+    @Override
+    public void checkDeck(Deck deck) {
+        if(deck.getDeck().size() < NEW_DECK_THRESHOLD) {
+            deck.createNewDeck(DEFAULT_NUMBER_OF_DECKS);
+        }
     }
 }
