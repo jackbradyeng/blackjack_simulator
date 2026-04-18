@@ -148,18 +148,6 @@ public class Table {
                 new SplitBetValidatorImpl());
     }
 
-    /** logs each of the player's opening balances, storing them as key-value pairs. */
-    private void logPlayerBalances() {
-        for(Player player : players) {
-            playerBalances.put(player, player.getChips());
-        }
-    }
-
-    /** logs the house's opening balance. */
-    private void logHouseBalance() {
-        this.houseBalance = dealer.getChips();
-    }
-
     /** executes the dealer's strategy. */
     public void executeDealerStrategy() {
         while(!Objects.equals(dealer.executeStrategy(), STAND)) {
