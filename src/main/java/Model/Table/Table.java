@@ -47,7 +47,7 @@ public class Table {
     @Getter private Dealer dealer;
     @Getter private final DealerPosition dealerPosition;
     @Getter private ArrayList<Player> players;
-    @Getter private final ArrayList<PlayerPosition> playerPositionsIterable;
+    @Getter private final ArrayList<PlayerPosition> playerPositions;
     @Getter private ArrayList<PlayerHand> activeHands;
     @Getter private HashMap<Player, Double> playerBalances;
     @Getter private Double houseBalance;
@@ -70,7 +70,7 @@ public class Table {
         this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
         this.players = new ArrayList<>();
         this.dealerPosition = new DealerPosition();
-        this.playerPositionsIterable = new ArrayList<>();
+        this.playerPositions = new ArrayList<>();
         this.activeHands = new ArrayList<>();
         this.playerBalances = new HashMap<>();
         this.chipBalanceObserver = new ChipBalanceObserverImpl();
@@ -82,8 +82,8 @@ public class Table {
         this.actionService = new ActionServicePlayerImpl();
         this.positionService = new PositionServiceImpl();
         initPlayers(playerCount);
-        positionService.createPlayerPositions(this.playerPositionsIterable);
-        positionService.assignDefaultPlayerPositions(this.players, this.playerPositionsIterable);
+        positionService.createPlayerPositions(this.playerPositions);
+        positionService.assignDefaultPlayerPositions(this.players, this.playerPositions);
         positionService.assignDealerPosition(this.dealer, this.dealerPosition);
         initBettingService();
     }
@@ -97,15 +97,15 @@ public class Table {
         this.houseBalance = chipBalanceObserver.logHouseBalance(dealer);
         this.playerBalances = chipBalanceObserver.logPlayerBalances(players);
         dealService.checkDeck(deck);
-        handService.createPlayerHands(playerPositionsIterable);
+        handService.createPlayerHands(playerPositions);
         handService.createDealerHand(dealerPosition);
     }
 
     /** Actions: deals each player two initial cards, computes the hand values for all active hands, outputs the results. */
     public void drawRoutine() {
-        handService.setActingPlayers(playerPositionsIterable);
-        dealService.dealOpeningCards(deck, dealerPosition, playerPositionsIterable);
-        this.activeHands = handService.setActiveHands(playerPositionsIterable);
+        handService.setActingPlayers(playerPositions);
+        dealService.dealOpeningCards(deck, dealerPosition, playerPositions);
+        this.activeHands = handService.setActiveHands(playerPositions);
         dealService.calculateHandValues(activeHands, dealerPosition);
         tablePrinter.printActivePlayerHands();
         tablePrinter.printDealerFirstCard();
@@ -118,7 +118,7 @@ public class Table {
         insurancePayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         tablePrinter.printHandResults();
         handService.clearActiveHands(activeHands);
-        handService.clearPlayerHands(playerPositionsIterable);
+        handService.clearPlayerHands(playerPositions);
         handService.clearDealerHand(dealerPosition);
     }
 
@@ -137,7 +137,7 @@ public class Table {
     }
 
     private void initBettingService() {
-        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositionsIterable,
+        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositions,
                 new DoubleBetProcessorImpl(),
                 new DoubleBetValidatorImpl(),
                 new InsuranceBetProcessorImpl(),

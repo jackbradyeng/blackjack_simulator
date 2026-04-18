@@ -59,14 +59,14 @@ public class TableTesting {
     @Order(4)
     @Test
     public void testPlayerPositions() {assertEquals(DEFAULT_TABLE_POSITIONS,
-            table.getPlayerPositionsIterable().size());}
+            table.getPlayerPositions().size());}
 
     /** tests that in a multi-player game, each player is assigned to their respective position. */
     @Order(5)
     @Test
     public void testPlayerDefaultPositions() {
         for(int i = 0; i < table.getPlayers().size(); i++) {
-            assertEquals(table.getPlayers().get(i).getDefaultPosition(), table.getPlayerPositionsIterable().get(i));
+            assertEquals(table.getPlayers().get(i).getDefaultPosition(), table.getPlayerPositions().get(i));
         }
     }
 
@@ -75,7 +75,7 @@ public class TableTesting {
     @Test
     public void testPositionHandCount() {
         table.startupRoutine();
-        for(PlayerPosition position : table.getPlayerPositionsIterable()) {
+        for(PlayerPosition position : table.getPlayerPositions()) {
             assertEquals(1, position.getHands().size());
         }
     }
@@ -112,7 +112,7 @@ public class TableTesting {
         Player singlePlayer = table.getPlayers().getFirst();
         table.startupRoutine();
         table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
-        table.getHandService().setActiveHands(table.getPlayerPositionsIterable());
+        table.getHandService().setActiveHands(table.getPlayerPositions());
 
         assertTrue(table.getActiveHands().size() == 1 &&
                 table.getActiveHands().getFirst().equals(singlePlayer.getDefaultPosition().getHands().getFirst()));
@@ -139,7 +139,7 @@ public class TableTesting {
     public void testActivePlayerDefault() {
         Player player = betOnDefaultPosition().getKey();
         PlayerHand hand = betOnDefaultPosition().getValue();
-        table.getHandService().setActingPlayers(table.getPlayerPositionsIterable());
+        table.getHandService().setActingPlayers(table.getPlayerPositions());
         assertEquals(player, hand.getActingPlayer());
     }
 
@@ -150,9 +150,9 @@ public class TableTesting {
     public void testActivePlayerNonDefault() {
         table.startupRoutine();
         Player singlePlayer = table.getPlayers().getFirst();
-        table.getBettingService().bookStandardBet(singlePlayer, table.getPlayerPositionsIterable().get(1), 100);
-        PlayerHand hand = table.getPlayerPositionsIterable().get(1).getHands().getFirst();
-        table.getHandService().setActingPlayers(table.getPlayerPositionsIterable());
+        table.getBettingService().bookStandardBet(singlePlayer, table.getPlayerPositions().get(1), 100);
+        PlayerHand hand = table.getPlayerPositions().get(1).getHands().getFirst();
+        table.getHandService().setActingPlayers(table.getPlayerPositions());
         assertEquals(singlePlayer, hand.getActingPlayer());
     }
 
