@@ -8,6 +8,8 @@ import Model.Actors.Dealer;
 import Model.Actors.Player;
 import Model.Deck.Deck;
 import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
+import Model.Observers.ChipBalanceObserver;
+import Model.Observers.ChipBalanceObserverImpl;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
@@ -49,6 +51,7 @@ public class Table {
     @Getter private ArrayList<PlayerHand> activeHands;
     @Getter private HashMap<Player, Double> playerBalances;
     @Getter private Double houseBalance;
+    @Getter private ChipBalanceObserver chipBalanceObserver;
     @Getter private DealServiceImpl dealService;
     @Getter private HandServiceImpl handService;
     @Getter private StandardPayoutService standardPayoutService;
@@ -70,6 +73,7 @@ public class Table {
         this.playerPositionsIterable = new ArrayList<>();
         this.activeHands = new ArrayList<>();
         this.playerBalances = new HashMap<>();
+        this.chipBalanceObserver = new ChipBalanceObserverImpl();
         this.tablePrinter = new TablePrinter(this);
         this.dealService = new DealServiceImpl();
         this.handService = new HandServiceImpl(tableStats);
@@ -90,8 +94,8 @@ public class Table {
      * creates an empty dealer hand at the dealer position. */
     public void startupRoutine() {
         tablePrinter.printNewRoundMessage();
-        logPlayerBalances();
-        logHouseBalance();
+        this.houseBalance = chipBalanceObserver.logHouseBalance(dealer);
+        this.playerBalances = chipBalanceObserver.logPlayerBalances(players);
         dealService.checkDeck(deck);
         handService.createPlayerHands(playerPositionsIterable);
         handService.createDealerHand(dealerPosition);
