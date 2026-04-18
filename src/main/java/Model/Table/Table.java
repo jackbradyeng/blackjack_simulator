@@ -57,11 +57,9 @@ public class Table {
     @Getter private TableStats tableStats;
 
     /// default constructor
-    public Table(int playerCount, int deckCount, boolean isSimulation) {
-
-        // REMEMBER TO INJECT TABLE STATS INTO THIS CLASS
-
+    public Table(int playerCount, int deckCount, boolean isSimulation, TableStats tableStats) {
         this.isSimulation = isSimulation;
+        this.tableStats = tableStats;
         this.deck = new Deck(deckCount, new FisherYatesStrategy());
         this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
         this.players = new ArrayList<>();
@@ -70,7 +68,6 @@ public class Table {
         this.activeHands = new ArrayList<>();
         this.playerBalances = new HashMap<>();
         this.tablePrinter = new TablePrinter(this);
-        this.tableStats = new TableStats();
         this.dealService = new DealServiceImpl();
         this.handService = new HandServiceImpl(tableStats);
         this.standardPayoutService = new StandardPayoutService(tableStats);
@@ -84,9 +81,9 @@ public class Table {
     }
 
     /** initializes the game state for a new round of Blackjack.
-     * <p> Actions: checks if the deck requires a top-up.
+     * Actions: checks if the deck requires a top-up.
      * creates empty player hands at each position.
-     * creates an empty dealer hand at the dealer position.</p> */
+     * creates an empty dealer hand at the dealer position. */
     public void startupRoutine() {
         tablePrinter.printNewRoundMessage();
         logPlayerBalances();
@@ -117,6 +114,8 @@ public class Table {
         handService.clearDealerHand(dealerPosition);
     }
 
+    /// PLACE THIS IN THE CONTROLLER
+
     /** initializes each of the players at the table. Throws an exception if more players are allocated than the
      * table allows. */
     private void initPlayers(int playerCount) throws PlayerCountException {
@@ -131,24 +130,14 @@ public class Table {
         }
     }
 
+    /// POSITION SERVICE
+
     /** initializes each of the player position instances and places them in the iterable arraylist. */
     private void initPlayerPositions() {
         for(int i = 1; i < DEFAULT_TABLE_POSITIONS + 1; i++) {
             PlayerPosition p = new PlayerPosition(i);
             playerPositionsIterable.add(p);
         }
-    }
-
-    private void initBettingService() {
-        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositionsIterable,
-                new DoubleBetProcessorImpl(),
-                new DoubleBetValidatorImpl(),
-                new InsuranceBetProcessorImpl(),
-                new InsuranceBetValidatorImpl(),
-                new StandardBetProcessorImpl(),
-                new StandardBetValidatorImpl(),
-                new SplitBetProcessorImpl(),
-                new SplitBetValidatorImpl());
     }
 
     /** assigns players to their default positions around the table. <strong> Note: </strong> This method assumes
@@ -176,6 +165,18 @@ public class Table {
     /** assigns the dealer to his/her default position. */
     private void assignDealerPosition(Dealer dealer) {
         dealer.setPosition(dealerPosition);
+    }
+
+    private void initBettingService() {
+        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositionsIterable,
+                new DoubleBetProcessorImpl(),
+                new DoubleBetValidatorImpl(),
+                new InsuranceBetProcessorImpl(),
+                new InsuranceBetValidatorImpl(),
+                new StandardBetProcessorImpl(),
+                new StandardBetValidatorImpl(),
+                new SplitBetProcessorImpl(),
+                new SplitBetValidatorImpl());
     }
 
     /** logs each of the player's opening balances, storing them as key-value pairs. */

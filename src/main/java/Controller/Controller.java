@@ -26,9 +26,9 @@ public class Controller {
         this.isSimulation = isSimulation;
         this.isRunning = true;
         this.scanner = new Scanner(System.in);
-        this.table = new Table(playerCount, deckCount, isSimulation);
-        this.tablePrinter = new TablePrinter(this.table);
         this.tableStats = new TableStats();
+        this.table = new Table(playerCount, deckCount, isSimulation, this.tableStats);
+        this.tablePrinter = new TablePrinter(this.table);
     }
 
     /** initializes the emulator. */

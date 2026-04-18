@@ -2,6 +2,7 @@ import java.util.Map;
 import Exceptions.DeckCountException;
 import Exceptions.PlayerCountException;
 import Model.Actors.Player;
+import Model.Observers.TableStats;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Table;
@@ -17,10 +18,12 @@ public class TableTesting {
 
     // testing instance variables
     private Table table;
+    private TableStats tableStats;
     private final int PLAYER_COUNT = 3;
 
     public TableTesting() {
-        table = new Table(PLAYER_COUNT, DEFAULT_NUMBER_OF_DECKS, false);
+        tableStats = new TableStats();
+        table = new Table(PLAYER_COUNT, DEFAULT_NUMBER_OF_DECKS, false, tableStats);
     }
 
     // private helper method
@@ -37,14 +40,14 @@ public class TableTesting {
     @Test
     public void testPlayerCountException() {
         PlayerCountException thrown = assertThrows(PlayerCountException.class, () ->
-                new Table(DEFAULT_TABLE_POSITIONS + 1, DEFAULT_NUMBER_OF_DECKS, false));
+                new Table(DEFAULT_TABLE_POSITIONS + 1, DEFAULT_NUMBER_OF_DECKS, false, tableStats));
     }
 
     @Order(2)
     @Test
     public void testDeckCountException() {
         DeckCountException thrown = assertThrows(DeckCountException.class, () ->
-                new Table(PLAYER_COUNT, 0, false));
+                new Table(PLAYER_COUNT, 0, false, tableStats));
     }
 
     /** tests that the player array size returns as expected in a single-player game. */
