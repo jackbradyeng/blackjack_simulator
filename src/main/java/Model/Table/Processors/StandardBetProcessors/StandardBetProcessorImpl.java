@@ -10,16 +10,11 @@ import lombok.NoArgsConstructor;
 public class StandardBetProcessorImpl implements StandardBetProcessor {
 
     public void process(Player player, PlayerPosition playerPosition, double amount) {
-        bookStandardBet(player, playerPosition, amount);
+        bookBet(player, playerPosition, amount);
     }
 
     /** books a standard bet for a player on a given position for a given amount. To be called BEFORE the cards are
      * dealt. */
-    private void bookStandardBet(Player player, PlayerPosition position, double amount) {
-        bookBet(player, position, amount);
-    }
-
-    /** books a bet for a player on a given position for a given amount. */
     private void bookBet(Player player, PlayerPosition position, double amount) {
         Bet playerBet = new Bet(amount);
         Map.Entry<Player, Bet> entry = Map.entry(player, playerBet);
