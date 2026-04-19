@@ -2,6 +2,7 @@ import java.util.Map;
 import Exceptions.DeckCountException;
 import Exceptions.PlayerCountException;
 import Model.Actors.Player;
+import Model.Observers.TableStats;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Table;
@@ -17,17 +18,19 @@ public class TableTesting {
 
     // testing instance variables
     private Table table;
+    private TableStats tableStats;
     private final int PLAYER_COUNT = 3;
 
     public TableTesting() {
-        table = new Table(PLAYER_COUNT, DEFAULT_NUMBER_OF_DECKS, false);
+        tableStats = new TableStats();
+        table = new Table(PLAYER_COUNT, DEFAULT_NUMBER_OF_DECKS, false, tableStats);
     }
 
     // private helper method
     private Map.Entry<Player, PlayerHand> betOnDefaultPosition() {
         table.startupRoutine();
         Player singlePlayer = table.getPlayers().getFirst();
-        table.bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
+        table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
         PlayerHand hand = table.getPlayers().getFirst().getDefaultPosition().getHands().getFirst();
         return Map.entry(singlePlayer, hand);
     }
@@ -37,14 +40,14 @@ public class TableTesting {
     @Test
     public void testPlayerCountException() {
         PlayerCountException thrown = assertThrows(PlayerCountException.class, () ->
-                new Table(DEFAULT_TABLE_POSITIONS + 1, DEFAULT_NUMBER_OF_DECKS, false));
+                new Table(DEFAULT_TABLE_POSITIONS + 1, DEFAULT_NUMBER_OF_DECKS, false, tableStats));
     }
 
     @Order(2)
     @Test
     public void testDeckCountException() {
         DeckCountException thrown = assertThrows(DeckCountException.class, () ->
-                new Table(PLAYER_COUNT, 0, false));
+                new Table(PLAYER_COUNT, 0, false, tableStats));
     }
 
     /** tests that the player array size returns as expected in a single-player game. */
@@ -56,14 +59,14 @@ public class TableTesting {
     @Order(4)
     @Test
     public void testPlayerPositions() {assertEquals(DEFAULT_TABLE_POSITIONS,
-            table.getPlayerPositionsIterable().size());}
+            table.getPlayerPositions().size());}
 
     /** tests that in a multi-player game, each player is assigned to their respective position. */
     @Order(5)
     @Test
     public void testPlayerDefaultPositions() {
         for(int i = 0; i < table.getPlayers().size(); i++) {
-            assertEquals(table.getPlayers().get(i).getDefaultPosition(), table.getPlayerPositionsIterable().get(i));
+            assertEquals(table.getPlayers().get(i).getDefaultPosition(), table.getPlayerPositions().get(i));
         }
     }
 
@@ -72,7 +75,7 @@ public class TableTesting {
     @Test
     public void testPositionHandCount() {
         table.startupRoutine();
-        for(PlayerPosition position : table.getPlayerPositionsIterable()) {
+        for(PlayerPosition position : table.getPlayerPositions()) {
             assertEquals(1, position.getHands().size());
         }
     }
@@ -92,7 +95,7 @@ public class TableTesting {
     public void testPlayerStandardBet() {
         Player player = table.getPlayers().getFirst();
         table.startupRoutine();
-        table.bookStandardBet(player, player.getDefaultPosition(), 100);
+        table.getBettingService().bookStandardBet(player, player.getDefaultPosition(), 100);
 
         // a standard bet should be allocated to the first hand at a given position
         PlayerHand hand = player.getDefaultPosition().getHands().getFirst();
@@ -108,11 +111,10 @@ public class TableTesting {
     public void testActiveHandCount() {
         Player singlePlayer = table.getPlayers().getFirst();
         table.startupRoutine();
-        table.bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
-        table.setActiveHands();
-
-        assertTrue(table.getActiveHands().size() == 1 &&
-                table.getActiveHands().getFirst().equals(singlePlayer.getDefaultPosition().getHands().getFirst()));
+        table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
+        table.drawRoutine();
+        assertTrue(table.getActiveHands().size() == 1);
+        assertTrue(table.getActiveHands().getFirst().equals(singlePlayer.getDefaultPosition().getHands().getFirst()));
     }
 
     /** tests that the dealer's position is created. */
@@ -127,7 +129,7 @@ public class TableTesting {
     @Test
     public void testDealerHasHand() {
         table.startupRoutine();
-        assertNotNull(table.getDealerHand());
+        assertNotNull(table.getDealerPosition().getHand());
     }
 
     /** tests that a given player remains the acting player after betting on their default position. */
@@ -136,7 +138,7 @@ public class TableTesting {
     public void testActivePlayerDefault() {
         Player player = betOnDefaultPosition().getKey();
         PlayerHand hand = betOnDefaultPosition().getValue();
-        table.determineActingPlayers();
+        table.getHandService().setActingPlayers(table.getPlayerPositions());
         assertEquals(player, hand.getActingPlayer());
     }
 
@@ -147,9 +149,9 @@ public class TableTesting {
     public void testActivePlayerNonDefault() {
         table.startupRoutine();
         Player singlePlayer = table.getPlayers().getFirst();
-        table.bookStandardBet(singlePlayer, table.getPlayerPositionsIterable().get(1), 100);
-        PlayerHand hand = table.getPlayerPositionsIterable().get(1).getHands().getFirst();
-        table.determineActingPlayers();
+        table.getBettingService().bookStandardBet(singlePlayer, table.getPlayerPositions().get(1), 100);
+        PlayerHand hand = table.getPlayerPositions().get(1).getHands().getFirst();
+        table.getHandService().setActingPlayers(table.getPlayerPositions());
         assertEquals(singlePlayer, hand.getActingPlayer());
     }
 
@@ -180,7 +182,7 @@ public class TableTesting {
     public void testHandCountAfterHit() {
         PlayerHand hand = betOnDefaultPosition().getValue();
         table.drawRoutine();
-        table.hit(hand);
+        table.getActionService().hit(table.getDeck(), hand);
         assertEquals(3, hand.getCards().size());
     }
 
@@ -191,10 +193,10 @@ public class TableTesting {
         PlayerHand hand = betOnDefaultPosition().getValue();
         table.drawRoutine();
         while(!hand.isBust()) {
-            table.hit(hand);
+            table.getActionService().hit(table.getDeck(), hand);
         }
         int size = hand.getCards().size();
-        table.hit(hand);
+        table.getActionService().hit(table.getDeck(), hand);
         assertEquals(size, hand.getCards().size());
     }
 }

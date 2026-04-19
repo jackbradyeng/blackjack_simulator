@@ -4,10 +4,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Scanner;
 import Model.Actors.*;
+import Model.Observers.TablePrinter;
+import Model.Observers.TableStats;
 import Model.Table.*;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
-
 import static Model.Constants.*;
 
 public class Controller {
@@ -17,13 +18,17 @@ public class Controller {
     private boolean isRunning;
     private final Scanner scanner;
     private final Table table;
+    private final TablePrinter tablePrinter;
+    private final TableStats tableStats;
 
     // default constructor
     public Controller(int playerCount, int deckCount, boolean isSimulation) {
         this.isSimulation = isSimulation;
         this.isRunning = true;
         this.scanner = new Scanner(System.in);
-        this.table = new Table(playerCount, deckCount, isSimulation);
+        this.tableStats = new TableStats();
+        this.table = new Table(playerCount, deckCount, isSimulation, this.tableStats);
+        this.tablePrinter = new TablePrinter(this.table);
     }
 
     /** initializes the emulator. */
@@ -33,15 +38,16 @@ public class Controller {
     /// Monte Carlo Simulation
     public void runSimulation() {
         Instant start = Instant.now();
-        table.printWelcomeMessage();
+        tablePrinter.printWelcomeMessage();
         Player mainPlayer = table.getPlayers().getFirst();
 
         for(int i = 0; i < DEFAULT_NUMBER_OF_ITERATIONS; i++) {
             table.startupRoutine();
-            table.bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
+            table.getBettingService()
+                    .bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
             table.drawRoutine();
             table.executePlayerStrategyForAll();
-            table.printDealerHand();
+            tablePrinter.printDealerHand();
             table.executeDealerStrategy();
             table.windDownRoutine();
             double runningProfit = mainPlayer.getChips() - DEFAULT_PLAYER_STARTING_CHIPS;
@@ -57,7 +63,7 @@ public class Controller {
 
     /// Interactive Game Loop
     public void runGameLoop() {
-        table.printWelcomeMessage();
+        tablePrinter.printWelcomeMessage();
 
         while(isRunning) {
             table.startupRoutine();
@@ -65,7 +71,7 @@ public class Controller {
             table.drawRoutine();
             playerActions();
             gamePause("Dealer drawing in...");
-            table.printDealerHand();
+            tablePrinter.printDealerHand();
             table.executeDealerStrategy();
             gamePause("Printing results in...");
             table.windDownRoutine();
@@ -93,29 +99,44 @@ public class Controller {
 
     /** prints summary statistics following a round of blackjack, including average profit per hand and the expected
      * value percentage. */
-    private void printStatistics(int handNumber, double runningProfit, double averageProfitPerHand,
-                                double expectedValuePerHand) {
-        System.out.print("\n");
-        System.out.println("---- SUMMARY STATISTICS ----");
-        System.out.println("Hand No. : " + handNumber);
-        System.out.println("Blackjack Count: " + table.getBlackjackCount());
-        System.out.println("Blackjack Percentage: " +
-                ((double) table.getBlackjackCount() / (double) table.getHandCount()) * 100 + "%");
-        System.out.println("Win Count: " + table.getPlayerWinCount());
-        System.out.println("Win Percentage: " +
-                ((double) table.getPlayerWinCount() / (double) table.getHandCount()) * 100 + "%");
-        System.out.println("Loss Count: " + table.getPlayerLossCount());
-        System.out.println("Loss Percentage: " +
-                ((double) table.getPlayerLossCount() / (double) table.getHandCount()) * 100 + "%");
-        System.out.println("Push Count: " + table.getPushCount());
-        System.out.println("Push Percentage: " +
-                ((double) table.getPushCount() / (double) table.getHandCount()) * 100 + "%");
-        System.out.println("Split Count: " + table.getSplitCount());
-        System.out.println("Split Percentage: " +
-                ((double) table.getSplitCount() /(double) table.getHandCount() * 100 + "%"));
-        System.out.println("Running Profit (Loss) : " + runningProfit);
-        System.out.println("Average Profit Per Hand: " + averageProfitPerHand);
-        System.out.println("Expected Value Per Hand: " + expectedValuePerHand * 100 + "%");
+    private void printStatistics(int handNumber,
+                                 double runningProfit,
+                                 double averageProfitPerHand,
+                                 double expectedValuePerHand) {
+
+        String statsOverview = """
+                
+                ---- SUMMARY STATISTICS ----
+                Hand No. : %s
+                Blackjack Count : %s
+                Blackjack Percentage : %s
+                Win Count : %s
+                Win Percentage : %s
+                Loss Count : %s
+                Loss Percentage : %s
+                Push Count : %s
+                Push Percentage : %s
+                Split Count : %s
+                Split Percentage : %s
+                Running Profit (Loss) : %s
+                Average Profit Per Hand : %s
+                Expected Value Per Hand : %s
+                """.formatted(handNumber,
+                tableStats.getBlackjackCount(),
+                ((double) tableStats.getBlackjackCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getPlayerWinCount(),
+                ((double) tableStats.getPlayerWinCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getPlayerLossCount(),
+                ((double) tableStats.getPlayerLossCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getPushCount(),
+                ((double) tableStats.getPushCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getSplitCount(),
+                ((double) tableStats.getSplitCount() /(double) tableStats.getHandCount()) * 100,
+                runningProfit,
+                averageProfitPerHand,
+                expectedValuePerHand * 100);
+
+        System.out.println(statsOverview);
     }
 
     /** initializes the first round of betting. This is a non-parameterized method for regular command line
@@ -159,16 +180,17 @@ public class Controller {
                     " The minimum bet size is " + DEFAULT_MIN_BET_SIZE + " chips.");
             double playerBet = scanner.nextDouble();
             System.out.println("Which position would you like to bet on? There are " +
-                    table.getNumberOfPositions() + " total positions.");
+                    table.getPlayerPositions().size() + " total positions.");
             int position = scanner.nextInt();
-            table.bookStandardBet(player, table.getPlayerPositionsIterable().get(position - 1), playerBet);
+            table.getBettingService()
+                    .bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
             return true;
         } else return action.equalsIgnoreCase("N");
     }
 
     /** handles cases where the player has a natural blackjack in non-simulation games. */
     private boolean handleBlackjackCase(PlayerHand hand) {
-        if(!hand.hasInsuranceOption(table.getDealerHand())) {
+        if(!hand.hasInsuranceOption(table.getDealerPosition().getHand())) {
             return false;
         } else {
             System.out.println("Would you like to buy insurance? (Y/N)");
@@ -192,7 +214,8 @@ public class Controller {
                     "initial bet.");
             try {
                 double insuranceBet = scanner.nextDouble();
-                table.bookInsuranceBet(hand.getActingPlayer(), hand.getPosition(), hand, insuranceBet);
+                table.getBettingService()
+                        .bookInsuranceBet(hand.getActingPlayer(), hand.getPosition(), hand, insuranceBet);
                 break;
             } catch (RuntimeException e) {
                 System.out.println("Invalid input.");
@@ -214,7 +237,7 @@ public class Controller {
                     playerCanAct = handleBlackjackCase(hand);
                 } else {
                     System.out.println("Player " + hand.getActingPlayer() + " to act. Select an action:");
-                    DealerHand dealerHand = table.getDealerHand();
+                    DealerHand dealerHand = table.getDealerPosition().getHand();
                     if (hand.isBlackjack()) {
                         handleBlackjackCase(hand);
                     } else if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
@@ -242,8 +265,8 @@ public class Controller {
                             handleInsuranceCase(hand);
                         } else {
                             table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
-                            table.printActivePlayerHands();
-                            table.printDealerFirstCard();
+                            tablePrinter.printActivePlayerHands();
+                            tablePrinter.printDealerFirstCard();
                         }
                         if (playerAction.equalsIgnoreCase(STAND)) {
                             playerCanAct = false;

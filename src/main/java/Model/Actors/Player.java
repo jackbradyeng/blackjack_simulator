@@ -7,7 +7,7 @@ import Model.Table.Positions.PlayerPosition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
 public class Player extends Actor {
 
