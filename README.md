@@ -1,39 +1,100 @@
 # Blackjack Simulator
 
-## Introduction
-
-This project is a fully interactive blackjack simulator, designed to replicate the experience of playing blackjack at a
-modern casino. The program has two modes, interactive and simulation. Interactive mode allows you to play blackjack
-using the command line interface. Simulation mode allows you to simulate a playing strategy and collect valuable
-statistics based on the results. Specifically, it uses the Monte Carlo method, a powerful statistical tool for
-approximating probabilities and expected value.<br/>
+A Monte Carlo blackjack simulator and interactive CLI game written in Java. Runs large-scale simulations to measure strategy performance and house edge, or lets you play interactively against a dealer.
 
 ## Features
 
-The blackjack simulator includes a number of commonly found features, including:
-**insurance** - a mechanic in blackjack that allows the player to place a side bet in the event that the dealer makes a
-natural blackjack; **splitting** - an option that allows the player to take their original hand and split it into two
-separate hands if both initial cards posses the same numerical value; and **doubling** - an option that allows the
-player to double the size of their bet after receiving their first two cards.<br/>
+- **Two modes**: interactive play or automated Monte Carlo simulation (default: 100,000 iterations)
+- **Optimal strategy**: mathematically correct play without card counting, using per-action lookup tables keyed on the dealer up-card
+- **Full rule set**: splitting, doubling down, insurance, back-betting, and multi-hand support
+- **Polymorphic strategies**: swap player or dealer strategies independently
+- **Configurable table**: deck count, player count, bet sizes, payout ratios, and more
+- **Live statistics**: tracks win/loss/push/split rates, running profit, and expected value per hand
 
-But it also includes a number of advanced features not commonly found in other implementations. For instance, the simulator
-allows for **multi-betting** - the ability to play multiple hands simultaneously - as well as **back-betting** - the act
-of placing a bet on another's player's hand but surrendering any agency in that hand's action. Most Australian casinos
-allow back-betting, however it is not commonly found in blackjack implementations on the internet.<br/>
+## Getting Started
 
-## Simulation Findings
+**Prerequisites:** Java 11+, Maven
 
-The results of the simulation verify existing data, which suggest that the house possesses a 0.5-2% edge in Blackjack.
-This means that for every 100 dollar bet, the player can expect to lose 0.50-2.00 dollars over the long run. Note that
-this applies even when the player makes the most mathematically optimal decision for each hand. Deviations from optimal
-strategy result in an  even lower expected value, thereby inflating the house edge. This finding assumes four to six
-decks in rotation, a 1:1 payout ratio for regular wins, a 3:2 payout ratio for player blackjacks, and a house strategy
-of standing on hard 17 and drawing on "soft" 17 (a 17  which includes an Ace). For reliable findings, it is recommended
-to use 500,000 - 1 million iterations for the Monte Carlo method as this reduces the variance found when using small
-sample sizes.<br/>
+```bash
+# Build
+mvn clean install
 
-## Installation Instructions
+# Run
+java -cp target/classes Launcher
+```
 
-1. git clone [https://github.com/jackbradyeng/blackjack_emulator.git]
-2. cd blackjack_emulator
-3. mvn install
+By default the launcher runs in simulation mode. To switch to interactive mode, set `isSimulation = false` in `Launcher.java`.
+
+## Configuration
+
+All constants live in `src/main/java/Model/Constants.java`.
+
+| Constant | Default | Description |
+|---|---|---|
+| `DEFAULT_NUMBER_OF_DECKS` | 4 | Decks in the shoe |
+| `DEFAULT_NUMBER_OF_PLAYERS` | 1 | Players at the table |
+| `DEFAULT_MIN_BET_SIZE` | 25 | Minimum bet |
+| `DEFAULT_PLAYER_STARTING_CHIPS` | 500 | Starting chip balance |
+| `DEFAULT_DEALER_STARTING_CHIPS` | 15,000 | House bankroll |
+| `DEFAULT_BLACKJACK_PAYOUT_NUMERATOR/DENOMINATOR` | 3:2 | Blackjack payout ratio |
+| `DEFAULT_INSURANCE_RATIO` | 3:1 | Insurance payout ratio |
+| `DEFAULT_NUMBER_OF_ITERATIONS` | 100,000 | Simulation iterations |
+| `DEFAULT_DEALER_DRAW_VALUE` | 17 | Dealer stands at this value |
+
+For statistically reliable results, 500,000–1,000,000 iterations are recommended.
+
+## Player Strategies
+
+| Strategy | Description |
+|---|---|
+| `OptimalNoCountingStrategy` | Mathematically optimal play (default) |
+| `OptimalNoCountingInsuranceStrategy` | Optimal play including insurance decisions |
+| `CopyDealerStrategy` | Mirrors the dealer (hit < 17, stand >= 17) |
+
+Strategies implement a common interface and are injected into the `Player`, making them easy to swap or extend.
+
+## Project Structure
+
+```
+src/main/java/
+├── Launcher.java                  # Entry point
+├── Controller/                    # Game flow (interactive vs simulation)
+└── Model/
+    ├── Constants.java             # All configuration values
+    ├── Actors/                    # Player and Dealer
+    ├── Cards/                     # Card and Ace types
+    ├── Deck/                      # Shoe management and shuffle strategies
+    ├── Exceptions/                # DeckCountException, PlayerCountException
+    ├── Observers/                 # Stats tracking and console output
+    ├── Strategies/                # Player and dealer strategy implementations
+    └── Table/                     # Game orchestration
+        ├── ActionServices/        # Hit, stand, split, double
+        ├── BettingServices/       # Bet booking and validation
+        ├── Bets/                  # Bet type definitions
+        ├── DealServices/          # Card dealing
+        ├── HandServices/          # Hand lifecycle management
+        ├── Hands/                 # Player and dealer hand representations
+        ├── PayoutServices/        # Win/loss/push payouts
+        ├── Positions/             # Table seat management
+        ├── Processors/            # Per-bet-type processing (split, double, insurance)
+        └── Validators/            # Bet validation rules
+```
+
+## Running Tests
+
+```bash
+mvn test
+```
+
+## Simulation Results
+
+  With optimal non-counting strategy, 4 decks, 3:2 blackjack payout, and a dealer that stands on hard 17:
+
+- House edge: approximately 0.5–2%
+- Expected value: roughly -0.50 to -2.00 per $100 wagered
+
+## To Be Completed
+
+- [ ] Controller refactor
+- [ ] Player card counting strategies
+- [ ] Parallelized simulations
