@@ -238,9 +238,7 @@ public class Controller {
                 } else {
                     System.out.println("Player " + hand.getActingPlayer() + " to act. Select an action:");
                     DealerHand dealerHand = table.getDealerPosition().getHand();
-                    if (hand.isBlackjack()) {
-                        handleBlackjackCase(hand);
-                    } else if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
+                    if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
                         System.out.println("HIT | STAND | DOUBLE | SPLIT | INSURANCE");
                     } else if(!hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
                         System.out.println("HIT | STAND | INSURANCE");
