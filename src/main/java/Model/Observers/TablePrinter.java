@@ -89,6 +89,49 @@ public class TablePrinter {
         System.out.println("---- END OF ROUND ----");
     }
 
+    /** prints summary statistics following a round of blackjack, including average profit per hand and the expected
+     * value percentage. */
+    public void printStatistics(int handNumber,
+                                 double runningProfit,
+                                 double averageProfitPerHand,
+                                 double expectedValuePerHand,
+                                 TableStats tableStats) {
+
+        String statsOverview = """
+                
+                ---- SUMMARY STATISTICS ----
+                Hand No. : %s
+                Blackjack Count : %s
+                Blackjack Percentage : %s
+                Win Count : %s
+                Win Percentage : %s
+                Loss Count : %s
+                Loss Percentage : %s
+                Push Count : %s
+                Push Percentage : %s
+                Split Count : %s
+                Split Percentage : %s
+                Running Profit (Loss) : %s
+                Average Profit Per Hand : %s
+                Expected Value Per Hand : %s
+                """.formatted(handNumber,
+                tableStats.getBlackjackCount(),
+                ((double) tableStats.getBlackjackCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getPlayerWinCount(),
+                ((double) tableStats.getPlayerWinCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getPlayerLossCount(),
+                ((double) tableStats.getPlayerLossCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getPushCount(),
+                ((double) tableStats.getPushCount() / (double) tableStats.getHandCount()) * 100,
+                tableStats.getSplitCount(),
+                ((double) tableStats.getSplitCount() /(double) tableStats.getHandCount()) * 100,
+                runningProfit,
+                averageProfitPerHand,
+                expectedValuePerHand * 100);
+
+        System.out.println(statsOverview);
+    }
+
     public void gamePause(String output) {
         System.out.println(output);
         threadSleep();

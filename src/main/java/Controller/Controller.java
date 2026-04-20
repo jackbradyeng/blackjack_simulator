@@ -53,7 +53,8 @@ public class Controller {
             double runningProfit = mainPlayer.getChips() - DEFAULT_PLAYER_STARTING_CHIPS;
             double averageProfitPerHand = runningProfit / ((double) i + 1);
             double expectedValuePerHand = averageProfitPerHand / DEFAULT_PLAYER_BET_AMOUNT;
-            printStatistics(i + 1, runningProfit, averageProfitPerHand, expectedValuePerHand);
+            tablePrinter.printStatistics(i + 1, runningProfit, averageProfitPerHand,
+                    expectedValuePerHand, tableStats);
         }
         Instant end = Instant.now();
         Duration timeElapsed = Duration.between(start, end);
@@ -78,48 +79,6 @@ public class Controller {
         }
 
         System.out.println("Thanks for playing!");
-    }
-
-    /** prints summary statistics following a round of blackjack, including average profit per hand and the expected
-     * value percentage. */
-    private void printStatistics(int handNumber,
-                                 double runningProfit,
-                                 double averageProfitPerHand,
-                                 double expectedValuePerHand) {
-
-        String statsOverview = """
-                
-                ---- SUMMARY STATISTICS ----
-                Hand No. : %s
-                Blackjack Count : %s
-                Blackjack Percentage : %s
-                Win Count : %s
-                Win Percentage : %s
-                Loss Count : %s
-                Loss Percentage : %s
-                Push Count : %s
-                Push Percentage : %s
-                Split Count : %s
-                Split Percentage : %s
-                Running Profit (Loss) : %s
-                Average Profit Per Hand : %s
-                Expected Value Per Hand : %s
-                """.formatted(handNumber,
-                tableStats.getBlackjackCount(),
-                ((double) tableStats.getBlackjackCount() / (double) tableStats.getHandCount()) * 100,
-                tableStats.getPlayerWinCount(),
-                ((double) tableStats.getPlayerWinCount() / (double) tableStats.getHandCount()) * 100,
-                tableStats.getPlayerLossCount(),
-                ((double) tableStats.getPlayerLossCount() / (double) tableStats.getHandCount()) * 100,
-                tableStats.getPushCount(),
-                ((double) tableStats.getPushCount() / (double) tableStats.getHandCount()) * 100,
-                tableStats.getSplitCount(),
-                ((double) tableStats.getSplitCount() /(double) tableStats.getHandCount()) * 100,
-                runningProfit,
-                averageProfitPerHand,
-                expectedValuePerHand * 100);
-
-        System.out.println(statsOverview);
     }
 
     /** initializes the first round of betting. This is a non-parameterized method for regular command line
