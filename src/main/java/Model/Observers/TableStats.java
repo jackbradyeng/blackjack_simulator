@@ -13,6 +13,12 @@ public class TableStats {
     public int playerWinCount = 0;
     public int playerLossCount = 0;
     public int pushCount = 0;
+    private int handCount = 0;
+    private int splitCount = 0;
+    private int blackjackCount = 0;
+    private int playerWinCount = 0;
+    private int playerLossCount = 0;
+    private int pushCount = 0;
 
     public void incrementHandCount() { handCount++; }
     public void incrementSplitCount() { splitCount++; }
