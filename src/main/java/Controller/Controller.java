@@ -70,31 +70,14 @@ public class Controller {
             initialWager();
             table.drawRoutine();
             playerActions();
-            gamePause("Dealer drawing in...");
+            tablePrinter.gamePause("Dealer drawing in...");
             tablePrinter.printDealerHand();
             table.executeDealerStrategy();
-            gamePause("Printing results in...");
+            tablePrinter.gamePause("Printing results in...");
             table.windDownRoutine();
         }
 
         System.out.println("Thanks for playing!");
-    }
-
-    /** initiates a countdown before revealing the dealer's hand. Creates a bit of suspense. */
-    private void gamePause(String output) {
-        System.out.println(output);
-        threadSleep();
-        System.out.println("3...");
-        threadSleep();
-        System.out.println("2...");
-        threadSleep();
-        System.out.println("1...");
-    }
-
-    /** thread sleep routine.*/
-    private void threadSleep() {
-        try {Thread.sleep(DEFAULT_COUNTDOWN_TIME);}
-        catch (InterruptedException i) {Thread.currentThread().interrupt();}
     }
 
     /** prints summary statistics following a round of blackjack, including average profit per hand and the expected

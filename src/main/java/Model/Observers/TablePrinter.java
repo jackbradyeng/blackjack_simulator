@@ -4,6 +4,7 @@ import Model.Actors.Player;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
 import lombok.AllArgsConstructor;
+import static Model.Constants.DEFAULT_COUNTDOWN_TIME;
 
 @AllArgsConstructor
 public class TablePrinter {
@@ -81,11 +82,25 @@ public class TablePrinter {
         System.out.println(houseResults);
     }
 
-    // prints results
     public void printHandResults() {
         System.out.println("---- RESULTS ----");
         printPlayerResults();
         printHouseResults();
         System.out.println("---- END OF ROUND ----");
+    }
+
+    public void gamePause(String output) {
+        System.out.println(output);
+        threadSleep();
+        System.out.println("3...");
+        threadSleep();
+        System.out.println("2...");
+        threadSleep();
+        System.out.println("1...");
+    }
+
+    private void threadSleep() {
+        try {Thread.sleep(DEFAULT_COUNTDOWN_TIME);}
+        catch (InterruptedException i) {Thread.currentThread().interrupt();}
     }
 }
