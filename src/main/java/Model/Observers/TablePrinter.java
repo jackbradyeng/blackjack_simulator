@@ -64,7 +64,9 @@ public class TablePrinter {
                     Starting Balance: %s
                     Closing Balance: %s
                     Profit (Loss): %s
-                    """.formatted(player, openingBalance.intValue(), (int) player.getChips(),
+                    """.formatted(player,
+                    openingBalance.intValue(),
+                    (int) player.getChips(),
                     (int) (player.getChips() - openingBalance));
             System.out.println(result);
         }
@@ -78,7 +80,7 @@ public class TablePrinter {
                 Profit (Loss): %s
                 """.formatted(table.getHouseBalance().intValue(),
                 (int) table.getDealer().getChips(),
-                (int) table.getDealer().getChips() - table.getHouseBalance());
+                (int) (table.getDealer().getChips() - table.getHouseBalance()));
         System.out.println(houseResults);
     }
 
