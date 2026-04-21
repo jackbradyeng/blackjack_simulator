@@ -33,6 +33,6 @@ public class SimulationModeOrchestrator implements GameModeOrchestrator {
         Instant end = Instant.now();
         Duration timeElapsed = Duration.between(start, end);
         long seconds = timeElapsed.getSeconds();
-        System.out.println("Total processing time: " + seconds + " seconds.");
+        tablePrinter.printProcessingTime(seconds);
     }
 }

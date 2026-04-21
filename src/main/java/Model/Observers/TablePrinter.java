@@ -133,6 +133,10 @@ public class TablePrinter {
         System.out.println(statsOverview);
     }
 
+    public void printProcessingTime(long seconds) {
+        System.out.println("Total processing time: " + seconds + " seconds.");
+    }
+
     public void gamePause(String output) {
         System.out.println(output);
         threadSleep();
