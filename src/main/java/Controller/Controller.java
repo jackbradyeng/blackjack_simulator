@@ -13,7 +13,6 @@ import static Model.Constants.*;
 
 public class Controller {
 
-    // private instance variables
     private final boolean isSimulation;
     private boolean isRunning;
     private final Scanner scanner;
@@ -21,7 +20,6 @@ public class Controller {
     private final TablePrinter tablePrinter;
     private final TableStats tableStats;
 
-    // default constructor
     public Controller(int playerCount, int deckCount, boolean isSimulation) {
         this.isSimulation = isSimulation;
         this.isRunning = true;
@@ -31,11 +29,9 @@ public class Controller {
         this.tablePrinter = new TablePrinter(this.table);
     }
 
-    /** initializes the emulator. */
     public void startGame() {
         if(isSimulation) {runSimulation();} else {runGameLoop(); } }
 
-    /// Monte Carlo Simulation
     public void runSimulation() {
         Instant start = Instant.now();
         tablePrinter.printWelcomeMessage();
@@ -61,7 +57,6 @@ public class Controller {
         System.out.println("Total processing time: " + seconds + " seconds.");
     }
 
-    /// Interactive Game Loop
     public void runGameLoop() {
         tablePrinter.printWelcomeMessage();
 
