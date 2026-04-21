@@ -92,10 +92,9 @@ public class TablePrinter {
     /** prints summary statistics following a round of blackjack, including average profit per hand and the expected
      * value percentage. */
     public void printStatistics(int handNumber,
-                                 double runningProfit,
-                                 double averageProfitPerHand,
-                                 double expectedValuePerHand,
                                  TableStats tableStats) {
+
+        int handCount = tableStats.getHandCount();
 
         String statsOverview = """
                 
@@ -116,18 +115,18 @@ public class TablePrinter {
                 Expected Value Per Hand : %s
                 """.formatted(handNumber,
                 tableStats.getBlackjackCount(),
-                ((double) tableStats.getBlackjackCount() / (double) tableStats.getHandCount()) * 100,
+                ((double) tableStats.getBlackjackCount() / (double) handCount) * 100,
                 tableStats.getPlayerWinCount(),
-                ((double) tableStats.getPlayerWinCount() / (double) tableStats.getHandCount()) * 100,
+                ((double) tableStats.getPlayerWinCount() / (double) handCount) * 100,
                 tableStats.getPlayerLossCount(),
-                ((double) tableStats.getPlayerLossCount() / (double) tableStats.getHandCount()) * 100,
+                ((double) tableStats.getPlayerLossCount() / (double) handCount) * 100,
                 tableStats.getPushCount(),
-                ((double) tableStats.getPushCount() / (double) tableStats.getHandCount()) * 100,
+                ((double) tableStats.getPushCount() / (double) handCount) * 100,
                 tableStats.getSplitCount(),
-                ((double) tableStats.getSplitCount() /(double) tableStats.getHandCount()) * 100,
-                runningProfit,
-                averageProfitPerHand,
-                expectedValuePerHand * 100);
+                ((double) tableStats.getSplitCount() /(double) handCount) * 100,
+                tableStats.getRunningProfit(),
+                tableStats.getProfitPerHand(),
+                tableStats.getExpectedValuePerHand() * 100);
 
         System.out.println(statsOverview);
     }

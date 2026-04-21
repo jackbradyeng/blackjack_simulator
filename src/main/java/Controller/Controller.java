@@ -47,14 +47,13 @@ public class Controller {
                     .bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
             table.drawRoutine();
             table.executePlayerStrategyForAll();
-            tablePrinter.printDealerHand();
+            if ((i + 1) % 1000 == 0) { tablePrinter.printDealerHand(); }
             table.executeDealerStrategy();
             table.windDownRoutine();
-            double runningProfit = mainPlayer.getChips() - DEFAULT_PLAYER_STARTING_CHIPS;
-            double averageProfitPerHand = runningProfit / ((double) i + 1);
-            double expectedValuePerHand = averageProfitPerHand / DEFAULT_PLAYER_BET_AMOUNT;
-            tablePrinter.printStatistics(i + 1, runningProfit, averageProfitPerHand,
-                    expectedValuePerHand, tableStats);
+            tableStats.setRunningProfit(mainPlayer.getChips());
+            tableStats.setProfitPerHand(i + 1);
+            tableStats.setExpectedValuePerHand();
+            if ((i + 1) % 1000 ==0) { tablePrinter.printStatistics(i + 1, tableStats); }
         }
         Instant end = Instant.now();
         Duration timeElapsed = Duration.between(start, end);
