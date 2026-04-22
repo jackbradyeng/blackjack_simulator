@@ -20,7 +20,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
         while (isRunning) {
             table.startupRoutine();
-            initialWager(table);
+            initialWager(table, tablePrinter);
             table.drawRoutine();
             playerActions(table, tablePrinter);
             tablePrinter.gamePause("Dealer drawing in...");
@@ -42,22 +42,21 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
     /** initializes the first round of betting. This is a non-parameterized method for regular command line
      * interactions. */
-    private void initialWager(Table table) {
-        // first bet
+    private void initialWager(Table table, TablePrinter tablePrinter) {
+
         for (Player player : table.getPlayers()) {
             while (isRunning) {
-                System.out.println("Would you like to place a bet? Enter Y/N.");
+                tablePrinter.printBettingPrompt();
                 try {
                     String response = readInput();
                     if (processStandardBet(table, player, response)) {break; }
                 } catch (RuntimeException e) {
-                    System.out.println("Please enter a valid response (Y/N).");
+                    tablePrinter.printInvalidInputPrompt();
                 }
             }
 
-            // additional bets
             while (isRunning) {
-                System.out.println("Would you like to place another bet?");
+                tablePrinter.printFollowUpBettingPrompt();
                 try {
                     String response = readInput();
                     if (response.equalsIgnoreCase("N")) {
@@ -66,7 +65,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                         processStandardBet(table, player, response);
                     }
                 } catch (RuntimeException e) {
-                    System.out.println("Please enter a valid response (Y/N).");
+                    tablePrinter.printInvalidInputPrompt();
                 }
             }
         }

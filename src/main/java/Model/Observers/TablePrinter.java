@@ -27,6 +27,12 @@ public class TablePrinter {
 
     public void printExitMessage() { System.out.println("Thanks for playing!"); }
 
+    public void printBettingPrompt() { System.out.println("Would you like to place a bet? Enter Y/N."); }
+
+    public void printFollowUpBettingPrompt() { System.out.println("Would you like to place another bet?"); }
+
+    public void printInvalidInputPrompt() { System.out.println("Please enter a valid response: Y/N."); }
+
     public void printActivePlayerHands() {
         for (PlayerHand hand : table.getActiveHands()) {
             System.out.println("Position: " + hand.getPosition().getPositionNumber());
