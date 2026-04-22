@@ -25,6 +25,8 @@ public class TablePrinter {
         System.out.println("\n---- NEW ROUND ----");
     }
 
+    public void printExitMessage() { System.out.println("Thanks for playing!"); }
+
     public void printActivePlayerHands() {
         for (PlayerHand hand : table.getActiveHands()) {
             System.out.println("Position: " + hand.getPosition().getPositionNumber());
