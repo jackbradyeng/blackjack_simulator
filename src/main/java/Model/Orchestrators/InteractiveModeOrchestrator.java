@@ -20,7 +20,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
         while (isRunning) {
             table.startupRoutine();
-            initialWager(table, scanner);
+            initialWager(table);
             table.drawRoutine();
             playerActions(table, tablePrinter);
             tablePrinter.gamePause("Dealer drawing in...");
@@ -29,31 +29,37 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             tablePrinter.gamePause("Printing results in...");
             table.windDownRoutine();
         }
-        System.out.println("Thanks for playing!");
+        tablePrinter.printExitMessage();
+    }
+
+    private String readInput() {
+        String input = scanner.next();
+        if (input.equalsIgnoreCase(QUIT)) {
+            isRunning = false;
+        }
+        return input;
     }
 
     /** initializes the first round of betting. This is a non-parameterized method for regular command line
      * interactions. */
-    private void initialWager(Table table, Scanner scanner) {
+    private void initialWager(Table table) {
         // first bet
         for (Player player : table.getPlayers()) {
-            while (true) {
+            while (isRunning) {
                 System.out.println("Would you like to place a bet? Enter Y/N.");
                 try {
-                    String response = scanner.next();
-                    if (processStandardBet(table, player, response)) {
-                        break;
-                    }
+                    String response = readInput();
+                    if (processStandardBet(table, player, response)) {break; }
                 } catch (RuntimeException e) {
                     System.out.println("Please enter a valid response (Y/N).");
                 }
             }
 
             // additional bets
-            while (true) {
+            while (isRunning) {
                 System.out.println("Would you like to place another bet?");
                 try {
-                    String response = scanner.next();
+                    String response = readInput();
                     if (response.equalsIgnoreCase("N")) {
                         break;
                     } else {
@@ -88,7 +94,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
         } else {
             System.out.println("Would you like to buy insurance? (Y/N)");
             try {
-                String playerAction = scanner.next();
+                String playerAction = readInput();
                 if (playerAction.equalsIgnoreCase("Y")) {
                     handleInsuranceCase(table, hand);
                     return false;
@@ -102,7 +108,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
     /** handles cases where the player orders insurance in non-simulation games. */
     private void handleInsuranceCase(Table table, PlayerHand hand) {
-        while (true) {
+        while (isRunning) {
             System.out.println("How much would you like to bet on insurance? The maximum size is the value of your" +
                     "initial bet.");
             try {
@@ -150,7 +156,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     }
                     String playerAction;
                     try {
-                        playerAction = scanner.next().toUpperCase();
+                        playerAction = readInput().toUpperCase();
 
                         if (playerAction.equalsIgnoreCase(INSURANCE)) {
                             handleInsuranceCase(table, hand);
