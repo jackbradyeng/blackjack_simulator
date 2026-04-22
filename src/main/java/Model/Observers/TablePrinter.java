@@ -5,6 +5,7 @@ import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
 import lombok.AllArgsConstructor;
 import static Model.Constants.DEFAULT_COUNTDOWN_TIME;
+import static Model.Constants.DEFAULT_MIN_BET_SIZE;
 
 @AllArgsConstructor
 public class TablePrinter {
@@ -32,6 +33,16 @@ public class TablePrinter {
     public void printFollowUpBettingPrompt() { System.out.println("Would you like to place another bet?"); }
 
     public void printInvalidInputPrompt() { System.out.println("Please enter a valid response: Y/N."); }
+
+    public void printBetSizePrompt(double chipCount) {
+        System.out.println("Specify your bet size. You have %d chips. The minimum bet size is %d chips."
+                .formatted((int) chipCount, DEFAULT_MIN_BET_SIZE));
+    }
+
+    public void printBetPositionPrompt(int positionCount) {
+        System.out.println("Which position would you like to bet on? There are %d total positions."
+                .formatted(positionCount));
+    }
 
     public void printActivePlayerHands() {
         for (PlayerHand hand : table.getActiveHands()) {

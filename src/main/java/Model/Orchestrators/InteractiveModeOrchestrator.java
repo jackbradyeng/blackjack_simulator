@@ -49,7 +49,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                 tablePrinter.printBettingPrompt();
                 try {
                     String response = readInput();
-                    if (processStandardBet(table, player, response)) {break; }
+                    if (processStandardBet(table, tablePrinter, player, response)) {break; }
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
                 }
@@ -62,7 +62,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     if (response.equalsIgnoreCase("N")) {
                         break;
                     } else {
-                        processStandardBet(table, player, response);
+                        processStandardBet(table, tablePrinter, player, response);
                     }
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
@@ -72,16 +72,13 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     }
 
     /** processes a standard bet during the initial wager phase. */
-    private boolean processStandardBet(Table table, Player player, String action) {
+    private boolean processStandardBet(Table table, TablePrinter tablePrinter, Player player, String action) {
         if (action.equalsIgnoreCase("Y")) {
-            System.out.println("Specify your bet size. You have " + (int) player.getChips() + " chips." +
-                    " The minimum bet size is " + DEFAULT_MIN_BET_SIZE + " chips.");
+            tablePrinter.printBetSizePrompt(player.getChips());
             double playerBet = scanner.nextDouble();
-            System.out.println("Which position would you like to bet on? There are " +
-                    table.getPlayerPositions().size() + " total positions.");
+            tablePrinter.printBetPositionPrompt(table.getPlayerPositions().size());
             int position = scanner.nextInt();
-            table.getBettingService()
-                    .bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
+            table.getBettingService().bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
             return true;
         } else return action.equalsIgnoreCase("N");
     }
@@ -132,7 +129,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                 if (hand.isBust()) {
                     playerCanAct = false;
                 } else if (hand.isBlackjack()) {
-                    playerCanAct = handleBlackjackCase(table, hand);
+                    playerCanAct = handleBlackjackCase(table, tablePrinter, hand);
                 } else {
                     System.out.println("Player " + hand.getActingPlayer() + " to act. Select an action:");
                     DealerHand dealerHand = table.getDealerPosition().getHand();
