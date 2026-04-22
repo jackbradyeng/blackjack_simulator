@@ -84,11 +84,11 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     }
 
     /** handles cases where the player has a natural blackjack in non-simulation games. */
-    private boolean handleBlackjackCase(Table table, PlayerHand hand) {
+    private boolean handleBlackjackCase(Table table, TablePrinter tablePrinter, PlayerHand hand) {
         if (!hand.hasInsuranceOption(table.getDealerPosition().getHand())) {
             return false;
         } else {
-            System.out.println("Would you like to buy insurance? (Y/N)");
+            tablePrinter.printInsuranceBetPrompt();
             try {
                 String playerAction = readInput();
                 if (playerAction.equalsIgnoreCase("Y")) {
@@ -96,7 +96,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     return false;
                 } else return !playerAction.equalsIgnoreCase("N");
             } catch (RuntimeException e) {
-                System.out.println("Please enter a valid input.");
+                tablePrinter.printInvalidInputPrompt();
                 return true;
             }
         }

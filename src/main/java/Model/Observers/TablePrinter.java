@@ -44,6 +44,8 @@ public class TablePrinter {
                 .formatted(positionCount));
     }
 
+    public void printInsuranceBetPrompt() { System.out.println("Would you like to buy insurance? Y/N"); }
+
     public void printActivePlayerHands() {
         for (PlayerHand hand : table.getActiveHands()) {
             System.out.println("Position: " + hand.getPosition().getPositionNumber());
