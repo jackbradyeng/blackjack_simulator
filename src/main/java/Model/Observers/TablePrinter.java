@@ -32,11 +32,16 @@ public class TablePrinter {
 
     public void printFollowUpBettingPrompt() { System.out.println("Would you like to place another bet?"); }
 
-    public void printInvalidInputPrompt() { System.out.println("Please enter a valid response: Y/N."); }
+    public void printInvalidInputPrompt() { System.out.println("Please enter a valid response."); }
 
     public void printBetSizePrompt(double chipCount) {
         System.out.println("Specify your bet size. You have %d chips. The minimum bet size is %d chips."
                 .formatted((int) chipCount, DEFAULT_MIN_BET_SIZE));
+    }
+
+    public void printInsuranceBetSizePrompt(double chipCount, double maxInsuranceBet) {
+        System.out.println("Specify your bet size. You have %d chips. The maximum bet size is %d chips."
+                .formatted((int) chipCount, (int) maxInsuranceBet));
     }
 
     public void printBetPositionPrompt(int positionCount) {

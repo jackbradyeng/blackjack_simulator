@@ -92,7 +92,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             try {
                 String playerAction = readInput();
                 if (playerAction.equalsIgnoreCase("Y")) {
-                    handleInsuranceCase(table, hand);
+                    handleInsuranceCase(table, tablePrinter, hand);
                     return false;
                 } else return !playerAction.equalsIgnoreCase("N");
             } catch (RuntimeException e) {
@@ -103,17 +103,19 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     }
 
     /** handles cases where the player orders insurance in non-simulation games. */
-    private void handleInsuranceCase(Table table, PlayerHand hand) {
+    private void handleInsuranceCase(Table table, TablePrinter tablePrinter, PlayerHand hand) {
         while (isRunning) {
-            System.out.println("How much would you like to bet on insurance? The maximum size is the value of your" +
-                    "initial bet.");
+            tablePrinter.printInsuranceBetSizePrompt(
+                    hand.getActingPlayer().getChips(),
+                    hand.getPairs().getFirst().getValue().getAmount()
+            );
             try {
                 double insuranceBet = scanner.nextDouble();
                 table.getBettingService()
                         .bookInsuranceBet(hand.getActingPlayer(), hand.getPosition(), hand, insuranceBet);
                 break;
             } catch (RuntimeException e) {
-                System.out.println("Invalid input.");
+                tablePrinter.printInvalidInputPrompt();
             }
         }
     }
@@ -155,7 +157,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                         playerAction = readInput().toUpperCase();
 
                         if (playerAction.equalsIgnoreCase(INSURANCE)) {
-                            handleInsuranceCase(table, hand);
+                            handleInsuranceCase(table, tablePrinter, hand);
                         } else {
                             table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
                             tablePrinter.printActivePlayerHands();
