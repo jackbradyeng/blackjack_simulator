@@ -46,8 +46,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     private void initialWager(Table table, TablePrinter tablePrinter) {
         while (isRunning) {
             for (Player player : table.getPlayers()) {
-                tablePrinter.printBettingPrompt();
                 try {
+                    tablePrinter.printBettingPrompt();
                     String response = readInput();
                     if (processStandardBet(table, tablePrinter, player, response)) {
                         break;
@@ -84,6 +84,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             double playerBet = scanner.nextDouble();
             tablePrinter.printBetPositionPrompt(table.getPlayerPositions().size());
             int position = scanner.nextInt();
+            // betting service should return a boolean to signal whether the bet was successfully placed or not
             table.getBettingService().bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
             return true;
         } else return action.equalsIgnoreCase(NO_RESPONSE);
