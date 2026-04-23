@@ -6,6 +6,8 @@ import Model.Observers.TableStats;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import static Model.Constants.*;
 
@@ -21,6 +23,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
         while (isRunning) {
             table.startupRoutine();
             initialWager(table, tablePrinter);
+            followUpWager(table, tablePrinter);
             table.drawRoutine();
             playerActions(table, tablePrinter);
             tablePrinter.gamePause("Dealer drawing in...");
@@ -40,22 +43,25 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
         return input;
     }
 
-    /** initializes the first round of betting. This is a non-parameterized method for regular command line
-     * interactions. */
     private void initialWager(Table table, TablePrinter tablePrinter) {
-
-        for (Player player : table.getPlayers()) {
-            while (isRunning) {
+        while (isRunning) {
+            for (Player player : table.getPlayers()) {
                 tablePrinter.printBettingPrompt();
                 try {
                     String response = readInput();
-                    if (processStandardBet(table, tablePrinter, player, response)) {break; }
+                    if (processStandardBet(table, tablePrinter, player, response)) {
+                        break;
+                    }
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
                 }
             }
+        }
+    }
 
-            while (isRunning) {
+    private void followUpWager(Table table, TablePrinter tablePrinter) {
+        while (isRunning) {
+            for (Player player : table.getPlayers()) {
                 tablePrinter.printFollowUpBettingPrompt();
                 try {
                     String response = readInput();
