@@ -124,7 +124,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     private void playerActions(Table table, TablePrinter tablePrinter) {
         for (int i = 0; i < table.getActiveHands().size(); i++) {
             PlayerHand hand = table.getActiveHands().get(i);
-            System.out.println("Position no. " + hand.getPosition().getPositionNumber());
+            tablePrinter.printPositionNumber(hand.getPosition().getPositionNumber());
             boolean playerCanAct = true;
 
             while (playerCanAct) {
@@ -133,7 +133,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                 } else if (hand.isBlackjack()) {
                     playerCanAct = handleBlackjackCase(table, tablePrinter, hand);
                 } else {
-                    System.out.println("Player " + hand.getActingPlayer() + " to act. Select an action:");
+                    tablePrinter.printActingPlayerPrompt(hand.getActingPlayer());
                     DealerHand dealerHand = table.getDealerPosition().getHand();
                     if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
                         System.out.println("HIT | STAND | DOUBLE | SPLIT | INSURANCE");
@@ -169,7 +169,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                             playerCanAct = false;
                         }
                     } catch (RuntimeException e) {
-                        System.out.println("Invalid input.");
+                        tablePrinter.printInvalidInputPrompt();
                     }
                 }
             }
