@@ -65,7 +65,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                 tablePrinter.printFollowUpBettingPrompt();
                 try {
                     String response = readInput();
-                    if (response.equalsIgnoreCase("N")) {
+                    if (response.equalsIgnoreCase(NO_RESPONSE)) {
                         break;
                     } else {
                         processStandardBet(table, tablePrinter, player, response);
@@ -79,14 +79,14 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
     /** processes a standard bet during the initial wager phase. */
     private boolean processStandardBet(Table table, TablePrinter tablePrinter, Player player, String action) {
-        if (action.equalsIgnoreCase("Y")) {
+        if (action.equalsIgnoreCase(YES_RESPONSE)) {
             tablePrinter.printBetSizePrompt(player.getChips());
             double playerBet = scanner.nextDouble();
             tablePrinter.printBetPositionPrompt(table.getPlayerPositions().size());
             int position = scanner.nextInt();
             table.getBettingService().bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
             return true;
-        } else return action.equalsIgnoreCase("N");
+        } else return action.equalsIgnoreCase(NO_RESPONSE);
     }
 
     /** handles cases where the player has a natural blackjack in non-simulation games. */
@@ -97,10 +97,10 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             tablePrinter.printInsuranceBetPrompt();
             try {
                 String playerAction = readInput();
-                if (playerAction.equalsIgnoreCase("Y")) {
+                if (playerAction.equalsIgnoreCase(YES_RESPONSE)) {
                     handleInsuranceCase(table, tablePrinter, hand);
                     return false;
-                } else return !playerAction.equalsIgnoreCase("N");
+                } else return !playerAction.equalsIgnoreCase(NO_RESPONSE);
             } catch (RuntimeException e) {
                 tablePrinter.printInvalidInputPrompt();
                 return true;

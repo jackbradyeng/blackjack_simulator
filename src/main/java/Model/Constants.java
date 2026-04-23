@@ -22,6 +22,8 @@ public final class Constants {
     public static final String SPLIT = "SPLIT";
     public static final String NO_SPLIT = "NO SPLIT";
     public static final String INSURANCE = "INSURANCE";
+    public static final String YES_RESPONSE = "Y";
+    public static final String NO_RESPONSE = "N";
 
     // DECK CONSTANTS
     public static final int DEFAULT_NUMBER_OF_DECKS = 4;
