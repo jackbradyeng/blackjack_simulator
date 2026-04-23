@@ -136,49 +136,39 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             while (playerCanAct) {
                 if (hand.isBust()) {
                     playerCanAct = false;
-                } else if (hand.isBlackjack()) {
+                }
+                if (hand.isBlackjack()) {
                     playerCanAct = handleBlackjackCase(table, tablePrinter, hand);
-                } else {
-                    tablePrinter.printActingPlayerPrompt(hand.getActingPlayer());
-                    DealerHand dealerHand = table.getDealerPosition().getHand();
-                    if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
-                        System.out.println("HIT | STAND | DOUBLE | SPLIT | INSURANCE");
-                    } else if(!hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
-                        System.out.println("HIT | STAND | INSURANCE");
-                    } else if (hand.hasSplitOption() && !hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
-                        System.out.println("HIT | STAND | DOUBLE | SPLIT");
-                    } else if (!hand.hasSplitOption() && !hand.hasInsuranceOption(dealerHand) && hand.isHasHit()) {
-                        System.out.println("HIT | STAND | DOUBLE");
-                    } else if (hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand)) {
-                        System.out.println("HIT | STAND | SPLIT | INSURANCE");
-                    } else if (hand.hasSplitOption() && !hand.hasInsuranceOption(dealerHand)) {
-                        System.out.println("HIT | STAND | SPLIT");
-                    } else if (!hand.hasSplitOption() && hand.hasInsuranceOption(dealerHand)) {
-                        System.out.println("HIT | STAND | INSURANCE");
+                }
+                determinePlayerOptions(table, tablePrinter, hand);
+                String playerAction;
+                try {
+                    playerAction = readInput().toUpperCase();
+                    if (playerAction.equalsIgnoreCase(INSURANCE)) {
+                        handleInsuranceCase(table, tablePrinter, hand);
                     } else {
-                        System.out.println("HIT | STAND");
+                        table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
+                        tablePrinter.printActivePlayerHands();
+                        tablePrinter.printDealerFirstCard();
                     }
-                    String playerAction;
-                    try {
-                        playerAction = readInput().toUpperCase();
-
-                        if (playerAction.equalsIgnoreCase(INSURANCE)) {
-                            handleInsuranceCase(table, tablePrinter, hand);
-                        } else {
-                            table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
-                            tablePrinter.printActivePlayerHands();
-                            tablePrinter.printDealerFirstCard();
-                        }
-                        if (playerAction.equalsIgnoreCase(STAND)) {
-                            playerCanAct = false;
-                        } else if (playerAction.equalsIgnoreCase(DOUBLE)) {
-                            playerCanAct = false;
-                        }
-                    } catch (RuntimeException e) {
-                        tablePrinter.printInvalidInputPrompt();
+                    if ((playerAction.equalsIgnoreCase(STAND)) || (playerAction.equalsIgnoreCase(DOUBLE))) {
+                        playerCanAct = false;
                     }
+                } catch (RuntimeException e) {
+                    tablePrinter.printInvalidInputPrompt();
                 }
             }
         }
+    }
+
+    /** determines and prints the player's options given the table and hand states. */
+    private void determinePlayerOptions(Table table, TablePrinter tablePrinter, PlayerHand hand) {
+        tablePrinter.printActingPlayerPrompt(hand.getActingPlayer());
+        DealerHand dealerHand = table.getDealerPosition().getHand();
+        List<String> actions = new ArrayList<>(List.of(HIT, STAND));
+        if (!hand.isHasHit() && !hand.hasInsuranceOption(dealerHand)) actions.add(DOUBLE);
+        if (hand.hasSplitOption()) actions.add(SPLIT);
+        if (hand.hasInsuranceOption(dealerHand)) actions.add(INSURANCE);
+        tablePrinter.printAvailableActions(actions);
     }
 }

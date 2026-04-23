@@ -4,6 +4,7 @@ import Model.Actors.Player;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
 import lombok.AllArgsConstructor;
+import java.util.List;
 import static Model.Constants.DEFAULT_COUNTDOWN_TIME;
 import static Model.Constants.DEFAULT_MIN_BET_SIZE;
 
@@ -57,6 +58,10 @@ public class TablePrinter {
 
     public void printActingPlayerPrompt(Player player) {
         System.out.println("Player %s to act. Select an action:".formatted(player.toString()));
+    }
+
+    public void printAvailableActions(List<String> actions) {
+        System.out.println(String.join(" | ", actions));
     }
 
     public void printActivePlayerHands() {
