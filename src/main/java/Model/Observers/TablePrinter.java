@@ -4,6 +4,9 @@ import Model.Actors.Player;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
 import lombok.AllArgsConstructor;
+import java.util.List;
+import static Model.Constants.DEFAULT_COUNTDOWN_TIME;
+import static Model.Constants.DEFAULT_MIN_BET_SIZE;
 
 @AllArgsConstructor
 public class TablePrinter {
@@ -22,6 +25,43 @@ public class TablePrinter {
 
     public void printNewRoundMessage() {
         System.out.println("\n---- NEW ROUND ----");
+    }
+
+    public void printExitMessage() { System.out.println("Thanks for playing!"); }
+
+    public void printBettingPrompt() { System.out.println("Would you like to place a bet? Enter Y/N."); }
+
+    public void printFollowUpBettingPrompt() { System.out.println("Would you like to place another bet?"); }
+
+    public void printInvalidInputPrompt() { System.out.println("Please enter a valid response."); }
+
+    public void printBetSizePrompt(double chipCount) {
+        System.out.println("Specify your bet size. You have %d chips. The minimum bet size is %d chips."
+                .formatted((int) chipCount, DEFAULT_MIN_BET_SIZE));
+    }
+
+    public void printInsuranceBetSizePrompt(double chipCount, double maxInsuranceBet) {
+        System.out.println("Specify your bet size. You have %d chips. The maximum bet size is %d chips."
+                .formatted((int) chipCount, (int) maxInsuranceBet));
+    }
+
+    public void printBetPositionPrompt(int positionCount) {
+        System.out.println("Which position would you like to bet on? There are %d total positions."
+                .formatted(positionCount));
+    }
+
+    public void printInsuranceBetPrompt() { System.out.println("Would you like to buy insurance? Y/N"); }
+
+    public void printPositionNumber(int positionNumber) {
+        System.out.println("Position no. %d".formatted(positionNumber));
+    }
+
+    public void printActingPlayerPrompt(Player player) {
+        System.out.println("Player %s to act. Select an action:".formatted(player.toString()));
+    }
+
+    public void printAvailableActions(List<String> actions) {
+        System.out.println(String.join(" | ", actions));
     }
 
     public void printActivePlayerHands() {
@@ -63,7 +103,9 @@ public class TablePrinter {
                     Starting Balance: %s
                     Closing Balance: %s
                     Profit (Loss): %s
-                    """.formatted(player, openingBalance.intValue(), (int) player.getChips(),
+                    """.formatted(player,
+                    openingBalance.intValue(),
+                    (int) player.getChips(),
                     (int) (player.getChips() - openingBalance));
             System.out.println(result);
         }
@@ -77,15 +119,75 @@ public class TablePrinter {
                 Profit (Loss): %s
                 """.formatted(table.getHouseBalance().intValue(),
                 (int) table.getDealer().getChips(),
-                (int) table.getDealer().getChips() - table.getHouseBalance());
+                (int) (table.getDealer().getChips() - table.getHouseBalance()));
         System.out.println(houseResults);
     }
 
-    // prints results
     public void printHandResults() {
         System.out.println("---- RESULTS ----");
         printPlayerResults();
         printHouseResults();
         System.out.println("---- END OF ROUND ----");
+    }
+
+    /** prints summary statistics following a round of blackjack, including average profit per hand and the expected
+     * value percentage. */
+    public void printStatistics(int handNumber,
+                                 TableStats tableStats) {
+
+        int handCount = tableStats.getHandCount();
+
+        String statsOverview = """
+                
+                ---- SUMMARY STATISTICS ----
+                Hand No. : %s
+                Blackjack Count : %s
+                Blackjack Percentage : %s
+                Win Count : %s
+                Win Percentage : %s
+                Loss Count : %s
+                Loss Percentage : %s
+                Push Count : %s
+                Push Percentage : %s
+                Split Count : %s
+                Split Percentage : %s
+                Running Profit (Loss) : %s
+                Average Profit Per Hand : %s
+                Expected Value Per Hand : %s
+                """.formatted(handNumber,
+                tableStats.getBlackjackCount(),
+                ((double) tableStats.getBlackjackCount() / (double) handCount) * 100,
+                tableStats.getPlayerWinCount(),
+                ((double) tableStats.getPlayerWinCount() / (double) handCount) * 100,
+                tableStats.getPlayerLossCount(),
+                ((double) tableStats.getPlayerLossCount() / (double) handCount) * 100,
+                tableStats.getPushCount(),
+                ((double) tableStats.getPushCount() / (double) handCount) * 100,
+                tableStats.getSplitCount(),
+                ((double) tableStats.getSplitCount() /(double) handCount) * 100,
+                tableStats.getRunningProfit(),
+                tableStats.getProfitPerHand(),
+                tableStats.getExpectedValuePerHand() * 100);
+
+        System.out.println(statsOverview);
+    }
+
+    public void printProcessingTime(long seconds) {
+        System.out.println("Total processing time: " + seconds + " seconds.");
+    }
+
+    public void gamePause(String output) {
+        System.out.println(output);
+        threadSleep();
+        System.out.println("3...");
+        threadSleep();
+        System.out.println("2...");
+        threadSleep();
+        System.out.println("1...");
+    }
+
+    private void threadSleep() {
+        try {Thread.sleep(DEFAULT_COUNTDOWN_TIME);}
+        catch (InterruptedException i) {Thread.currentThread().interrupt();}
     }
 }
