@@ -2,7 +2,6 @@ package Model.Table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import Exceptions.PlayerCountException;
 import Model.Actors.Dealer;
 import Model.Actors.Player;
@@ -20,7 +19,6 @@ import Model.Table.BettingServices.BettingService;
 import Model.Table.BettingServices.BettingServiceImpl;
 import Model.Table.DealServices.DealServiceImpl;
 import Model.Table.HandServices.HandServiceImpl;
-import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.PayoutServices.InsurancePayoutService;
 import Model.Table.PayoutServices.StandardPayoutService;
@@ -142,41 +140,6 @@ public class Table {
                 new StandardBetValidatorImpl(),
                 new SplitBetProcessorImpl(),
                 new SplitBetValidatorImpl());
-    }
-
-    /** executes the dealer's strategy. */
-    public void executeDealerStrategy() {
-        while(!Objects.equals(dealer.executeStrategy(), STAND)) {
-            handleDealerAction(dealer.executeStrategy());
-        }
-        tablePrinter.printDealerHand();
-    }
-
-    /** executes the player's strategy. */
-    public void executePlayerStrategy(PlayerHand playerHand, DealerHand dealerHand) {
-        Player actingPlayer = playerHand.getActingPlayer();
-
-        while (!playerHand.isBust()) {
-            String playerStrategy = actingPlayer.executeStrategy(playerHand, dealerHand);
-            tablePrinter.printPlayerStrategy(playerStrategy);
-            if (playerStrategy.equals(DOUBLE)) {
-                handlePlayerAction(actingPlayer, playerHand, playerStrategy);
-                break;
-            } else if (playerStrategy.equals(STAND)) {
-                break;
-            } else {
-                handlePlayerAction(actingPlayer, playerHand, playerStrategy);
-            }
-        }
-        tablePrinter.printActivePlayerHands();
-    }
-
-    /** executes the player strategy for all active hands at the table. */
-    public void executePlayerStrategyForAll() {
-        for (int i = 0; i < getActiveHands().size(); i++) {
-            PlayerHand hand = getActiveHands().get(i);
-            executePlayerStrategy(hand, dealer.getPosition().getHand());
-        }
     }
 
     public void handleDealerAction(String action) {
