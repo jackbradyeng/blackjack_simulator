@@ -46,13 +46,14 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     }
 
     private void initialWager(Table table, TablePrinter tablePrinter) {
-        while (isRunning) {
+        boolean initialWager = true;
+        while (initialWager) {
             for (Player player : table.getPlayers()) {
                 try {
                     tablePrinter.printBettingPrompt();
                     String response = readInput();
                     if (processStandardBet(table, tablePrinter, player, response)) {
-                        break;
+                        initialWager = false;
                     }
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
@@ -62,13 +63,14 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     }
 
     private void followUpWager(Table table, TablePrinter tablePrinter) {
-        while (isRunning) {
+        boolean followUpWager = true;
+        while (followUpWager) {
             for (Player player : table.getPlayers()) {
                 tablePrinter.printFollowUpBettingPrompt();
                 try {
                     String response = readInput();
                     if (response.equalsIgnoreCase(NO_RESPONSE)) {
-                        break;
+                        followUpWager = false;
                     } else {
                         processStandardBet(table, tablePrinter, player, response);
                     }
