@@ -3,6 +3,7 @@ package Model.Orchestrators;
 import Model.Actors.Player;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
+import Model.Orchestrators.actor_strategy_orchestrators.DealerStrategyOrchestrator;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
@@ -15,6 +16,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
     private boolean isRunning = true;
     private final Scanner scanner = new Scanner(System.in);
+    private final DealerStrategyOrchestrator dealerStrategyOrchestrator = new DealerStrategyOrchestrator();
 
     @Override
     public void runGame(Table table, TablePrinter tablePrinter, TableStats tableStats) {
@@ -28,7 +30,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             playerActions(table, tablePrinter);
             tablePrinter.gamePause("Dealer drawing in...");
             tablePrinter.printDealerHand();
-            table.executeDealerStrategy();
+            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter);
             tablePrinter.gamePause("Printing results in...");
             table.windDownRoutine();
         }
