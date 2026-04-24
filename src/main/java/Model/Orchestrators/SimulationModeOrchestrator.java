@@ -32,7 +32,7 @@ public class SimulationModeOrchestrator implements GameModeOrchestrator {
             table.getBettingService().bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
             table.drawRoutine();
             playerStrategyOrchestrator.executePlayerStrategyForAll(table, tablePrinter);
-            if ((i + 1) % 1000 == 0) { tablePrinter.printDealerHand(); }
+            if ((i + 1) % 1000 == 0) { tablePrinter.printDealerHand(table); }
             dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter);
             table.windDownRoutine();
             tableStats.setRunningProfit(mainPlayer.getChips());

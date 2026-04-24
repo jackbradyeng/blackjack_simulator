@@ -29,7 +29,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             table.drawRoutine();
             playerActions(table, tablePrinter);
             tablePrinter.gamePause("Dealer drawing in...");
-            tablePrinter.printDealerHand();
+            tablePrinter.printDealerHand(table);
             dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter);
             tablePrinter.gamePause("Printing results in...");
             table.windDownRoutine();
@@ -153,8 +153,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                         handleInsuranceCase(table, tablePrinter, hand);
                     } else {
                         table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
-                        tablePrinter.printActivePlayerHands();
-                        tablePrinter.printDealerFirstCard();
+                        tablePrinter.printActivePlayerHands(table);
+                        tablePrinter.printDealerFirstCard(table);
                     }
                     if ((playerAction.equalsIgnoreCase(STAND)) || (playerAction.equalsIgnoreCase(DOUBLE))) {
                         playerCanAct = false;

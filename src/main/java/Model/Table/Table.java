@@ -59,9 +59,12 @@ public class Table {
     @Getter private TablePrinter tablePrinter;
     @Getter private TableStats tableStats;
 
-    public Table(int playerCount, int deckCount, boolean isSimulation, TableStats tableStats) {
+    public Table(int playerCount, int deckCount, boolean isSimulation,
+                 TablePrinter tablePrinter, TableStats tableStats) {
+
         this.isSimulation = isSimulation;
         this.tableStats = tableStats;
+        this.tablePrinter = tablePrinter;
         this.deck = new Deck(deckCount, new FisherYatesStrategy());
         this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
         this.players = new ArrayList<>();
@@ -70,7 +73,6 @@ public class Table {
         this.activeHands = new ArrayList<>();
         this.playerBalances = new HashMap<>();
         this.chipBalanceObserver = new ChipBalanceObserverImpl();
-        this.tablePrinter = new TablePrinter(this);
         this.dealService = new DealServiceImpl();
         this.handService = new HandServiceImpl(tableStats);
         this.standardPayoutService = new StandardPayoutService(tableStats);
@@ -101,8 +103,8 @@ public class Table {
         dealService.dealOpeningCards(deck, dealerPosition, playerPositions);
         this.activeHands = handService.setActiveHands(playerPositions);
         dealService.calculateHandValues(activeHands, dealerPosition);
-        tablePrinter.printActivePlayerHands();
-        tablePrinter.printDealerFirstCard();
+        tablePrinter.printActivePlayerHands(this);
+        tablePrinter.printDealerFirstCard(this);
     }
 
     /** Actions: handles regular payouts, handles insurance payouts, and resets the game state in preparation for a new
@@ -110,7 +112,7 @@ public class Table {
     public void windDownRoutine() {
         standardPayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         insurancePayoutService.process(activeHands, dealerPosition.getHand(), dealer);
-        tablePrinter.printHandResults();
+        tablePrinter.printHandResults(this);
         handService.clearActiveHands(activeHands);
         handService.clearPlayerHands(playerPositions);
         handService.clearDealerHand(dealerPosition);

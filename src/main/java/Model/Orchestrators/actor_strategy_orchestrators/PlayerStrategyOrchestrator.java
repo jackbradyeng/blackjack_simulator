@@ -28,7 +28,7 @@ public class PlayerStrategyOrchestrator {
                 table.handlePlayerAction(actingPlayer, playerHand, playerStrategy);
             }
         }
-        tablePrinter.printActivePlayerHands();
+        tablePrinter.printActivePlayerHands(table);
     }
 
     /** executes the player strategy for all active hands at the table. */

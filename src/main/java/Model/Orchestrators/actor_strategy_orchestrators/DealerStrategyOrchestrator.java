@@ -12,6 +12,6 @@ public class DealerStrategyOrchestrator {
         while(!Objects.equals(table.getDealer().executeStrategy(), STAND)) {
             table.handleDealerAction(table.getDealer().executeStrategy());
         }
-        tablePrinter.printDealerHand();
+        tablePrinter.printDealerHand(table);
     }
 }

@@ -16,8 +16,8 @@ public class Controller {
 
     public Controller(int playerCount, int deckCount, boolean isSimulation) {
         this.tableStats = new TableStats();
-        this.table = new Table(playerCount, deckCount, isSimulation, this.tableStats);
-        this.tablePrinter = new TablePrinter(this.table);
+        this.tablePrinter = new TablePrinter();
+        this.table = new Table(playerCount, deckCount, isSimulation, this.tablePrinter, this.tableStats);
         initializeGameModeOrchestrator(isSimulation);
     }
 
