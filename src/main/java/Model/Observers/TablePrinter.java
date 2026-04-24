@@ -27,6 +27,11 @@ public class TablePrinter {
         System.out.println("\n---- NEW ROUND ----");
     }
 
+    public void printPlayerStrategy(String playerStrategy) {
+        System.out.println("---- PLAYER STRATEGY IS: %s ----"
+                .formatted(playerStrategy));
+    }
+
     public void printExitMessage() { System.out.println("Thanks for playing!"); }
 
     public void printBettingPrompt() { System.out.println("Would you like to place a bet? Enter Y/N."); }

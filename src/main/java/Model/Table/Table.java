@@ -41,7 +41,6 @@ import lombok.Getter;
 
 public class Table {
 
-    /// instance variables
     @Getter private boolean isSimulation;
     @Getter private Deck deck;
     @Getter private Dealer dealer;
@@ -62,7 +61,6 @@ public class Table {
     @Getter private TablePrinter tablePrinter;
     @Getter private TableStats tableStats;
 
-    /// default constructor
     public Table(int playerCount, int deckCount, boolean isSimulation, TableStats tableStats) {
         this.isSimulation = isSimulation;
         this.tableStats = tableStats;
@@ -88,10 +86,8 @@ public class Table {
         initBettingService();
     }
 
-    /** initializes the game state for a new round of Blackjack.
-     * Actions: checks if the deck requires a top-up.
-     * creates empty player hands at each position.
-     * creates an empty dealer hand at the dealer position. */
+    /** Actions: checks if the deck requires a top-up, creates empty player hands at each position, creates an empty
+     * dealer hand at the dealer position. */
     public void startupRoutine() {
         tablePrinter.printNewRoundMessage();
         this.houseBalance = chipBalanceObserver.logHouseBalance(dealer);
@@ -158,20 +154,18 @@ public class Table {
 
     /** executes the player's strategy. */
     public void executePlayerStrategy(PlayerHand playerHand, DealerHand dealerHand) {
-        // defines the acting player in the hand
         Player actingPlayer = playerHand.getActingPlayer();
-        // need to check that the hand is not bust to prevent null pointer exceptions in the strategy class
-        while(!playerHand.isBust()) {
-            System.out.println("---- PLAYER STRATEGY IS: " + actingPlayer.executeStrategy(playerHand, dealerHand)
-                    + " ----");
-            // players are only permitted to hit once after doubling down so the loop should terminate after doing so
-            if(actingPlayer.executeStrategy(playerHand, dealerHand).equals(DOUBLE)) {
-                handlePlayerAction(actingPlayer, playerHand, actingPlayer.executeStrategy(playerHand, dealerHand));
+
+        while (!playerHand.isBust()) {
+            String playerStrategy = actingPlayer.executeStrategy(playerHand, dealerHand);
+            tablePrinter.printPlayerStrategy(playerStrategy);
+            if (playerStrategy.equals(DOUBLE)) {
+                handlePlayerAction(actingPlayer, playerHand, playerStrategy);
                 break;
-            } else if(actingPlayer.executeStrategy(playerHand, dealerHand).equals(STAND)) {
+            } else if (playerStrategy.equals(STAND)) {
                 break;
             } else {
-                handlePlayerAction(actingPlayer, playerHand, actingPlayer.executeStrategy(playerHand, dealerHand));
+                handlePlayerAction(actingPlayer, playerHand, playerStrategy);
             }
         }
         tablePrinter.printActivePlayerHands();
@@ -179,15 +173,14 @@ public class Table {
 
     /** executes the player strategy for all active hands at the table. */
     public void executePlayerStrategyForAll() {
-        // switched to an iterative for loop to avoid ConcurrentModificationExceptions...
-        for(int i = 0; i < getActiveHands().size(); i++) {
+        for (int i = 0; i < getActiveHands().size(); i++) {
             PlayerHand hand = getActiveHands().get(i);
             executePlayerStrategy(hand, dealer.getPosition().getHand());
         }
     }
 
     public void handleDealerAction(String action) {
-        if(action.equals(HIT)) {
+        if (action.equals(HIT)) {
             actionService.hit(deck, dealer.getPosition().getHand());
         }
     }
@@ -198,22 +191,18 @@ public class Table {
                 actionService.hit(deck, hand);
                 break;
             case SPLIT:
-                // partition hands and book additional bet
                 bettingService.splitHand(player, hand.getPosition(), hand, activeHands);
                 tableStats.incrementHandCount();
                 tableStats.incrementSplitCount();
                 break;
             case DOUBLE:
-                // book double down bet
                 bettingService.bookDoubleDownBet(player, hand.getPosition(), hand);
                 actionService.hit(deck, hand);
                 break;
             case INSURANCE:
-                // book insurance bet
                 bettingService.bookInsuranceBet(player, hand.getPosition(), hand, DEFAULT_PLAYER_INSURANCE_BET);
                 break;
             case STAND: {}
-                // do nothing
         }
     }
 }
