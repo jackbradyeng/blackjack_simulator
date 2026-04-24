@@ -3,6 +3,8 @@ package Model.Orchestrators;
 import Model.Actors.Player;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
+import Model.Orchestrators.actor_strategy_orchestrators.DealerStrategyOrchestrator;
+import Model.Orchestrators.actor_strategy_orchestrators.PlayerStrategyOrchestrator;
 import Model.Table.Table;
 import java.time.Duration;
 import java.time.Instant;
@@ -10,6 +12,14 @@ import static Model.Constants.DEFAULT_NUMBER_OF_ITERATIONS;
 import static Model.Constants.DEFAULT_PLAYER_BET_AMOUNT;
 
 public class SimulationModeOrchestrator implements GameModeOrchestrator {
+
+    private final PlayerStrategyOrchestrator playerStrategyOrchestrator;
+    private final DealerStrategyOrchestrator dealerStrategyOrchestrator;
+
+    public SimulationModeOrchestrator() {
+        this.playerStrategyOrchestrator = new PlayerStrategyOrchestrator();
+        this.dealerStrategyOrchestrator = new DealerStrategyOrchestrator();
+    }
 
     @Override
     public void runGame(Table table, TablePrinter tablePrinter, TableStats tableStats) {
@@ -21,9 +31,9 @@ public class SimulationModeOrchestrator implements GameModeOrchestrator {
             table.startupRoutine();
             table.getBettingService().bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
             table.drawRoutine();
-            table.executePlayerStrategyForAll();
+            playerStrategyOrchestrator.executePlayerStrategyForAll(table, tablePrinter);
             if ((i + 1) % 1000 == 0) { tablePrinter.printDealerHand(); }
-            table.executeDealerStrategy();
+            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter);
             table.windDownRoutine();
             tableStats.setRunningProfit(mainPlayer.getChips());
             tableStats.setProfitPerHand(i + 1);
