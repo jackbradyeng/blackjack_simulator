@@ -23,11 +23,6 @@ public class TablePrinter {
         System.out.println("\n---- NEW ROUND ----");
     }
 
-    public void printPlayerStrategy(String playerStrategy) {
-        System.out.println("---- PLAYER STRATEGY IS: %s ----"
-                .formatted(playerStrategy));
-    }
-
     public void printExitMessage() { System.out.println("Thanks for playing!"); }
 
     public void printBettingPrompt() { System.out.println("Would you like to place a bet? Enter Y/N."); }
@@ -67,8 +62,11 @@ public class TablePrinter {
 
     public void printActivePlayerHands(Table table) {
         for (PlayerHand hand : table.getActiveHands()) {
-            System.out.println("Position: " + hand.getPosition().getPositionNumber());
-            System.out.println("---- Hand: " + hand + " Hand value: " + hand.getHandValue() + ".");
+            String output = """
+                    Position: %d
+                    ---- Hand: %s Hand Value: %s.
+                    """.formatted(hand.getPosition().getPositionNumber(), hand, hand.getHandValue());
+            System.out.println(output);
             if (hand.isBust()) {
                 System.out.println("BUST!");
             }
@@ -173,10 +171,6 @@ public class TablePrinter {
         System.out.println(statsOverview);
     }
 
-    public void printProcessingTime(long seconds) {
-        System.out.println("Total processing time: " + seconds + " seconds.");
-    }
-
     public void gamePause(String output) {
         System.out.println(output);
         threadSleep();
@@ -190,5 +184,17 @@ public class TablePrinter {
     private void threadSleep() {
         try {Thread.sleep(DEFAULT_COUNTDOWN_TIME);}
         catch (InterruptedException i) {Thread.currentThread().interrupt();}
+    }
+
+    /// SIMULATION MODE METHODS
+
+    public void printProcessingTime(long seconds) {
+        System.out.println("Total processing time: %d seconds."
+                .formatted(seconds));
+    }
+
+    public void printPlayerStrategy(String playerStrategy) {
+        System.out.println("---- PLAYER STRATEGY IS: %s ----"
+                .formatted(playerStrategy));
     }
 }
