@@ -78,7 +78,7 @@ public class Table {
     /** Actions: checks if the deck requires a top-up, creates empty player hands at each position, creates an empty
      * dealer hand at the dealer position. */
     public void startupRoutine() {
-        tablePrinter.printNewRoundMessage();
+        if (!isSimulation) tablePrinter.printNewRoundMessage();
         this.houseBalance = chipBalanceObserver.logHouseBalance(dealer);
         this.playerBalances = chipBalanceObserver.logPlayerBalances(players);
         dealService.checkDeck(deck);
@@ -92,8 +92,8 @@ public class Table {
         dealService.dealOpeningCards(deck, dealerPosition, playerPositions);
         this.activeHands = handService.setActiveHands(playerPositions);
         dealService.calculateHandValues(activeHands, dealerPosition);
-        tablePrinter.printActivePlayerHands(this);
-        tablePrinter.printDealerFirstCard(this);
+        if (!isSimulation) tablePrinter.printActivePlayerHands(this);
+        if (!isSimulation) tablePrinter.printDealerFirstCard(this);
     }
 
     /** Actions: handles regular payouts, handles insurance payouts, and resets the game state in preparation for a new
@@ -101,7 +101,7 @@ public class Table {
     public void windDownRoutine() {
         standardPayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         insurancePayoutService.process(activeHands, dealerPosition.getHand(), dealer);
-        tablePrinter.printHandResults(this);
+        if (!isSimulation) tablePrinter.printHandResults(this);
         handService.clearActiveHands(activeHands);
         handService.clearPlayerHands(playerPositions);
         handService.clearDealerHand(dealerPosition);

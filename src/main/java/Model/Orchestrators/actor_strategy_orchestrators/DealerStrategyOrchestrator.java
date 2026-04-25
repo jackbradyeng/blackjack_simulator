@@ -8,10 +8,10 @@ import static Model.Constants.STAND;
 public class DealerStrategyOrchestrator {
 
     /** executes the dealer's strategy. */
-    public void executeDealerStrategy(Table table, TablePrinter tablePrinter) {
+    public void executeDealerStrategy(Table table, TablePrinter tablePrinter, boolean isSimulation) {
         while(!Objects.equals(table.getDealer().executeStrategy(), STAND)) {
             table.handleDealerAction(table.getDealer().executeStrategy());
         }
-        tablePrinter.printDealerHand(table);
+        if (!isSimulation) tablePrinter.printDealerHand(table);
     }
 }

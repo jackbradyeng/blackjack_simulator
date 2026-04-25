@@ -24,21 +24,19 @@ public class SimulationModeOrchestrator implements GameModeOrchestrator {
     @Override
     public void runGame(Table table, TablePrinter tablePrinter, TableStats tableStats) {
         Instant start = Instant.now();
-        tablePrinter.printWelcomeMessage();
         Player mainPlayer = table.getPlayers().getFirst();
 
         for (int i = 0; i < DEFAULT_NUMBER_OF_ITERATIONS; i++) {
             table.startupRoutine();
             table.getBettingService().bookStandardBet(mainPlayer, mainPlayer.getDefaultPosition(), DEFAULT_PLAYER_BET_AMOUNT);
             table.drawRoutine();
-            playerStrategyOrchestrator.executePlayerStrategyForAll(table, tablePrinter);
-            if ((i + 1) % 1000 == 0) { tablePrinter.printDealerHand(table); }
-            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter);
+            playerStrategyOrchestrator.executePlayerStrategyForAll(table);
+            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter, true);
             table.windDownRoutine();
             tableStats.setRunningProfit(mainPlayer.getChips());
             tableStats.setProfitPerHand(i + 1);
             tableStats.setExpectedValuePerHand();
-            if ((i + 1) % 1000 ==0) { tablePrinter.printStatistics(i + 1, tableStats); }
+            if ((i + 1) % 1000 == 0) { tablePrinter.printStatistics(i + 1, tableStats); }
         }
         Instant end = Instant.now();
         Duration timeElapsed = Duration.between(start, end);

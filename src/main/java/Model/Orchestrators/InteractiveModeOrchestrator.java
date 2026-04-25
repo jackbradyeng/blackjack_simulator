@@ -30,7 +30,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             playerActions(table, tablePrinter);
             tablePrinter.gamePause("Dealer drawing in...");
             tablePrinter.printDealerHand(table);
-            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter);
+            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter, false);
             tablePrinter.gamePause("Printing results in...");
             table.windDownRoutine();
         }
