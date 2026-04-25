@@ -1,9 +1,12 @@
+import java.util.ArrayList;
 import java.util.Map;
+import Controller.Controller;
 import Exceptions.DeckCountException;
 import Exceptions.PlayerCountException;
 import Model.Actors.Player;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
+import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 import Model.Table.Table;
@@ -20,20 +23,33 @@ public class TableTesting {
     private Table table;
     private TableStats tableStats;
     private TablePrinter tablePrinter;
+    private ArrayList<Player> players;
+    private PlayerPosition defaultPlayerPosition;
     private final int PLAYER_COUNT = 3;
 
     public TableTesting() {
         this.tableStats = new TableStats();
         this.tablePrinter = new TablePrinter();
-        table = new Table(PLAYER_COUNT, DEFAULT_NUMBER_OF_DECKS, false, tablePrinter, tableStats);
+        this.players = createPlayers(PLAYER_COUNT);
+        this.table = new Table(players, DEFAULT_NUMBER_OF_DECKS, false, tablePrinter, tableStats);
+        this.defaultPlayerPosition = table.getPlayerPositions().get(DEFAULT_TABLE_POSITIONS / 2 + 1);
+    }
+
+    private ArrayList<Player> createPlayers(int count) {
+        this.players = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            players.add(new Player(DEFAULT_PLAYER_STARTING_CHIPS, new OptimalNoCountingStrategy()));
+        }
+        return players;
     }
 
     // private helper method
     private Map.Entry<Player, PlayerHand> betOnDefaultPosition() {
         table.startupRoutine();
-        Player singlePlayer = table.getPlayers().getFirst();
+        Player singlePlayer = players.getFirst();
+        singlePlayer.setDefaultPosition(defaultPlayerPosition);
         table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
-        PlayerHand hand = table.getPlayers().getFirst().getDefaultPosition().getHands().getFirst();
+        PlayerHand hand = players.getFirst().getDefaultPosition().getHands().getFirst();
         return Map.entry(singlePlayer, hand);
     }
 
@@ -41,16 +57,15 @@ public class TableTesting {
     @Order(1)
     @Test
     public void testPlayerCountException() {
-        PlayerCountException thrown = assertThrows(PlayerCountException.class, () ->
-                new Table(DEFAULT_TABLE_POSITIONS + 1, DEFAULT_NUMBER_OF_DECKS,
-                        false, tablePrinter ,tableStats));
+        assertThrows(PlayerCountException.class, () ->
+                new Controller(DEFAULT_TABLE_POSITIONS + 1, DEFAULT_NUMBER_OF_DECKS, false));
     }
 
     @Order(2)
     @Test
     public void testDeckCountException() {
-        DeckCountException thrown = assertThrows(DeckCountException.class, () ->
-                new Table(PLAYER_COUNT, 0, false, tablePrinter, tableStats));
+        assertThrows(DeckCountException.class, () ->
+                new Table(createPlayers(PLAYER_COUNT), 0, false, tablePrinter, tableStats));
     }
 
     /** tests that the player array size returns as expected in a single-player game. */
@@ -96,15 +111,16 @@ public class TableTesting {
     @Order(8)
     @Test
     public void testPlayerStandardBet() {
-        Player player = table.getPlayers().getFirst();
+        Player singlePlayer = players.getFirst();
+        singlePlayer.setDefaultPosition(table.getPlayerPositions().get(DEFAULT_TABLE_POSITIONS / 2 + 1));
         table.startupRoutine();
-        table.getBettingService().bookStandardBet(player, player.getDefaultPosition(), 100);
+        table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
 
         // a standard bet should be allocated to the first hand at a given position
-        PlayerHand hand = player.getDefaultPosition().getHands().getFirst();
+        PlayerHand hand = singlePlayer.getDefaultPosition().getHands().getFirst();
 
         // the key in the set of pairs should be the player object while the value should be the corresponding bet
-        assertTrue(hand.getPairs().getFirst().getKey().equals(player)
+        assertTrue(hand.getPairs().getFirst().getKey().equals(singlePlayer)
                 && hand.getPairs().getFirst().getValue().getAmount() == 100);
     }
 
@@ -112,7 +128,7 @@ public class TableTesting {
     @Order(9)
     @Test
     public void testActiveHandCount() {
-        Player singlePlayer = table.getPlayers().getFirst();
+        Player singlePlayer = players.getFirst();
         table.startupRoutine();
         table.getBettingService().bookStandardBet(singlePlayer, singlePlayer.getDefaultPosition(), 100);
         table.drawRoutine();
@@ -151,7 +167,7 @@ public class TableTesting {
     @Test
     public void testActivePlayerNonDefault() {
         table.startupRoutine();
-        Player singlePlayer = table.getPlayers().getFirst();
+        Player singlePlayer = players.getFirst();
         table.getBettingService().bookStandardBet(singlePlayer, table.getPlayerPositions().get(1), 100);
         PlayerHand hand = table.getPlayerPositions().get(1).getHands().getFirst();
         table.getHandService().setActingPlayers(table.getPlayerPositions());

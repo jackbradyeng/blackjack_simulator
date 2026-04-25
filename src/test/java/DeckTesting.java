@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DeckTesting {
 
-    // testing instance variables
     private final Deck deck;
 
     public DeckTesting() {

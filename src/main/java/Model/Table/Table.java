@@ -2,7 +2,6 @@ package Model.Table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import Exceptions.PlayerCountException;
 import Model.Actors.Dealer;
 import Model.Actors.Player;
 import Model.Deck.Deck;
@@ -12,7 +11,6 @@ import Model.Observers.ChipBalanceObserverImpl;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
-import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Table.ActionServices.ActionService;
 import Model.Table.ActionServices.ActionServicePlayerImpl;
 import Model.Table.BettingServices.BettingService;
@@ -51,15 +49,15 @@ public class Table {
     @Getter private TablePrinter tablePrinter;
     @Getter private TableStats tableStats;
 
-    public Table(int playerCount, int deckCount, boolean isSimulation,
+    public Table(ArrayList<Player> players, int deckCount, boolean isSimulation,
                  TablePrinter tablePrinter, TableStats tableStats) {
 
         this.isSimulation = isSimulation;
         this.tableStats = tableStats;
         this.tablePrinter = tablePrinter;
+        this.players = players;
         this.deck = new Deck(deckCount, new FisherYatesStrategy());
         this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
-        this.players = new ArrayList<>();
         this.dealerPosition = new DealerPosition();
         this.playerPositions = new ArrayList<>();
         this.activeHands = new ArrayList<>();
@@ -72,7 +70,6 @@ public class Table {
         this.actionService = new ActionServicePlayerImpl();
         this.positionService = new PositionServiceImpl();
         this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositions);
-        initPlayers(playerCount);
         positionService.createPlayerPositions(this.playerPositions);
         positionService.assignDefaultPlayerPositions(this.players, this.playerPositions);
         positionService.assignDealerPosition(this.dealer, this.dealerPosition);
@@ -108,20 +105,6 @@ public class Table {
         handService.clearActiveHands(activeHands);
         handService.clearPlayerHands(playerPositions);
         handService.clearDealerHand(dealerPosition);
-    }
-
-    /** initializes each of the players at the table. Throws an exception if more players are allocated than the
-     * table allows. */
-    private void initPlayers(int playerCount) throws PlayerCountException {
-        if(playerCount > DEFAULT_TABLE_POSITIONS) {
-            throw new PlayerCountException("Insufficient table positions for this many players. The default number" +
-                    "of table positions is " + DEFAULT_TABLE_POSITIONS + ".");
-        } else {
-            for (int i = 0; i < playerCount; i++) {
-                Player player = new Player(DEFAULT_PLAYER_STARTING_CHIPS, new OptimalNoCountingStrategy());
-                players.add(player);
-            }
-        }
     }
 
     public void handleDealerAction(String action) {
