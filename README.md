@@ -7,7 +7,7 @@ A Monte Carlo blackjack simulator and interactive CLI game written in Java. Runs
 - **Two modes**: interactive play or automated Monte Carlo simulation (default: 100,000 iterations)
 - **Optimal strategy**: mathematically correct play without card counting, using per-action lookup tables keyed on the dealer up-card
 - **Full rule set**: splitting, doubling down, insurance, back-betting, and multi-hand support
-- **Polymorphic strategies**: swap player or dealer strategies independently
+- **Modular strategies**: swap player or dealer strategies independently
 - **Configurable table**: deck count, player count, bet sizes, payout ratios, and more
 - **Live statistics**: tracks win/loss/push/split rates, running profit, and expected value per hand
 
@@ -23,7 +23,7 @@ mvn clean install
 java -cp target/classes Launcher
 ```
 
-By default the launcher runs in simulation mode. To switch to interactive mode, set `isSimulation = false` in `Launcher.java`.
+By default, the launcher runs in simulation mode. To switch to interactive mode, set `isSimulation = false` in `Launcher.java`.
 
 ## Configuration
 
@@ -58,15 +58,19 @@ Strategies implement a common interface and are injected into the `Player`, maki
 ```
 src/main/java/
 ├── Launcher.java                  # Entry point
-├── Controller/                    # Game flow (interactive vs simulation)
+├── Controller/                    # Game flow coordination
+├── Exceptions/                    # DeckCountException, PlayerCountException
 └── Model/
     ├── Constants.java             # All configuration values
     ├── Actors/                    # Player and Dealer
     ├── Cards/                     # Card and Ace types
-    ├── Deck/                      # Shoe management and shuffle strategies
-    ├── Exceptions/                # DeckCountException, PlayerCountException
+    ├── Deck/                      # Shoe management
+    │   └── ShuffleStrategies/     # Fisher-Yates shuffle implementations
     ├── Observers/                 # Stats tracking and console output
-    ├── Strategies/                # Player and dealer strategy implementations
+    ├── Orchestrators/             # Game mode orchestration (interactive vs simulation)
+    ├── Strategies/
+    │   ├── dealer_strategies/     # Dealer strategy interface and default implementation
+    │   └── player_strategies/     # Optimal, copy-dealer, and insurance strategies
     └── Table/                     # Game orchestration
         ├── ActionServices/        # Hit, stand, split, double
         ├── BettingServices/       # Bet booking and validation
@@ -76,8 +80,17 @@ src/main/java/
         ├── Hands/                 # Player and dealer hand representations
         ├── PayoutServices/        # Win/loss/push payouts
         ├── Positions/             # Table seat management
-        ├── Processors/            # Per-bet-type processing (split, double, insurance)
+        ├── PositionService/       # Position service interface and implementation
+        ├── Processors/            # Per-bet-type processing
+        │   ├── DoubleBetProcessors/
+        │   ├── InsuranceBetProcessors/
+        │   ├── SplitBetProcessors/
+        │   └── StandardBetProcessors/
         └── Validators/            # Bet validation rules
+            ├── DoubleBetValidators/
+            ├── InsuranceBetValidators/
+            ├── SplitBetValidators/
+            └── StandardBetValidators/
 ```
 
 ## Running Tests
@@ -95,6 +108,8 @@ mvn test
 
 ## To Be Completed
 
-- [ ] Controller refactor
-- [ ] Player card counting strategies
+- [x] Controller refactor
+- [ ] Table printing refactor
+- [ ] Testing suite refactor
 - [ ] Parallelized simulations
+- [ ] Player card counting strategies
