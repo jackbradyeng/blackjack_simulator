@@ -22,7 +22,7 @@ public class InsurancePayoutService implements PayoutService {
 
                 // skip non-insurance bets
                 if (!(pair.getValue() instanceof InsuranceBet)) {
-                    return;
+                    continue;
                 }
 
                 if (dealerHand.getHandValue() == BLACKJACK_CONSTANT && hand.hasInsuranceOption(dealerHand)) {
