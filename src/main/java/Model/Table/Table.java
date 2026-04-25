@@ -26,15 +26,7 @@ import Model.Table.PositionService.PositionService;
 import Model.Table.PositionService.PositionServiceImpl;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Processors.DoubleBetProcessors.DoubleBetProcessorImpl;
-import Model.Table.Processors.InsuranceBetProcessors.InsuranceBetProcessorImpl;
-import Model.Table.Processors.SplitBetProcessors.SplitBetProcessorImpl;
-import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
-import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
-import Model.Table.Validators.InsuranceBetValidators.InsuranceBetValidatorImpl;
-import Model.Table.Validators.SplitBetValidators.SplitBetValidatorImpl;
-import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.Getter;
 
 public class Table {
@@ -79,11 +71,11 @@ public class Table {
         this.insurancePayoutService = new InsurancePayoutService();
         this.actionService = new ActionServicePlayerImpl();
         this.positionService = new PositionServiceImpl();
+        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositions);
         initPlayers(playerCount);
         positionService.createPlayerPositions(this.playerPositions);
         positionService.assignDefaultPlayerPositions(this.players, this.playerPositions);
         positionService.assignDealerPosition(this.dealer, this.dealerPosition);
-        initBettingService();
     }
 
     /** Actions: checks if the deck requires a top-up, creates empty player hands at each position, creates an empty
@@ -130,18 +122,6 @@ public class Table {
                 players.add(player);
             }
         }
-    }
-
-    private void initBettingService() {
-        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositions,
-                new DoubleBetProcessorImpl(),
-                new DoubleBetValidatorImpl(),
-                new InsuranceBetProcessorImpl(),
-                new InsuranceBetValidatorImpl(),
-                new StandardBetProcessorImpl(),
-                new StandardBetValidatorImpl(),
-                new SplitBetProcessorImpl(),
-                new SplitBetValidatorImpl());
     }
 
     public void handleDealerAction(String action) {
