@@ -68,6 +68,7 @@ src/main/java/
     │   └── ShuffleStrategies/     # Fisher-Yates shuffle implementations
     ├── Observers/                 # Stats tracking and console output
     ├── Orchestrators/             # Game mode orchestration (interactive vs simulation)
+    │   └── actor_strategy_orchestrators/  # Dealer and player strategy orchestrators
     ├── Strategies/
     │   ├── dealer_strategies/     # Dealer strategy interface and default implementation
     │   └── player_strategies/     # Optimal, copy-dealer, and insurance strategies
@@ -109,7 +110,7 @@ mvn test
 ## To Be Completed
 
 - [x] Controller refactor
-- [ ] Table printing refactor
+- [x] Table printing refactor
 - [ ] Testing suite refactor
 - [ ] Parallelized simulations
 - [ ] Player card counting strategies
