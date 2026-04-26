@@ -2,8 +2,6 @@ package Model.Table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
-import Exceptions.PlayerCountException;
 import Model.Actors.Dealer;
 import Model.Actors.Player;
 import Model.Deck.Deck;
@@ -13,14 +11,12 @@ import Model.Observers.ChipBalanceObserverImpl;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
-import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
 import Model.Table.ActionServices.ActionService;
 import Model.Table.ActionServices.ActionServicePlayerImpl;
 import Model.Table.BettingServices.BettingService;
 import Model.Table.BettingServices.BettingServiceImpl;
 import Model.Table.DealServices.DealServiceImpl;
 import Model.Table.HandServices.HandServiceImpl;
-import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.PayoutServices.InsurancePayoutService;
 import Model.Table.PayoutServices.StandardPayoutService;
@@ -28,20 +24,11 @@ import Model.Table.PositionService.PositionService;
 import Model.Table.PositionService.PositionServiceImpl;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
-import Model.Table.Processors.DoubleBetProcessors.DoubleBetProcessorImpl;
-import Model.Table.Processors.InsuranceBetProcessors.InsuranceBetProcessorImpl;
-import Model.Table.Processors.SplitBetProcessors.SplitBetProcessorImpl;
-import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
 import static Model.Constants.*;
-import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
-import Model.Table.Validators.InsuranceBetValidators.InsuranceBetValidatorImpl;
-import Model.Table.Validators.SplitBetValidators.SplitBetValidatorImpl;
-import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
 import lombok.Getter;
 
 public class Table {
 
-    /// instance variables
     @Getter private boolean isSimulation;
     @Getter private Deck deck;
     @Getter private Dealer dealer;
@@ -62,38 +49,36 @@ public class Table {
     @Getter private TablePrinter tablePrinter;
     @Getter private TableStats tableStats;
 
-    /// default constructor
-    public Table(int playerCount, int deckCount, boolean isSimulation, TableStats tableStats) {
+    public Table(ArrayList<Player> players, int deckCount, boolean isSimulation,
+                 TablePrinter tablePrinter, TableStats tableStats) {
+
         this.isSimulation = isSimulation;
         this.tableStats = tableStats;
+        this.tablePrinter = tablePrinter;
+        this.players = players;
         this.deck = new Deck(deckCount, new FisherYatesStrategy());
         this.dealer = new Dealer(new DefaultDealerStrategy(), DEFAULT_DEALER_STARTING_CHIPS);
-        this.players = new ArrayList<>();
         this.dealerPosition = new DealerPosition();
         this.playerPositions = new ArrayList<>();
         this.activeHands = new ArrayList<>();
         this.playerBalances = new HashMap<>();
         this.chipBalanceObserver = new ChipBalanceObserverImpl();
-        this.tablePrinter = new TablePrinter(this);
         this.dealService = new DealServiceImpl();
         this.handService = new HandServiceImpl(tableStats);
         this.standardPayoutService = new StandardPayoutService(tableStats);
         this.insurancePayoutService = new InsurancePayoutService();
         this.actionService = new ActionServicePlayerImpl();
         this.positionService = new PositionServiceImpl();
-        initPlayers(playerCount);
+        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositions);
         positionService.createPlayerPositions(this.playerPositions);
         positionService.assignDefaultPlayerPositions(this.players, this.playerPositions);
         positionService.assignDealerPosition(this.dealer, this.dealerPosition);
-        initBettingService();
     }
 
-    /** initializes the game state for a new round of Blackjack.
-     * Actions: checks if the deck requires a top-up.
-     * creates empty player hands at each position.
-     * creates an empty dealer hand at the dealer position. */
+    /** Actions: checks if the deck requires a top-up, creates empty player hands at each position, creates an empty
+     * dealer hand at the dealer position. */
     public void startupRoutine() {
-        tablePrinter.printNewRoundMessage();
+        if (!isSimulation) tablePrinter.printNewRoundMessage();
         this.houseBalance = chipBalanceObserver.logHouseBalance(dealer);
         this.playerBalances = chipBalanceObserver.logPlayerBalances(players);
         dealService.checkDeck(deck);
@@ -107,8 +92,8 @@ public class Table {
         dealService.dealOpeningCards(deck, dealerPosition, playerPositions);
         this.activeHands = handService.setActiveHands(playerPositions);
         dealService.calculateHandValues(activeHands, dealerPosition);
-        tablePrinter.printActivePlayerHands();
-        tablePrinter.printDealerFirstCard();
+        if (!isSimulation) tablePrinter.printActivePlayerHands(this);
+        if (!isSimulation) tablePrinter.printDealerFirstCard(this);
     }
 
     /** Actions: handles regular payouts, handles insurance payouts, and resets the game state in preparation for a new
@@ -116,78 +101,14 @@ public class Table {
     public void windDownRoutine() {
         standardPayoutService.process(activeHands, dealerPosition.getHand(), dealer);
         insurancePayoutService.process(activeHands, dealerPosition.getHand(), dealer);
-        tablePrinter.printHandResults();
+        if (!isSimulation) tablePrinter.printHandResults(this);
         handService.clearActiveHands(activeHands);
         handService.clearPlayerHands(playerPositions);
         handService.clearDealerHand(dealerPosition);
     }
 
-    /** initializes each of the players at the table. Throws an exception if more players are allocated than the
-     * table allows. */
-    private void initPlayers(int playerCount) throws PlayerCountException {
-        if(playerCount > DEFAULT_TABLE_POSITIONS) {
-            throw new PlayerCountException("Insufficient table positions for this many players. The default number" +
-                    "of table positions is " + DEFAULT_TABLE_POSITIONS + ".");
-        } else {
-            for (int i = 0; i < playerCount; i++) {
-                Player player = new Player(DEFAULT_PLAYER_STARTING_CHIPS, new OptimalNoCountingStrategy());
-                players.add(player);
-            }
-        }
-    }
-
-    private void initBettingService() {
-        this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositions,
-                new DoubleBetProcessorImpl(),
-                new DoubleBetValidatorImpl(),
-                new InsuranceBetProcessorImpl(),
-                new InsuranceBetValidatorImpl(),
-                new StandardBetProcessorImpl(),
-                new StandardBetValidatorImpl(),
-                new SplitBetProcessorImpl(),
-                new SplitBetValidatorImpl());
-    }
-
-    /** executes the dealer's strategy. */
-    public void executeDealerStrategy() {
-        while(!Objects.equals(dealer.executeStrategy(), STAND)) {
-            handleDealerAction(dealer.executeStrategy());
-        }
-        tablePrinter.printDealerHand();
-    }
-
-    /** executes the player's strategy. */
-    public void executePlayerStrategy(PlayerHand playerHand, DealerHand dealerHand) {
-        // defines the acting player in the hand
-        Player actingPlayer = playerHand.getActingPlayer();
-        // need to check that the hand is not bust to prevent null pointer exceptions in the strategy class
-        while(!playerHand.isBust()) {
-            System.out.println("---- PLAYER STRATEGY IS: " + actingPlayer.executeStrategy(playerHand, dealerHand)
-                    + " ----");
-            // players are only permitted to hit once after doubling down so the loop should terminate after doing so
-            if(actingPlayer.executeStrategy(playerHand, dealerHand).equals(DOUBLE)) {
-                handlePlayerAction(actingPlayer, playerHand, actingPlayer.executeStrategy(playerHand, dealerHand));
-                break;
-            } else if(actingPlayer.executeStrategy(playerHand, dealerHand).equals(STAND)) {
-                break;
-            } else {
-                handlePlayerAction(actingPlayer, playerHand, actingPlayer.executeStrategy(playerHand, dealerHand));
-            }
-        }
-        tablePrinter.printActivePlayerHands();
-    }
-
-    /** executes the player strategy for all active hands at the table. */
-    public void executePlayerStrategyForAll() {
-        // switched to an iterative for loop to avoid ConcurrentModificationExceptions...
-        for(int i = 0; i < getActiveHands().size(); i++) {
-            PlayerHand hand = getActiveHands().get(i);
-            executePlayerStrategy(hand, dealer.getPosition().getHand());
-        }
-    }
-
     public void handleDealerAction(String action) {
-        if(action.equals(HIT)) {
+        if (action.equals(HIT)) {
             actionService.hit(deck, dealer.getPosition().getHand());
         }
     }
@@ -198,22 +119,18 @@ public class Table {
                 actionService.hit(deck, hand);
                 break;
             case SPLIT:
-                // partition hands and book additional bet
                 bettingService.splitHand(player, hand.getPosition(), hand, activeHands);
                 tableStats.incrementHandCount();
                 tableStats.incrementSplitCount();
                 break;
             case DOUBLE:
-                // book double down bet
                 bettingService.bookDoubleDownBet(player, hand.getPosition(), hand);
                 actionService.hit(deck, hand);
                 break;
             case INSURANCE:
-                // book insurance bet
                 bettingService.bookInsuranceBet(player, hand.getPosition(), hand, DEFAULT_PLAYER_INSURANCE_BET);
                 break;
             case STAND: {}
-                // do nothing
         }
     }
 }

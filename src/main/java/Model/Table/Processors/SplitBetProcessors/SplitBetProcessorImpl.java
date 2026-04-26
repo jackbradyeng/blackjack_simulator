@@ -30,7 +30,6 @@ public class SplitBetProcessorImpl implements SplitBetProcessor {
 
         // dispenses chips from the player for the new hand
         player.dispenseChips(amount);
-        System.out.println("Hand split. Additional bet booked for " + (int) amount + " chips on second hand.");
 
         // removes the split card from the main hand, adds it to the new one
         splitHand.getCards().add(playerHand.getCards().removeLast());

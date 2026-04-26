@@ -23,7 +23,5 @@ public class StandardBetProcessorImpl implements StandardBetProcessor {
             number. */
         position.getHands().getFirst().getPairs().add(entry);
         player.dispenseChips(amount);
-        System.out.println("Your bet has been placed! You have " + (int) player.getChips() +
-                " chips remaining.");
     }
 }

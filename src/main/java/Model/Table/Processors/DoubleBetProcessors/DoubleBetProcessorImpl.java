@@ -23,7 +23,5 @@ public class DoubleBetProcessorImpl implements DoubleBetProcessor {
         Map.Entry<Player, Bet> entry = Map.entry(player, playerBet);
         position.getHands().getFirst().getPairs().add(entry);
         player.dispenseChips(amount);
-        System.out.println("Your double down bet has been placed! You have " + (int) player.getChips() +
-                " chips remaining.");
     }
 }

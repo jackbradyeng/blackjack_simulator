@@ -51,8 +51,6 @@ public class StandardBetValidatorImpl implements StandardBetValidator {
     /** validates a given bet size by verifying that it is greater than the minimum allowed for a standard bet. */
     private boolean isValidBetSize(double betAmount) {
         if(betAmount < DEFAULT_MIN_BET_SIZE) {
-            System.out.println("Bet size of: " + (int) betAmount + " is less than the minimum bet size: "
-                    + DEFAULT_MIN_BET_SIZE + ".");
             return false;
         } else {
             return true;

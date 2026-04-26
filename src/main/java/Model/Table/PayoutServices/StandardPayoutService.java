@@ -24,7 +24,7 @@ public class StandardPayoutService implements PayoutService {
 
                 // skip insurance bets
                 if (pair.getValue() instanceof InsuranceBet) {
-                    return;
+                    continue;
                 }
                 // player loss case
                 if (hand.isBust() || (!dealerHand.isBust() && dealerHand.getHandValue() > hand.getHandValue())) {

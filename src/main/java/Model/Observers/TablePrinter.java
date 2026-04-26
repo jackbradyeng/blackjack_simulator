@@ -3,15 +3,11 @@ package Model.Observers;
 import Model.Actors.Player;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
-import lombok.AllArgsConstructor;
 import java.util.List;
 import static Model.Constants.DEFAULT_COUNTDOWN_TIME;
 import static Model.Constants.DEFAULT_MIN_BET_SIZE;
 
-@AllArgsConstructor
 public class TablePrinter {
-
-    private Table table;
 
     public void printWelcomeMessage() {
         String message =
@@ -64,17 +60,20 @@ public class TablePrinter {
         System.out.println(String.join(" | ", actions));
     }
 
-    public void printActivePlayerHands() {
+    public void printActivePlayerHands(Table table) {
         for (PlayerHand hand : table.getActiveHands()) {
-            System.out.println("Position: " + hand.getPosition().getPositionNumber());
-            System.out.println("---- Hand: " + hand + " Hand value: " + hand.getHandValue() + ".");
+            String output = """
+                    Position: %d
+                    ---- Hand: %s Hand Value: %s.
+                    """.formatted(hand.getPosition().getPositionNumber(), hand, hand.getHandValue());
+            System.out.println(output);
             if (hand.isBust()) {
                 System.out.println("BUST!");
             }
         }
     }
 
-    public void printDealerFirstCard() {
+    public void printDealerFirstCard(Table table) {
         var firstCard = table.getDealerPosition().getHand().getCards().getFirst();
         String output = """
                 Position: 0 (Dealer)
@@ -83,7 +82,7 @@ public class TablePrinter {
         System.out.println(output);
     }
 
-    public void printDealerHand() {
+    public void printDealerHand(Table table) {
         var dealerHand = table.getDealerPosition().getHand();
         String output = """
                 Position: 0 (Dealer)
@@ -95,7 +94,7 @@ public class TablePrinter {
         }
     }
 
-    public void printPlayerResults() {
+    public void printPlayerResults(Table table) {
         for (Player player : table.getPlayers()) {
             Double openingBalance = table.getPlayerBalances().get(player);
             String result = """
@@ -111,7 +110,7 @@ public class TablePrinter {
         }
     }
 
-    public void printHouseResults() {
+    public void printHouseResults(Table table) {
         String houseResults = """
                 Player: House
                 Starting Balance: %s
@@ -123,10 +122,10 @@ public class TablePrinter {
         System.out.println(houseResults);
     }
 
-    public void printHandResults() {
+    public void printHandResults(Table table) {
         System.out.println("---- RESULTS ----");
-        printPlayerResults();
-        printHouseResults();
+        printPlayerResults(table);
+        printHouseResults(table);
         System.out.println("---- END OF ROUND ----");
     }
 
@@ -172,10 +171,6 @@ public class TablePrinter {
         System.out.println(statsOverview);
     }
 
-    public void printProcessingTime(long seconds) {
-        System.out.println("Total processing time: " + seconds + " seconds.");
-    }
-
     public void gamePause(String output) {
         System.out.println(output);
         threadSleep();
@@ -189,5 +184,17 @@ public class TablePrinter {
     private void threadSleep() {
         try {Thread.sleep(DEFAULT_COUNTDOWN_TIME);}
         catch (InterruptedException i) {Thread.currentThread().interrupt();}
+    }
+
+    /// SIMULATION MODE METHODS
+
+    public void printProcessingTime(long seconds) {
+        System.out.println("Total processing time: %d seconds."
+                .formatted(seconds));
+    }
+
+    public void printPlayerStrategy(String playerStrategy) {
+        System.out.println("---- PLAYER STRATEGY IS: %s ----"
+                .formatted(playerStrategy));
     }
 }

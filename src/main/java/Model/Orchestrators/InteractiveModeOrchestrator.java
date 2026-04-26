@@ -3,6 +3,7 @@ package Model.Orchestrators;
 import Model.Actors.Player;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
+import Model.Orchestrators.actor_strategy_orchestrators.DealerStrategyOrchestrator;
 import Model.Table.Hands.DealerHand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Table;
@@ -15,6 +16,7 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
     private boolean isRunning = true;
     private final Scanner scanner = new Scanner(System.in);
+    private final DealerStrategyOrchestrator dealerStrategyOrchestrator = new DealerStrategyOrchestrator();
 
     @Override
     public void runGame(Table table, TablePrinter tablePrinter, TableStats tableStats) {
@@ -27,8 +29,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             table.drawRoutine();
             playerActions(table, tablePrinter);
             tablePrinter.gamePause("Dealer drawing in...");
-            tablePrinter.printDealerHand();
-            table.executeDealerStrategy();
+            tablePrinter.printDealerHand(table);
+            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter, false);
             tablePrinter.gamePause("Printing results in...");
             table.windDownRoutine();
         }
@@ -44,13 +46,14 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     }
 
     private void initialWager(Table table, TablePrinter tablePrinter) {
-        while (isRunning) {
+        boolean initialWager = true;
+        while (initialWager) {
             for (Player player : table.getPlayers()) {
                 try {
                     tablePrinter.printBettingPrompt();
                     String response = readInput();
                     if (processStandardBet(table, tablePrinter, player, response)) {
-                        break;
+                        initialWager = false;
                     }
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
@@ -60,13 +63,14 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     }
 
     private void followUpWager(Table table, TablePrinter tablePrinter) {
-        while (isRunning) {
+        boolean followUpWager = true;
+        while (followUpWager) {
             for (Player player : table.getPlayers()) {
                 tablePrinter.printFollowUpBettingPrompt();
                 try {
                     String response = readInput();
                     if (response.equalsIgnoreCase(NO_RESPONSE)) {
-                        break;
+                        followUpWager = false;
                     } else {
                         processStandardBet(table, tablePrinter, player, response);
                     }
@@ -149,8 +153,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                         handleInsuranceCase(table, tablePrinter, hand);
                     } else {
                         table.handlePlayerAction(hand.getActingPlayer(), hand, playerAction);
-                        tablePrinter.printActivePlayerHands();
-                        tablePrinter.printDealerFirstCard();
+                        tablePrinter.printActivePlayerHands(table);
+                        tablePrinter.printDealerFirstCard(table);
                     }
                     if ((playerAction.equalsIgnoreCase(STAND)) || (playerAction.equalsIgnoreCase(DOUBLE))) {
                         playerCanAct = false;
