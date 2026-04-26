@@ -21,7 +21,5 @@ public class InsuranceBetProcessorImpl implements InsuranceBetProcessor {
         Map.Entry<Player, Bet> entry = Map.entry(player, iBet);
         position.getHands().getFirst().getPairs().add(entry);
         player.dispenseChips(amount);
-        System.out.println("Your insurance bet has been placed! You have " + (int) player.getChips() +
-                " chips remaining.");
     }
 }
