@@ -1,3 +1,5 @@
+package Deck;
+
 import Exceptions.DeckCountException;
 import Model.Cards.Ace;
 import Model.Cards.Card;
@@ -12,7 +14,7 @@ import java.util.Optional;
 import static Model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DeckTesting {
+public class DeckUnitTests {
 
     private Deck deck;
 
