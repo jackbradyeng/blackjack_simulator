@@ -1,4 +1,4 @@
-package Deck;
+package deck;
 
 import Exceptions.DeckCountException;
 import Model.Cards.Ace;
