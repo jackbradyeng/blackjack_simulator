@@ -56,7 +56,7 @@ public class DoubleBetValidatorImpl implements DoubleBetValidator {
     /** validates that the given hand has not yet been hit. Opening hands should have a size of two while split hands
      * should have a size of one. */
     private boolean hasNotHit(PlayerHand playerHand) {
-        return playerHand.isHasHit();
+        return !playerHand.isHasHit();
     }
 
     /** validates that a particular player has not yet doubled on the given hand. */
