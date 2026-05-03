@@ -11,8 +11,6 @@ import Model.Observers.ChipBalanceObserverImpl;
 import Model.Observers.TablePrinter;
 import Model.Observers.TableStats;
 import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
-import Model.Table.ActionServices.ActionService;
-import Model.Table.ActionServices.ActionServicePlayerImpl;
 import Model.Table.BettingServices.BettingService;
 import Model.Table.BettingServices.BettingServiceImpl;
 import Model.Table.DealServices.DealServiceImpl;
@@ -43,7 +41,6 @@ public class Table {
     @Getter private HandServiceImpl handService;
     @Getter private StandardPayoutService standardPayoutService;
     @Getter private InsurancePayoutService insurancePayoutService;
-    @Getter private ActionService actionService;
     @Getter private PositionService positionService;
     @Getter private BettingService bettingService;
     @Getter private TablePrinter tablePrinter;
@@ -67,7 +64,6 @@ public class Table {
         this.handService = new HandServiceImpl(tableStats);
         this.standardPayoutService = new StandardPayoutService(tableStats);
         this.insurancePayoutService = new InsurancePayoutService();
-        this.actionService = new ActionServicePlayerImpl();
         this.positionService = new PositionServiceImpl();
         this.bettingService = new BettingServiceImpl(isSimulation, players, playerPositions);
         positionService.createPlayerPositions(this.playerPositions);
@@ -109,14 +105,14 @@ public class Table {
 
     public void handleDealerAction(String action) {
         if (action.equals(HIT)) {
-            actionService.hit(deck, dealer.getPosition().getHand());
+            dealService.hit(deck, dealer.getPosition().getHand());
         }
     }
 
     public void handlePlayerAction(Player player, PlayerHand hand, String action) {
         switch (action) {
             case HIT:
-                actionService.hit(deck, hand);
+                dealService.hit(deck, hand);
                 break;
             case SPLIT:
                 bettingService.splitHand(player, hand.getPosition(), hand, activeHands);
@@ -125,7 +121,7 @@ public class Table {
                 break;
             case DOUBLE:
                 bettingService.bookDoubleDownBet(player, hand.getPosition(), hand);
-                actionService.hit(deck, hand);
+                dealService.hit(deck, hand);
                 break;
             case INSURANCE:
                 bettingService.bookInsuranceBet(player, hand.getPosition(), hand, DEFAULT_PLAYER_INSURANCE_BET);

@@ -2,6 +2,7 @@ package Model.Table.DealServices;
 
 import java.util.List;
 import Model.Deck.Deck;
+import Model.Table.Hands.Hand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
@@ -49,6 +50,21 @@ public class DealServiceImpl implements DealService {
     public void checkDeck(Deck deck) {
         if(deck.getDeck().size() < NEW_DECK_THRESHOLD) {
             deck.createNewDeck(DEFAULT_NUMBER_OF_DECKS);
+        }
+    }
+
+    @Override
+    public boolean hit(Deck deck, Hand hand) {
+
+        if (hand.isBust()) {
+            return false;
+        } else {
+            deck.deal().ifPresent(deal -> {
+                hand.receiveCard(deal);
+                hand.setHandValue();
+                hand.setHasHit(true);
+            });
+            return true;
         }
     }
 }

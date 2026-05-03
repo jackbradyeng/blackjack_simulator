@@ -2,6 +2,7 @@ package Model.Table.DealServices;
 
 import java.util.List;
 import Model.Deck.Deck;
+import Model.Table.Hands.Hand;
 import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.DealerPosition;
 import Model.Table.Positions.PlayerPosition;
@@ -17,4 +18,6 @@ public interface DealService {
     void calculateHandValues(List<PlayerHand> activeHands, DealerPosition dealerPosition);
 
     void checkDeck(Deck deck);
+
+    boolean hit(Deck deck, Hand hand);
 }
