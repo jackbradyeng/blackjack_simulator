@@ -139,16 +139,11 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             boolean playerCanAct = true;
 
             while (playerCanAct) {
-                if (hand.isBust()) {
-                    playerCanAct = false;
-                }
-                if (hand.isBlackjack()) {
-                    playerCanAct = handleBlackjackCase(table, tablePrinter, hand);
-                }
+                if (hand.isBust()) { playerCanAct = false; }
+                if (hand.isBlackjack()) { playerCanAct = handleBlackjackCase(table, tablePrinter, hand); }
                 determinePlayerOptions(table, tablePrinter, hand);
-                String playerAction;
                 try {
-                    playerAction = readInput().toUpperCase();
+                    String playerAction = readInput().toUpperCase();
                     if (playerAction.equalsIgnoreCase(INSURANCE)) {
                         handleInsuranceCase(table, tablePrinter, hand);
                     } else {
