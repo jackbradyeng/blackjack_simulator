@@ -15,8 +15,18 @@ import static Model.Constants.*;
 public class InteractiveModeOrchestrator implements GameModeOrchestrator {
 
     private boolean isRunning = true;
-    private final Scanner scanner = new Scanner(System.in);
-    private final DealerStrategyOrchestrator dealerStrategyOrchestrator = new DealerStrategyOrchestrator();
+    private final Scanner scanner;
+    private final DealerStrategyOrchestrator dealerStrategyOrchestrator;
+
+    public InteractiveModeOrchestrator() {
+        this(new Scanner(System.in), new DealerStrategyOrchestrator());
+    }
+
+    // package private constructor for testing only
+    InteractiveModeOrchestrator(Scanner scanner, DealerStrategyOrchestrator dealerStrategyOrchestrator) {
+        this.scanner = scanner;
+        this.dealerStrategyOrchestrator = dealerStrategyOrchestrator;
+    }
 
     @Override
     public void runGame(Table table, TablePrinter tablePrinter, TableStats tableStats) {
