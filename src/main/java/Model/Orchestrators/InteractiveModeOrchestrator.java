@@ -109,10 +109,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             tablePrinter.printBetSizePrompt(player.getChips());
             double playerBet = readDouble();
             tablePrinter.printBetPositionPrompt(table.getPlayerPositions().size());
-            // betting service should return a boolean to signal whether the bet was successfully placed or not
-            table.getBettingService().bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
-            return true;
             int position = readInt();
+            return table.getBettingService().bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
         } else return action.equalsIgnoreCase(NO_RESPONSE);
     }
 

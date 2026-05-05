@@ -6,8 +6,8 @@ import Model.Table.Hands.PlayerHand;
 import Model.Table.Positions.PlayerPosition;
 
 public interface BettingService {
-    void bookStandardBet(Player player, PlayerPosition position, double amount);
-    void bookInsuranceBet(Player player, PlayerPosition position, PlayerHand hand, double amount);
-    void bookDoubleDownBet(Player player, PlayerPosition position, PlayerHand hand);
-    void splitHand(Player player, PlayerPosition position, PlayerHand hand, ArrayList<PlayerHand> activeHands);
+    boolean bookStandardBet(Player player, PlayerPosition position, double amount);
+    boolean bookInsuranceBet(Player player, PlayerPosition position, PlayerHand hand, double amount);
+    boolean bookDoubleDownBet(Player player, PlayerPosition position, PlayerHand hand);
+    boolean splitHand(Player player, PlayerPosition position, PlayerHand hand, ArrayList<PlayerHand> activeHands);
 }
