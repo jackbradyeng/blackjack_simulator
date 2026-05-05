@@ -10,6 +10,7 @@ import Model.Table.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import Exceptions.QuitException;
 import static Model.Constants.*;
 
 public class InteractiveModeOrchestrator implements GameModeOrchestrator {
@@ -32,18 +33,20 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     public void runGame(Table table, TablePrinter tablePrinter, TableStats tableStats) {
         tablePrinter.printWelcomeMessage();
 
-        while (isRunning) {
-            table.startupRoutine();
-            initialWager(table, tablePrinter);
-            followUpWager(table, tablePrinter);
-            table.drawRoutine();
-            playerActions(table, tablePrinter);
-            tablePrinter.gamePause("Dealer drawing in...");
-            tablePrinter.printDealerHand(table);
-            dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter, false);
-            tablePrinter.gamePause("Printing results in...");
-            table.windDownRoutine();
-        }
+        try {
+            while (isRunning) {
+                table.startupRoutine();
+                initialWager(table, tablePrinter);
+                followUpWager(table, tablePrinter);
+                table.drawRoutine();
+                playerActions(table, tablePrinter);
+                tablePrinter.gamePause("Dealer drawing in...");
+                tablePrinter.printDealerHand(table);
+                dealerStrategyOrchestrator.executeDealerStrategy(table, tablePrinter, false);
+                tablePrinter.gamePause("Printing results in...");
+                table.windDownRoutine();
+            }
+        } catch (QuitException ignored) {}
         tablePrinter.printExitMessage();
     }
 
@@ -51,9 +54,14 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
         String input = scanner.next();
         if (input.equalsIgnoreCase(QUIT)) {
             isRunning = false;
+            throw new QuitException();
         }
         return input;
     }
+
+    private double readDouble() { return Double.parseDouble(readInput()); }
+
+    private int readInt() { return Integer.parseInt(readInput()); }
 
     private void initialWager(Table table, TablePrinter tablePrinter) {
         boolean initialWager = true;
@@ -65,6 +73,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     if (processStandardBet(table, tablePrinter, player, response)) {
                         initialWager = false;
                     }
+                } catch (QuitException e) {
+                    throw e;
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
                 }
@@ -84,6 +94,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     } else {
                         processStandardBet(table, tablePrinter, player, response);
                     }
+                } catch (QuitException e) {
+                    throw e;
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
                 }
@@ -95,17 +107,17 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
     private boolean processStandardBet(Table table, TablePrinter tablePrinter, Player player, String action) {
         if (action.equalsIgnoreCase(YES_RESPONSE)) {
             tablePrinter.printBetSizePrompt(player.getChips());
-            double playerBet = scanner.nextDouble();
+            double playerBet = readDouble();
             tablePrinter.printBetPositionPrompt(table.getPlayerPositions().size());
-            int position = scanner.nextInt();
             // betting service should return a boolean to signal whether the bet was successfully placed or not
             table.getBettingService().bookStandardBet(player, table.getPlayerPositions().get(position - 1), playerBet);
             return true;
+            int position = readInt();
         } else return action.equalsIgnoreCase(NO_RESPONSE);
     }
 
     /** handles cases where the player has a natural blackjack in non-simulation games. */
-    private boolean handleBlackjackCase(Table table, TablePrinter tablePrinter, PlayerHand hand) {
+    private boolean blackjackHandleInsuranceOption(Table table, TablePrinter tablePrinter, PlayerHand hand) {
         if (!hand.hasInsuranceOption(table.getDealerPosition().getHand())) {
             return false;
         } else {
@@ -116,6 +128,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     handleInsuranceCase(table, tablePrinter, hand);
                     return false;
                 } else return !playerAction.equalsIgnoreCase(NO_RESPONSE);
+            } catch (QuitException e) {
+                throw e;
             } catch (RuntimeException e) {
                 tablePrinter.printInvalidInputPrompt();
                 return true;
@@ -131,10 +145,12 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     hand.getPairs().getFirst().getValue().getAmount()
             );
             try {
-                double insuranceBet = scanner.nextDouble();
+                double insuranceBet = readDouble();
                 table.getBettingService()
                         .bookInsuranceBet(hand.getActingPlayer(), hand.getPosition(), hand, insuranceBet);
                 break;
+            } catch (QuitException e) {
+                throw e;
             } catch (RuntimeException e) {
                 tablePrinter.printInvalidInputPrompt();
             }
@@ -149,8 +165,11 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
             boolean playerCanAct = true;
 
             while (playerCanAct) {
-                if (hand.isBust()) { playerCanAct = false; }
-                if (hand.isBlackjack()) { playerCanAct = handleBlackjackCase(table, tablePrinter, hand); }
+                if (hand.isBust()) { break; }
+                if (hand.isBlackjack()) {
+                    playerCanAct = blackjackHandleInsuranceOption(table, tablePrinter, hand);
+                    continue;
+                }
                 determinePlayerOptions(table, tablePrinter, hand);
                 try {
                     String playerAction = readInput().toUpperCase();
@@ -164,6 +183,8 @@ public class InteractiveModeOrchestrator implements GameModeOrchestrator {
                     if ((playerAction.equalsIgnoreCase(STAND)) || (playerAction.equalsIgnoreCase(DOUBLE))) {
                         playerCanAct = false;
                     }
+                } catch (QuitException e) {
+                    throw e;
                 } catch (RuntimeException e) {
                     tablePrinter.printInvalidInputPrompt();
                 }
