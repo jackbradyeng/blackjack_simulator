@@ -48,7 +48,7 @@ public class Hand {
 
     /** returns whether the hand is a blackjack or not. */
     public boolean isBlackjack() {
-        return handValue == BLACKJACK_CONSTANT;
+        return handValue == BLACKJACK_CONSTANT && cards.size() == 2;
     }
 
     /** returns whether the hand has an ace in it or not. */
