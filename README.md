@@ -7,7 +7,7 @@ A Monte Carlo blackjack simulator and interactive CLI game written in Java. Runs
 - **Two modes**: interactive play or automated Monte Carlo simulation (default: 100,000 iterations)
 - **Optimal strategy**: mathematically correct play without card counting, using per-action lookup tables keyed on the dealer up-card
 - **Full rule set**: splitting, doubling down, insurance, back-betting, and multi-hand support
-- **Modular strategies**: swap player or dealer strategies independently
+- **Modular actor_strategies**: swap player or dealer actor_strategies independently
 - **Configurable table**: deck count, player count, bet sizes, payout ratios, and more
 - **Live statistics**: tracks win/loss/push/split rates, running profit, and expected value per hand
 
@@ -27,7 +27,7 @@ By default, the launcher runs in simulation mode. To switch to interactive mode,
 
 ## Configuration
 
-All constants live in `src/main/java/Model/Constants.java`.
+All constants live in `src/main/java/model/Constants.java`.
 
 | Constant | Default | Description |
 |---|---|---|
@@ -58,40 +58,39 @@ Strategies implement a common interface and are injected into the `Player`, maki
 ```
 src/main/java/
 ├── Launcher.java                  # Entry point
-├── Controller/                    # Game flow coordination
-├── Exceptions/                    # DeckCountException, PlayerCountException
-└── Model/
+├── controller/                    # Game flow coordination
+├── exceptions/                    # DeckCountException, PlayerCountException
+└── model/
     ├── Constants.java             # All configuration values
-    ├── Actors/                    # Player and Dealer
-    ├── Cards/                     # Card and Ace types
-    ├── Deck/                      # Shoe management
-    │   └── ShuffleStrategies/     # Fisher-Yates shuffle implementations
-    ├── Observers/                 # Stats tracking and console output
-    ├── Orchestrators/             # Game mode orchestration (interactive vs simulation)
+    ├── actors/                    # Player and Dealer
+    ├── cards/                     # Card and Ace types
+    ├── deck/                      # Shoe management
+    │   └── shuffle_strategies/    # Fisher-Yates shuffle implementations
+    ├── observers/                 # Stats tracking and console output
+    ├── orchestrators/             # Game mode orchestration (interactive vs simulation)
     │   └── actor_strategy_orchestrators/  # Dealer and player strategy orchestrators
-    ├── Strategies/
+    ├── strategies/
     │   ├── dealer_strategies/     # Dealer strategy interface and default implementation
-    │   └── player_strategies/     # Optimal, copy-dealer, and insurance strategies
+    │   └── player_strategies/     # Optimal, copy-dealer, and insurance actor_strategies
     └── Table/                     # Game orchestration
-        ├── ActionServices/        # Hit, stand, split, double
-        ├── BettingServices/       # Bet booking and validation
-        ├── Bets/                  # Bet type definitions
-        ├── DealServices/          # Card dealing
-        ├── HandServices/          # Hand lifecycle management
-        ├── Hands/                 # Player and dealer hand representations
-        ├── PayoutServices/        # Win/loss/push payouts
-        ├── Positions/             # Table seat management
-        ├── PositionService/       # Position service interface and implementation
-        ├── Processors/            # Per-bet-type processing
-        │   ├── DoubleBetProcessors/
-        │   ├── InsuranceBetProcessors/
-        │   ├── SplitBetProcessors/
-        │   └── StandardBetProcessors/
-        └── Validators/            # Bet validation rules
-            ├── DoubleBetValidators/
-            ├── InsuranceBetValidators/
-            ├── SplitBetValidators/
-            └── StandardBetValidators/
+        ├── betting_services/      # Bet booking and validation
+        ├── bets/                  # Bet type definitions
+        ├── deal_services/         # Card dealing
+        ├── hand_services/         # Hand lifecycle management
+        ├── hands/                 # Player and dealer hand representations
+        ├── payout_services/       # Win/loss/push payouts
+        ├── positions/             # Table seat management
+        ├── position_services/     # Position service interface and implementation
+        ├── processors/            # Per-bet-type processing
+        │   ├── double_bet_processors/
+        │   ├── insurance_bet_processors/
+        │   ├── split_bet_processors/
+        │   └── standard_bet_processors/
+        └── validators/            # Bet validation rules
+            ├── double_bet_validators/
+            ├── insurance_bet_validators/
+            ├── split_bet_validators/
+            └── standard_bet_validators/
 ```
 
 ## Running Tests
@@ -99,6 +98,20 @@ src/main/java/
 ```bash
 mvn test
 ```
+
+Tests are organised by domain under `src/test/java/`:
+
+| Package | Coverage |
+|---|---|
+| `actor_strategies` | Optimal, insurance, copy-dealer, and default dealer strategies |
+| `deal_services` | Card dealing |
+| `deck` | Deck/shoe management |
+| `hand_services` | Hand lifecycle |
+| `hands` | Hand and player-hand logic |
+| `payout_services` | Standard and insurance payouts |
+| `position_services` | Table position management |
+| `processors` | Double, insurance, split, and standard bet processing |
+| `validators` | Double, insurance, split, and standard bet validation |
 
 ## Simulation Results
 
@@ -109,8 +122,8 @@ mvn test
 
 ## To Be Completed
 
-- [x] Controller refactor
+- [x] controller refactor
 - [x] Table printing refactor
-- [ ] Testing suite refactor
+- [x] Testing suite refactor
 - [ ] Parallelized simulations
-- [ ] Player card counting strategies
+- [ ] Player card counting actor_strategies
