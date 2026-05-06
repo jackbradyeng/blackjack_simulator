@@ -2,7 +2,7 @@ package hands;
 
 import model.cards.Ace;
 import model.cards.Card;
-import model.Table.hands.Hand;
+import model.table.hands.Hand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

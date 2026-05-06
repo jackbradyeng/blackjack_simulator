@@ -5,7 +5,7 @@ import model.observers.TablePrinter;
 import model.observers.TableStats;
 import model.orchestrators.actor_strategy_orchestrators.DealerStrategyOrchestrator;
 import model.orchestrators.actor_strategy_orchestrators.PlayerStrategyOrchestrator;
-import model.Table.Table;
+import model.table.Table;
 import java.time.Duration;
 import java.time.Instant;
 import static model.Constants.DEFAULT_NUMBER_OF_ITERATIONS;

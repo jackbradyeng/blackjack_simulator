@@ -1,7 +1,7 @@
 package model.actors;
 
 import model.strategies.dealer_strategies.DealerStrategy;
-import model.Table.positions.DealerPosition;
+import model.table.positions.DealerPosition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

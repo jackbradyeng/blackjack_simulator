@@ -1,9 +1,9 @@
 package model.orchestrators.actor_strategy_orchestrators;
 
 import model.actors.Player;
-import model.Table.hands.DealerHand;
-import model.Table.hands.PlayerHand;
-import model.Table.Table;
+import model.table.hands.DealerHand;
+import model.table.hands.PlayerHand;
+import model.table.Table;
 import static model.Constants.DOUBLE;
 import static model.Constants.STAND;
 

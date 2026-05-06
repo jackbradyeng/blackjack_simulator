@@ -2,7 +2,7 @@ package model.orchestrators;
 
 import model.observers.TablePrinter;
 import model.observers.TableStats;
-import model.Table.Table;
+import model.table.Table;
 
 public interface GameModeOrchestrator {
 

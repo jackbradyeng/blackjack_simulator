@@ -1,8 +1,8 @@
 package model.strategies.player_strategies;
 
 import model.cards.Card;
-import model.Table.hands.DealerHand;
-import model.Table.hands.PlayerHand;
+import model.table.hands.DealerHand;
+import model.table.hands.PlayerHand;
 import static model.Constants.*;
 import java.util.HashMap;
 import java.util.Map;

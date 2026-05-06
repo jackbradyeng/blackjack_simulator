@@ -2,9 +2,9 @@ package position_services;
 
 import model.actors.Dealer;
 import model.actors.Player;
-import model.Table.positions.DealerPosition;
-import model.Table.positions.PlayerPosition;
-import model.Table.position_services.PositionServiceImpl;
+import model.table.positions.DealerPosition;
+import model.table.positions.PlayerPosition;
+import model.table.position_services.PositionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

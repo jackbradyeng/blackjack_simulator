@@ -1,11 +1,11 @@
 package processors;
 
 import model.actors.Player;
-import model.Table.bets.Bet;
-import model.Table.bets.DoubleBet;
-import model.Table.hands.PlayerHand;
-import model.Table.positions.PlayerPosition;
-import model.Table.processors.double_bet_processors.DoubleBetProcessorImpl;
+import model.table.bets.Bet;
+import model.table.bets.DoubleBet;
+import model.table.hands.PlayerHand;
+import model.table.positions.PlayerPosition;
+import model.table.processors.double_bet_processors.DoubleBetProcessorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Map;

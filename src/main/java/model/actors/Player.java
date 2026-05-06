@@ -1,9 +1,9 @@
 package model.actors;
 
 import model.strategies.player_strategies.PlayerStrategy;
-import model.Table.hands.DealerHand;
-import model.Table.hands.PlayerHand;
-import model.Table.positions.PlayerPosition;
+import model.table.hands.DealerHand;
+import model.table.hands.PlayerHand;
+import model.table.positions.PlayerPosition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

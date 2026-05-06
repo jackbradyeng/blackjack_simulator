@@ -9,7 +9,7 @@ import model.orchestrators.GameModeOrchestrator;
 import model.orchestrators.InteractiveModeOrchestrator;
 import model.orchestrators.SimulationModeOrchestrator;
 import model.strategies.player_strategies.OptimalNoCountingStrategy;
-import model.Table.*;
+import model.table.*;
 import static model.Constants.DEFAULT_PLAYER_STARTING_CHIPS;
 import static model.Constants.DEFAULT_TABLE_POSITIONS;
 

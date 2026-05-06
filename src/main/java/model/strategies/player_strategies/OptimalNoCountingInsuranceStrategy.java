@@ -1,7 +1,7 @@
 package model.strategies.player_strategies;
 
-import model.Table.hands.DealerHand;
-import model.Table.hands.PlayerHand;
+import model.table.hands.DealerHand;
+import model.table.hands.PlayerHand;
 import static model.Constants.INSURANCE;
 import lombok.RequiredArgsConstructor;
 

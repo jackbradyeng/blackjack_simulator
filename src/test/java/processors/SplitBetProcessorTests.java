@@ -2,10 +2,10 @@ package processors;
 
 import model.actors.Player;
 import model.cards.Card;
-import model.Table.bets.Bet;
-import model.Table.hands.PlayerHand;
-import model.Table.positions.PlayerPosition;
-import model.Table.processors.split_bet_processors.SplitBetProcessorImpl;
+import model.table.bets.Bet;
+import model.table.hands.PlayerHand;
+import model.table.positions.PlayerPosition;
+import model.table.processors.split_bet_processors.SplitBetProcessorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

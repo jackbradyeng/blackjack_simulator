@@ -1,6 +1,6 @@
 package model.strategies.dealer_strategies;
 
-import model.Table.hands.DealerHand;
+import model.table.hands.DealerHand;
 
 public interface DealerStrategy {
 

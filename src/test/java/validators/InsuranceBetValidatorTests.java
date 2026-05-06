@@ -2,11 +2,11 @@ package validators;
 
 import model.actors.Player;
 import model.strategies.player_strategies.OptimalNoCountingStrategy;
-import model.Table.bets.Bet;
-import model.Table.bets.InsuranceBet;
-import model.Table.hands.PlayerHand;
-import model.Table.positions.PlayerPosition;
-import model.Table.validators.insurance_bet_validators.InsuranceBetValidatorImpl;
+import model.table.bets.Bet;
+import model.table.bets.InsuranceBet;
+import model.table.hands.PlayerHand;
+import model.table.positions.PlayerPosition;
+import model.table.validators.insurance_bet_validators.InsuranceBetValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package model.orchestrators.actor_strategy_orchestrators;
 
 import model.observers.TablePrinter;
-import model.Table.Table;
+import model.table.Table;
 import java.util.Objects;
 import static model.Constants.STAND;
 

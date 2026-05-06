@@ -3,7 +3,7 @@ package actor_strategies;
 import model.cards.Ace;
 import model.cards.Card;
 import model.strategies.dealer_strategies.DefaultDealerStrategy;
-import model.Table.hands.DealerHand;
+import model.table.hands.DealerHand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static model.Constants.*;

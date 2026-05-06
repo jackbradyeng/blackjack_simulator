@@ -1,8 +1,8 @@
 package validators;
 
 import model.actors.Player;
-import model.Table.positions.PlayerPosition;
-import model.Table.validators.standard_bet_validators.StandardBetValidatorImpl;
+import model.table.positions.PlayerPosition;
+import model.table.validators.standard_bet_validators.StandardBetValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

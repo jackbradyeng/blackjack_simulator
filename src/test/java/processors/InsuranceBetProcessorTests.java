@@ -1,10 +1,10 @@
 package processors;
 
 import model.actors.Player;
-import model.Table.bets.InsuranceBet;
-import model.Table.hands.PlayerHand;
-import model.Table.positions.PlayerPosition;
-import model.Table.processors.insurance_bet_processors.InsuranceBetProcessorImpl;
+import model.table.bets.InsuranceBet;
+import model.table.hands.PlayerHand;
+import model.table.positions.PlayerPosition;
+import model.table.processors.insurance_bet_processors.InsuranceBetProcessorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

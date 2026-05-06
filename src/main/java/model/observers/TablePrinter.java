@@ -1,8 +1,8 @@
 package model.observers;
 
 import model.actors.Player;
-import model.Table.hands.PlayerHand;
-import model.Table.Table;
+import model.table.hands.PlayerHand;
+import model.table.Table;
 import java.util.List;
 import static model.Constants.DEFAULT_COUNTDOWN_TIME;
 import static model.Constants.DEFAULT_MIN_BET_SIZE;
