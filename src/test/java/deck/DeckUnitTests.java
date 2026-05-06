@@ -1,17 +1,17 @@
 package deck;
 
-import Exceptions.DeckCountException;
-import Model.Cards.Ace;
-import Model.Cards.Card;
-import Model.Deck.Deck;
-import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
-import Model.Deck.ShuffleStrategies.ModifiedFisherYatesStrategy;
+import exceptions.DeckCountException;
+import model.cards.Ace;
+import model.cards.Card;
+import model.deck.Deck;
+import model.deck.shuffle_strategies.FisherYatesStrategy;
+import model.deck.shuffle_strategies.ModifiedFisherYatesStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import java.util.Optional;
-import static Model.Constants.*;
+import static model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckUnitTests {

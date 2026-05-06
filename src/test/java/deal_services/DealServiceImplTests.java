@@ -1,20 +1,20 @@
 package deal_services;
 
-import Model.Actors.Player;
-import Model.Cards.Card;
-import Model.Deck.Deck;
-import Model.Deck.ShuffleStrategies.FisherYatesStrategy;
-import Model.Table.Bets.Bet;
-import Model.Table.DealServices.DealServiceImpl;
-import Model.Table.Hands.DealerHand;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.DealerPosition;
-import Model.Table.Positions.PlayerPosition;
+import model.actors.Player;
+import model.cards.Card;
+import model.deck.Deck;
+import model.deck.shuffle_strategies.FisherYatesStrategy;
+import model.Table.bets.Bet;
+import model.Table.deal_services.DealServiceImpl;
+import model.Table.hands.DealerHand;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.DealerPosition;
+import model.Table.positions.PlayerPosition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
-import static Model.Constants.*;
+import static model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DealServiceImplTests {

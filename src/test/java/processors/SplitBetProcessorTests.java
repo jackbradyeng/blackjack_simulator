@@ -1,11 +1,11 @@
 package processors;
 
-import Model.Actors.Player;
-import Model.Cards.Card;
-import Model.Table.Bets.Bet;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.PlayerPosition;
-import Model.Table.Processors.SplitBetProcessors.SplitBetProcessorImpl;
+import model.actors.Player;
+import model.cards.Card;
+import model.Table.bets.Bet;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.PlayerPosition;
+import model.Table.processors.split_bet_processors.SplitBetProcessorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

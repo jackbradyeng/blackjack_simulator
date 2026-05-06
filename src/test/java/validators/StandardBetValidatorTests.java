@@ -1,12 +1,12 @@
 package validators;
 
-import Model.Actors.Player;
-import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.StandardBetValidators.StandardBetValidatorImpl;
+import model.actors.Player;
+import model.Table.positions.PlayerPosition;
+import model.Table.validators.standard_bet_validators.StandardBetValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
-import static Model.Constants.DEFAULT_MIN_BET_SIZE;
+import static model.Constants.DEFAULT_MIN_BET_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StandardBetValidatorTests {

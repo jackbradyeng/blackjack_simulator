@@ -1,16 +1,16 @@
 package hands;
 
-import Model.Actors.Player;
-import Model.Cards.Ace;
-import Model.Cards.Card;
-import Model.Table.Bets.Bet;
-import Model.Table.Hands.DealerHand;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.PlayerPosition;
+import model.actors.Player;
+import model.cards.Ace;
+import model.cards.Card;
+import model.Table.bets.Bet;
+import model.Table.hands.DealerHand;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.PlayerPosition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Map;
-import static Model.Constants.ACE_LOWER_VALUE;
+import static model.Constants.ACE_LOWER_VALUE;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerHandTests {

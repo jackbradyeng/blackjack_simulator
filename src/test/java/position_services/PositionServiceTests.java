@@ -1,15 +1,15 @@
 package position_services;
 
-import Model.Actors.Dealer;
-import Model.Actors.Player;
-import Model.Table.Positions.DealerPosition;
-import Model.Table.Positions.PlayerPosition;
-import Model.Table.PositionService.PositionServiceImpl;
+import model.actors.Dealer;
+import model.actors.Player;
+import model.Table.positions.DealerPosition;
+import model.Table.positions.PlayerPosition;
+import model.Table.position_services.PositionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
-import static Model.Constants.DEFAULT_TABLE_POSITIONS;
+import static model.Constants.DEFAULT_TABLE_POSITIONS;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PositionServiceTests {

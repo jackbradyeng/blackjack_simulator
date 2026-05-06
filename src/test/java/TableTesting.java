@@ -1,20 +1,20 @@
 import java.util.ArrayList;
 import java.util.Map;
-import Controller.Controller;
-import Exceptions.DeckCountException;
-import Exceptions.PlayerCountException;
-import Model.Actors.Player;
-import Model.Observers.TablePrinter;
-import Model.Observers.TableStats;
-import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.PlayerPosition;
-import Model.Table.Table;
+import controller.Controller;
+import exceptions.DeckCountException;
+import exceptions.PlayerCountException;
+import model.actors.Player;
+import model.observers.TablePrinter;
+import model.observers.TableStats;
+import model.strategies.player_strategies.OptimalNoCountingStrategy;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.PlayerPosition;
+import model.Table.Table;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import static Model.Constants.*;
+import static model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

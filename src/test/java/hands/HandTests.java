@@ -1,12 +1,12 @@
 package hands;
 
-import Model.Cards.Ace;
-import Model.Cards.Card;
-import Model.Table.Hands.Hand;
+import model.cards.Ace;
+import model.cards.Card;
+import model.Table.hands.Hand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static Model.Constants.*;
+import static model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HandTests {

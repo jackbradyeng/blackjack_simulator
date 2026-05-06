@@ -1,22 +1,22 @@
 package payout_services;
 
-import Model.Actors.Dealer;
-import Model.Actors.Player;
-import Model.Cards.Ace;
-import Model.Cards.Card;
-import Model.Observers.TableStats;
-import Model.Table.Bets.Bet;
-import Model.Table.Bets.DoubleBet;
-import Model.Table.Bets.InsuranceBet;
-import Model.Table.Hands.DealerHand;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.PayoutServices.StandardPayoutService;
-import Model.Table.Positions.PlayerPosition;
+import model.actors.Dealer;
+import model.actors.Player;
+import model.cards.Ace;
+import model.cards.Card;
+import model.observers.TableStats;
+import model.Table.bets.Bet;
+import model.Table.bets.DoubleBet;
+import model.Table.bets.InsuranceBet;
+import model.Table.hands.DealerHand;
+import model.Table.hands.PlayerHand;
+import model.Table.payout_services.StandardPayoutService;
+import model.Table.positions.PlayerPosition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
-import static Model.Constants.*;
+import static model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StandardPayoutServiceTests {

@@ -1,9 +1,9 @@
 package processors;
 
-import Model.Actors.Player;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.PlayerPosition;
-import Model.Table.Processors.StandardBetProcessors.StandardBetProcessorImpl;
+import model.actors.Player;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.PlayerPosition;
+import model.Table.processors.standard_bet_processors.StandardBetProcessorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

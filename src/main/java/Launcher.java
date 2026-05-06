@@ -1,5 +1,5 @@
-import Controller.Controller;
-import static Model.Constants.*;
+import controller.Controller;
+import static model.Constants.*;
 
 public class Launcher {
     public static void main(String[] args) {

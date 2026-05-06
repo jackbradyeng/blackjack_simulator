@@ -1,13 +1,13 @@
 package hand_services;
 
-import Model.Actors.Player;
-import Model.Cards.Card;
-import Model.Observers.TableStats;
-import Model.Table.Bets.Bet;
-import Model.Table.HandServices.HandServiceImpl;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.DealerPosition;
-import Model.Table.Positions.PlayerPosition;
+import model.actors.Player;
+import model.cards.Card;
+import model.observers.TableStats;
+import model.Table.bets.Bet;
+import model.Table.hand_services.HandServiceImpl;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.DealerPosition;
+import model.Table.positions.PlayerPosition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

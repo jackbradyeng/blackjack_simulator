@@ -1,12 +1,12 @@
 package actor_strategies;
 
-import Model.Cards.Ace;
-import Model.Cards.Card;
-import Model.Strategies.dealer_strategies.DefaultDealerStrategy;
-import Model.Table.Hands.DealerHand;
+import model.cards.Ace;
+import model.cards.Card;
+import model.strategies.dealer_strategies.DefaultDealerStrategy;
+import model.Table.hands.DealerHand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static Model.Constants.*;
+import static model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DefaultDealerStrategyTests {

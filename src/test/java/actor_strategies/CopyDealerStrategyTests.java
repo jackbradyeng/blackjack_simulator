@@ -1,14 +1,14 @@
 package actor_strategies;
 
-import Model.Actors.Player;
-import Model.Cards.Card;
-import Model.Strategies.player_strategies.CopyDealerStrategy;
-import Model.Table.Hands.DealerHand;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.PlayerPosition;
+import model.actors.Player;
+import model.cards.Card;
+import model.strategies.player_strategies.CopyDealerStrategy;
+import model.Table.hands.DealerHand;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.PlayerPosition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static Model.Constants.*;
+import static model.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CopyDealerStrategyTests {

@@ -1,13 +1,13 @@
 package validators;
 
-import Model.Actors.Player;
-import Model.Cards.Card;
-import Model.Strategies.player_strategies.OptimalNoCountingStrategy;
-import Model.Table.Bets.Bet;
-import Model.Table.Bets.DoubleBet;
-import Model.Table.Hands.PlayerHand;
-import Model.Table.Positions.PlayerPosition;
-import Model.Table.Validators.DoubleBetValidators.DoubleBetValidatorImpl;
+import model.actors.Player;
+import model.cards.Card;
+import model.strategies.player_strategies.OptimalNoCountingStrategy;
+import model.Table.bets.Bet;
+import model.Table.bets.DoubleBet;
+import model.Table.hands.PlayerHand;
+import model.Table.positions.PlayerPosition;
+import model.Table.validators.double_bet_validators.DoubleBetValidatorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
