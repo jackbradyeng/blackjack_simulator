@@ -121,14 +121,14 @@ public class StandardPayoutServiceTests {
     @Test
     public void handlePlayerBlackjack_playerReceivesBlackjackPayout() {
         service.handlePlayerBlackjack(dealer, makePair(player, new Bet(BET_AMOUNT)));
-        double expectedPayout = BET_AMOUNT * (1 + (double) DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR / DEFAULT_BLACKJACK_PAYOUT_NUMERATOR);
+        double expectedPayout = BET_AMOUNT * (1 + (double) DEFAULT_BLACKJACK_PAYOUT_NUMERATOR / DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR);
         assertEquals(PLAYER_STARTING_CHIPS + expectedPayout, player.getChips());
     }
 
     @Test
     public void handlePlayerBlackjack_dealerDispensesBlackjackBonus() {
         service.handlePlayerBlackjack(dealer, makePair(player, new Bet(BET_AMOUNT)));
-        double payout = BET_AMOUNT * (1 + (double) DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR / DEFAULT_BLACKJACK_PAYOUT_NUMERATOR);
+        double payout = BET_AMOUNT * (1 + (double) DEFAULT_BLACKJACK_PAYOUT_NUMERATOR / DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR);
         assertEquals(DEALER_STARTING_CHIPS - (payout - BET_AMOUNT), dealer.getChips());
     }
 

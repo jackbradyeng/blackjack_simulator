@@ -42,11 +42,11 @@ public final class Constants {
     public static final int DEFAULT_TABLE_POSITIONS = 5; // excludes the dealer
     public static final int DEFAULT_MIN_BET_SIZE = 25;
     public static final int DEFAULT_PAYOUT_RATIO = 1;
-    public static final int DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR = 3;
-    public static final int DEFAULT_BLACKJACK_PAYOUT_NUMERATOR = 2;
+    public static final int DEFAULT_BLACKJACK_PAYOUT_NUMERATOR = 3;
+    public static final int DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR = 2;
     public static final int DEFAULT_INSURANCE_RATIO = 3;
 
     // SIMULATION CONSTANTS
-    public static final int DEFAULT_NUMBER_OF_ITERATIONS = 500_000;
+    public static final int DEFAULT_NUMBER_OF_ITERATIONS = 1_000_000;
     public static final int DEFAULT_COUNTDOWN_TIME = 1_000;
 }

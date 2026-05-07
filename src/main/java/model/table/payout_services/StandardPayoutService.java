@@ -31,7 +31,8 @@ public class StandardPayoutService implements PayoutService {
                     handlePlayerLoss(dealer, pair);
                 }
                 // player blackjack case
-                else if (hand.getHandValue() == BLACKJACK_CONSTANT && hand.getCards().size() == 2) {
+                else if (hand.getHandValue() == BLACKJACK_CONSTANT && hand.getCards().size() == 2
+                        && dealerHand.getHandValue() != BLACKJACK_CONSTANT) {
                     handlePlayerBlackjack(dealer, pair);
                 }
                 // player win case
@@ -54,7 +55,7 @@ public class StandardPayoutService implements PayoutService {
 
     public void handlePlayerBlackjack(Dealer dealer, Map.Entry<Player, Bet> pair) {
         double payout = pair.getValue().getAmount() * (1 +
-                ((double) DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR / DEFAULT_BLACKJACK_PAYOUT_NUMERATOR));
+                ((double) DEFAULT_BLACKJACK_PAYOUT_NUMERATOR / DEFAULT_BLACKJACK_PAYOUT_DENOMINATOR));
         dealer.dispenseChips(payout - pair.getValue().getAmount());
         pair.getKey().receiveChips(payout);
         tableStats.incrementBlackjackCount();
