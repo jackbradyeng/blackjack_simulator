@@ -122,8 +122,8 @@ Tests are organised by domain under `src/test/java/`:
 
 ## To Be Completed
 
-- [x] controller refactor
+- [x] Controller refactor
 - [x] Table printing refactor
 - [x] Testing suite refactor
+- [ ] Player card counting strategies
 - [ ] Parallelized simulations
-- [ ] Player card counting actor_strategies
